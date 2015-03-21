@@ -13,7 +13,7 @@ class SpeckCipher:
     __valid_modes = ['ECB', 'CTR', 'CBC', 'PCBC', 'CFB', 'OFB']
 
     def encrypt_round(self, x, y, k):
-
+        """Complete One Round of Fiestal Operation"""
         rs_x = ((x << (self.word_size - self.alpha_shift)) + (x >> self.alpha_shift)) & self.mod_mask
 
         add_sxy = (rs_x + y) & self.mod_mask
@@ -27,6 +27,7 @@ class SpeckCipher:
         return new_x, new_y
 
     def decrypt_round(self, x, y, k):
+        """Complete One Round of Inverse Fiestal Operation"""
 
         xor_xy = x ^ y
 
@@ -34,7 +35,7 @@ class SpeckCipher:
 
         xor_xk = x ^ k
 
-        if xor_xk > new_y:
+        if xor_xk >= new_y:
             msub = xor_xk - new_y
         else:
             msub = ((xor_xk - new_y) % self.mod_mask) + 1
@@ -45,37 +46,28 @@ class SpeckCipher:
 
     def __init__(self, key, key_size=128, block_size=128, mode='ECB', init=0, counter=0):
 
+        # Setup block/word size
         try:
-            self.key = key
-        except TypeError:
-            print('Invalid Key Value!')
-            print('Please Provide Key as int')
-
-        # setup block size
-        try:
-            if block_size in self.__valid_setups:
-                self.word_size = block_size >> 1
-                self.possible_setups = self.__valid_setups[block_size]
-            else:
-                raise ValueError
-        except ValueError:
+            self.possible_setups = self.__valid_setups[block_size]
+            self.word_size = block_size >> 1
+        except KeyError:
             print('Invalid block size!')
             print('Please use one of the following block sizes:', [x for x in self.__valid_setups.keys()])
             raise
 
+        # Setup Number of Rounds and Key Size
         try:
-            if key_size in self.possible_setups:
-                self.key_size = key_size
-                self.rounds = self.possible_setups[self.key_size]
-            else:
-                raise ValueError
-        except ValueError:
+            self.rounds = self.possible_setups[key_size]
+            self.key_size = key_size
+        except KeyError:
             print('Invalid key size for selected block size!!')
             print('Please use one of the following key sizes:', [x for x in self.possible_setups.keys()])
             raise
 
+        # Create Properly Sized bit mask for truncating addition and left shift outputs
         self.mod_mask = (2 ** self.word_size) - 1
 
+        # Setup Circular Shift Parameters
         if block_size == 32:
             self.beta_shift = 2
             self.alpha_shift = 7
@@ -83,21 +75,41 @@ class SpeckCipher:
             self.beta_shift = 3
             self.alpha_shift = 8
 
-        self.iv = init
-        self.counter = counter
-
+        # Parse the given iv and truncate it to the block length
         try:
-            if mode in self.__valid_modes:
-                self.mode = mode
-            else:
-                raise ValueError
+            self.iv = init & ((2 ** block_size) - 1)
+        except (ValueError, TypeError):
+            print('Invalid IV Value!')
+            print('Please Provide IV as int')
+            raise
+
+        # Parse the given Counter and truncate it to the block length
+        try:
+            self.counter = counter & ((2 ** block_size) - 1)
+        except (ValueError, TypeError):
+            print('Invalid Counter Value!')
+            print('Please Provide Counter as int')
+            raise
+
+        # Check Cipher Mode
+        try:
+            position = self.__valid_modes.index(mode)
+            self.mode = self.__valid_modes[position]
         except ValueError:
             print('Invalid cipher mode!')
             print('Please use one of the following block cipher modes:', self.__valid_modes)
             raise
 
+        # Parse the given key and truncate it to the key length
+        try:
+            self.key = key & ((2 ** self.key_size) - 1)
+        except (ValueError, TypeError):
+            print('Invalid Key Value!')
+            print('Please Provide Key as int')
+            raise
+
         # Pre-compile key schedule
-        self.key_schedule = [key & self.mod_mask]
+        self.key_schedule = [self.key & self.mod_mask]
         l_schedule = [(self.key >> (x * self.word_size)) & self.mod_mask for x in
                       range(1, self.key_size // self.word_size)]
 
@@ -174,11 +186,15 @@ class SpeckCipher:
         return ciphertext
 
     def decrypt(self, ciphertext):
-        b = 0
-        a = 0
-        if self.mode == 'ECB':
+        try:
             b = ciphertext >> self.word_size
             a = ciphertext & self.mod_mask
+        except TypeError:
+            print('Invalid plaintext!')
+            print('Please provide plaintext at int')
+            raise
+
+        if self.mode == 'ECB':
             for x in range(self.rounds):
                 b, a = self.decrypt_round(b, a, self.key_schedule[self.rounds - (x + 1)])
 
@@ -203,8 +219,13 @@ class SpeckCipher:
 
 
 if __name__ == "__main__":
-    c = SpeckCipher(0, mode='Mode11')
-    print('')
-    c = SpeckCipher(0, block_size=10)
-    print('')
-    c = SpeckCipher(0, key_size=10)
+    # y = SpeckCipher('0x11223344556677889900AABBCCDDEEFF')
+    # y = SpeckCipher('0X11223344556677889900AABBCCDDEEFF')
+    # y = SpeckCipher('ThekeyisPASSWORD')
+    # y = SpeckCipher(1)
+    # y = SpeckCipher(121423459234858293745823758932759823759823758932759263757623785623785)
+    # u = bytearray(b'ThekeyisPASSWORD')
+    # u = bytearray([12,34,56,78,89,0xAA,00,0x00,34])
+    # y = SpeckCipher(u)
+    # y = SpeckCipher(123)
+    r = SpeckCipher(6.22, mode='ERT')
