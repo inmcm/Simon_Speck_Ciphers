@@ -1,9 +1,15 @@
+from pip._vendor.progress import counter
 import pytest
+from random import randint
 from speck import SpeckCipher
 
 
 # Official Test Vectors
 class TestOfficialTestVectors:
+    """
+    Official Test Vector From the Original Paper
+    "The SIMON and SPECK Families of Lightweight Block Ciphers"
+    """
     def test_speck32_64(self):
         key = 0x1918111009080100
         plaintxt = 0x6574694c
@@ -105,36 +111,155 @@ class TestOfficialTestVectors:
         assert c.decrypt(ciphertxt) == plaintxt
 
 
+
+class TestRandomTestVectors:
+    """
+    Unofficial Test Vectors Randomly Generated
+    Key/Plaintext are printed out with each test in case of failure
+    """
+    test_cnt = 500
+
+    def test_speck32_64(self):
+        block_size = 32
+        key_size = 64
+        for x in range(self.test_cnt):
+            key = randint(0, (2**key_size) - 1)
+            plaintxt = randint(0, (2**block_size) - 1)
+            print(x, hex(key), hex(plaintxt))
+            c = SpeckCipher(key, key_size, block_size, 'ECB')
+            assert  c.decrypt(c.encrypt(plaintxt)) == plaintxt
+
+    def test_speck48_72(self):
+        block_size = 48
+        key_size = 72
+        for x in range(self.test_cnt):
+            key = randint(0, (2**key_size) - 1)
+            plaintxt = randint(0, (2**block_size) - 1)
+            print(x, hex(key), hex(plaintxt))
+            c = SpeckCipher(key, key_size, block_size, 'ECB')
+            assert  c.decrypt(c.encrypt(plaintxt)) == plaintxt
+
+    def test_speck48_96(self):
+        block_size = 48
+        key_size = 96
+        for x in range(self.test_cnt):
+            key = randint(0, (2**key_size) - 1)
+            plaintxt = randint(0, (2**block_size) - 1)
+            print(x, hex(key), hex(plaintxt))
+            c = SpeckCipher(key, key_size, block_size, 'ECB')
+            assert  c.decrypt(c.encrypt(plaintxt)) == plaintxt
+
+    def test_speck64_96(self):
+        block_size = 64
+        key_size = 96
+        for x in range(self.test_cnt):
+            key = randint(0, (2**key_size) - 1)
+            plaintxt = randint(0, (2**block_size) - 1)
+            print(x, hex(key), hex(plaintxt))
+            c = SpeckCipher(key, key_size, block_size, 'ECB')
+            assert  c.decrypt(c.encrypt(plaintxt)) == plaintxt
+
+    def test_speck64_128(self):
+        block_size = 64
+        key_size = 128
+        for x in range(self.test_cnt):
+            key = randint(0, (2**key_size) - 1)
+            plaintxt = randint(0, (2**block_size) - 1)
+            print(x, hex(key), hex(plaintxt))
+            c = SpeckCipher(key, key_size, block_size, 'ECB')
+            assert  c.decrypt(c.encrypt(plaintxt)) == plaintxt
+
+    def test_speck96_96(self):
+        block_size = 96
+        key_size = 96
+        for x in range(self.test_cnt):
+            key = randint(0, (2**key_size) - 1)
+            plaintxt = randint(0, (2**block_size) - 1)
+            print(x, hex(key), hex(plaintxt))
+            c = SpeckCipher(key, key_size, block_size, 'ECB')
+            assert  c.decrypt(c.encrypt(plaintxt)) == plaintxt
+
+    def test_speck96_144(self):
+        block_size = 96
+        key_size = 144
+        for x in range(self.test_cnt):
+            key = randint(0, (2**key_size) - 1)
+            plaintxt = randint(0, (2**block_size) - 1)
+            print(x, hex(key), hex(plaintxt))
+            c = SpeckCipher(key, key_size, block_size, 'ECB')
+            assert  c.decrypt(c.encrypt(plaintxt)) == plaintxt
+
+    def test_speck128_128(self):
+        block_size = 128
+        key_size = 128
+        for x in range(self.test_cnt):
+            key = randint(0, (2**key_size) - 1)
+            plaintxt = randint(0, (2**block_size) - 1)
+            print(x, hex(key), hex(plaintxt))
+            c = SpeckCipher(key, key_size, block_size, 'ECB')
+            assert  c.decrypt(c.encrypt(plaintxt)) == plaintxt
+
+    def test_speck128_192(self):
+        block_size = 128
+        key_size = 192
+        for x in range(self.test_cnt):
+            key = randint(0, (2**key_size) - 1)
+            plaintxt = randint(0, (2**block_size) - 1)
+            print(x, hex(key), hex(plaintxt))
+            c = SpeckCipher(key, key_size, block_size, 'ECB')
+            assert  c.decrypt(c.encrypt(plaintxt)) == plaintxt
+
+    def test_speck128_256(self):
+        block_size = 128
+        key_size = 256
+        for x in range(self.test_cnt):
+            key = randint(0, (2**key_size) - 1)
+            plaintxt = randint(0, (2**block_size) - 1)
+            print(x, hex(key), hex(plaintxt))
+            c = SpeckCipher(key, key_size, block_size, 'ECB')
+            assert  c.decrypt(c.encrypt(plaintxt)) == plaintxt
+
+
 class TestCipherInitialization:
-    def test_bad_key(self):
-        key = 'texas'
-        with pytest.raises(TypeError):
-            SpeckCipher(key)
+    not_ints = [6.22, 'hello', bytearray(b'stuffandbytes'), bytearray([12, 34, 0xAA, 00, 0x00, 34]), '0x1234567']
 
-    def test_bad_mode(self):
-        mode = 11
-        with pytest.raises(ValueError):
-            SpeckCipher(0, mode=mode)
+    def test_bad_keys(self):
+        for bad_key in self.not_ints:
+            with pytest.raises(TypeError):
+                SpeckCipher(bad_key)
 
-    def test_bad_blocksize1(self):
-        blocksize = 10
-        with pytest.raises(ValueError):
-            SpeckCipher(0, block_size=blocksize)
+    def test_bad_counters(self):
+        for bad_counters in self.not_ints:
+            with pytest.raises(TypeError):
+                SpeckCipher(0, counter=bad_counters)
 
-    def test_bad_blocksize2(self):
-        blocksize = 'steve'
-        with pytest.raises(ValueError):
-            SpeckCipher(0, block_size=blocksize)
+    def test_bad_ivs(self):
+        for bad_iv in self.not_ints:
+            with pytest.raises(TypeError):
+                SpeckCipher(0,iv=bad_iv)
 
-    def test_bad_keysize1(self):
-        keysize = 10000
-        with pytest.raises(ValueError):
-            SpeckCipher(0, key_size=keysize)
+    not_block_modes = [7.1231, 'ERT', 11]
 
-    def test_bad_keysize2(self):
-        key_size = 'eve'
-        with pytest.raises(ValueError):
-            SpeckCipher(0, key_size=key_size)
+    def test_bad_modes(self):
+        for bad_mode in self.not_block_modes:
+            with pytest.raises(ValueError):
+                SpeckCipher(0, mode=bad_mode)
+
+    not_block_sizes = [10, 'steve', 11.8]
+
+    def test_bad_blocksizes(self):
+        for bad_bsize in self.not_block_sizes:
+            with pytest.raises(KeyError):
+                SpeckCipher(0, block_size=bad_bsize)
+
+    not_key_sizes = [100000, 'eve', 11.8, 127]
+
+    def test_bad_keysize_1(self):
+        for bad_ksize in self.not_key_sizes:
+            with pytest.raises(KeyError):
+                SpeckCipher(0, key_size=bad_ksize)
+
+
 
 
 class TestCipherModes:
