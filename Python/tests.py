@@ -2,6 +2,7 @@ from pip._vendor.progress import counter
 import pytest
 from random import randint
 from speck import SpeckCipher
+from simon import SimonCipher
 
 
 # Official Test Vectors
@@ -10,6 +11,7 @@ class TestOfficialTestVectors:
     Official Test Vector From the Original Paper
     "The SIMON and SPECK Families of Lightweight Block Ciphers"
     """
+    # Speck Test Vectors
     def test_speck32_64(self):
         key = 0x1918111009080100
         plaintxt = 0x6574694c
@@ -110,6 +112,106 @@ class TestOfficialTestVectors:
         assert c.encrypt(plaintxt) == ciphertxt
         assert c.decrypt(ciphertxt) == plaintxt
 
+    # Simon Test Vectors
+    def test_simon32_64(self):
+        key = 0x1918111009080100
+        plaintxt = 0x65656877
+        ciphertxt = 0xc69be9bb
+        block_size = 32
+        key_size = 64
+        c = SimonCipher(key, key_size, block_size, 'ECB')
+        assert c.encrypt(plaintxt) == ciphertxt
+        assert c.decrypt(ciphertxt) == plaintxt
+
+    def test_simon48_72(self):
+        key = 0x1211100a0908020100
+        plaintxt = 0x6120676e696c
+        ciphertxt = 0xdae5ac292cac
+        block_size = 48
+        key_size = 72
+        c = SimonCipher(key, key_size, block_size, 'ECB')
+        assert c.encrypt(plaintxt) == ciphertxt
+        assert c.decrypt(ciphertxt) == plaintxt
+
+    def test_simon48_96(self):
+        key = 0x1a19181211100a0908020100
+        plaintxt = 0x72696320646e
+        ciphertxt = 0x6e06a5acf156
+        block_size = 48
+        key_size = 96
+        c = SimonCipher(key, key_size, block_size, 'ECB')
+        assert c.encrypt(plaintxt) == ciphertxt
+        assert c.decrypt(ciphertxt) == plaintxt
+
+    def test_simon64_96(self):
+        key = 0x131211100b0a090803020100
+        plaintxt = 0x6f7220676e696c63
+        ciphertxt = 0x5ca2e27f111a8fc8
+        block_size = 64
+        key_size = 96
+        c = SimonCipher(key, key_size, block_size, 'ECB')
+        assert c.encrypt(plaintxt) == ciphertxt
+        assert c.decrypt(ciphertxt) == plaintxt
+
+    def test_simon64_128(self):
+        key = 0x1b1a1918131211100b0a090803020100
+        plaintxt = 0x656b696c20646e75
+        ciphertxt = 0x44c8fc20b9dfa07a
+        block_size = 64
+        key_size = 128
+        c = SimonCipher(key, key_size, block_size, 'ECB')
+        assert c.encrypt(plaintxt) == ciphertxt
+        assert c.decrypt(ciphertxt) == plaintxt
+
+    def test_simon96_96(self):
+        key = 0x0d0c0b0a0908050403020100
+        plaintxt = 0x2072616c6c69702065687420
+        ciphertxt = 0x602807a462b469063d8ff082
+        block_size = 96
+        key_size = 96
+        c = SimonCipher(key, key_size, block_size, 'ECB')
+        assert c.encrypt(plaintxt) == ciphertxt
+        assert c.decrypt(ciphertxt) == plaintxt
+
+    def test_simon96_144(self):
+        key = 0x1514131211100d0c0b0a0908050403020100
+        plaintxt = 0x74616874207473756420666f
+        ciphertxt = 0xecad1c6c451e3f59c5db1ae9
+        block_size = 96
+        key_size = 144
+        c = SimonCipher(key, key_size, block_size, 'ECB')
+        assert c.encrypt(plaintxt) == ciphertxt
+        assert c.decrypt(ciphertxt) == plaintxt
+
+    def test_simon128_128(self):
+        key = 0x0f0e0d0c0b0a09080706050403020100
+        plaintxt = 0x63736564207372656c6c657661727420
+        ciphertxt = 0x49681b1e1e54fe3f65aa832af84e0bbc
+        block_size = 128
+        key_size = 128
+        c = SimonCipher(key, key_size, block_size, 'ECB')
+        assert c.encrypt(plaintxt) == ciphertxt
+        assert c.decrypt(ciphertxt) == plaintxt
+
+    def test_simon128_192(self):
+        key = 0x17161514131211100f0e0d0c0b0a09080706050403020100
+        plaintxt = 0x206572656874206e6568772065626972
+        ciphertxt = 0xc4ac61effcdc0d4f6c9c8d6e2597b85b
+        block_size = 128
+        key_size = 192
+        c = SimonCipher(key, key_size, block_size, 'ECB')
+        assert c.encrypt(plaintxt) == ciphertxt
+        assert c.decrypt(ciphertxt) == plaintxt
+
+    def test_simon128_256(self):
+        key = 0x1f1e1d1c1b1a191817161514131211100f0e0d0c0b0a09080706050403020100
+        plaintxt = 0x74206e69206d6f6f6d69732061207369
+        ciphertxt = 0x8d2b5579afc8a3a03bf72a87efe7b868
+        block_size = 128
+        key_size = 256
+        c = SimonCipher(key, key_size, block_size, 'ECB')
+        assert c.encrypt(plaintxt) == ciphertxt
+        assert c.decrypt(ciphertxt) == plaintxt
 
 
 class TestRandomTestVectors:
@@ -127,7 +229,7 @@ class TestRandomTestVectors:
             plaintxt = randint(0, (2**block_size) - 1)
             print(x, hex(key), hex(plaintxt))
             c = SpeckCipher(key, key_size, block_size, 'ECB')
-            assert  c.decrypt(c.encrypt(plaintxt)) == plaintxt
+            assert c.decrypt(c.encrypt(plaintxt)) == plaintxt
 
     def test_speck48_72(self):
         block_size = 48
@@ -137,7 +239,7 @@ class TestRandomTestVectors:
             plaintxt = randint(0, (2**block_size) - 1)
             print(x, hex(key), hex(plaintxt))
             c = SpeckCipher(key, key_size, block_size, 'ECB')
-            assert  c.decrypt(c.encrypt(plaintxt)) == plaintxt
+            assert c.decrypt(c.encrypt(plaintxt)) == plaintxt
 
     def test_speck48_96(self):
         block_size = 48
@@ -147,7 +249,7 @@ class TestRandomTestVectors:
             plaintxt = randint(0, (2**block_size) - 1)
             print(x, hex(key), hex(plaintxt))
             c = SpeckCipher(key, key_size, block_size, 'ECB')
-            assert  c.decrypt(c.encrypt(plaintxt)) == plaintxt
+            assert c.decrypt(c.encrypt(plaintxt)) == plaintxt
 
     def test_speck64_96(self):
         block_size = 64
@@ -157,7 +259,7 @@ class TestRandomTestVectors:
             plaintxt = randint(0, (2**block_size) - 1)
             print(x, hex(key), hex(plaintxt))
             c = SpeckCipher(key, key_size, block_size, 'ECB')
-            assert  c.decrypt(c.encrypt(plaintxt)) == plaintxt
+            assert c.decrypt(c.encrypt(plaintxt)) == plaintxt
 
     def test_speck64_128(self):
         block_size = 64
@@ -167,7 +269,7 @@ class TestRandomTestVectors:
             plaintxt = randint(0, (2**block_size) - 1)
             print(x, hex(key), hex(plaintxt))
             c = SpeckCipher(key, key_size, block_size, 'ECB')
-            assert  c.decrypt(c.encrypt(plaintxt)) == plaintxt
+            assert c.decrypt(c.encrypt(plaintxt)) == plaintxt
 
     def test_speck96_96(self):
         block_size = 96
@@ -177,7 +279,7 @@ class TestRandomTestVectors:
             plaintxt = randint(0, (2**block_size) - 1)
             print(x, hex(key), hex(plaintxt))
             c = SpeckCipher(key, key_size, block_size, 'ECB')
-            assert  c.decrypt(c.encrypt(plaintxt)) == plaintxt
+            assert c.decrypt(c.encrypt(plaintxt)) == plaintxt
 
     def test_speck96_144(self):
         block_size = 96
@@ -187,7 +289,7 @@ class TestRandomTestVectors:
             plaintxt = randint(0, (2**block_size) - 1)
             print(x, hex(key), hex(plaintxt))
             c = SpeckCipher(key, key_size, block_size, 'ECB')
-            assert  c.decrypt(c.encrypt(plaintxt)) == plaintxt
+            assert c.decrypt(c.encrypt(plaintxt)) == plaintxt
 
     def test_speck128_128(self):
         block_size = 128
@@ -197,7 +299,7 @@ class TestRandomTestVectors:
             plaintxt = randint(0, (2**block_size) - 1)
             print(x, hex(key), hex(plaintxt))
             c = SpeckCipher(key, key_size, block_size, 'ECB')
-            assert  c.decrypt(c.encrypt(plaintxt)) == plaintxt
+            assert c.decrypt(c.encrypt(plaintxt)) == plaintxt
 
     def test_speck128_192(self):
         block_size = 128
@@ -207,7 +309,7 @@ class TestRandomTestVectors:
             plaintxt = randint(0, (2**block_size) - 1)
             print(x, hex(key), hex(plaintxt))
             c = SpeckCipher(key, key_size, block_size, 'ECB')
-            assert  c.decrypt(c.encrypt(plaintxt)) == plaintxt
+            assert c.decrypt(c.encrypt(plaintxt)) == plaintxt
 
     def test_speck128_256(self):
         block_size = 128
@@ -217,7 +319,7 @@ class TestRandomTestVectors:
             plaintxt = randint(0, (2**block_size) - 1)
             print(x, hex(key), hex(plaintxt))
             c = SpeckCipher(key, key_size, block_size, 'ECB')
-            assert  c.decrypt(c.encrypt(plaintxt)) == plaintxt
+            assert c.decrypt(c.encrypt(plaintxt)) == plaintxt
 
 
 class TestCipherInitialization:
@@ -236,7 +338,7 @@ class TestCipherInitialization:
     def test_bad_ivs(self):
         for bad_iv in self.not_ints:
             with pytest.raises(TypeError):
-                SpeckCipher(0,iv=bad_iv)
+                SpeckCipher(0, iv=bad_iv)
 
     not_block_modes = [7.1231, 'ERT', 11]
 
@@ -258,8 +360,6 @@ class TestCipherInitialization:
         for bad_ksize in self.not_key_sizes:
             with pytest.raises(KeyError):
                 SpeckCipher(0, key_size=bad_ksize)
-
-
 
 
 class TestCipherModes:
