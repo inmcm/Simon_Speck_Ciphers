@@ -78,6 +78,8 @@ class SpeckCipher:
         # Parse the given iv and truncate it to the block length
         try:
             self.iv = init & ((2 ** block_size) - 1)
+            self.iv_upper = self.iv >> self.word_size
+            self.iv_lower = self.iv & self.mod_mask
         except (ValueError, TypeError):
             print('Invalid IV Value!')
             print('Please Provide IV as int')
@@ -120,7 +122,7 @@ class SpeckCipher:
 
     def encrypt(self, plaintext):
         try:
-            b = plaintext >> self.word_size
+            b = (plaintext >> self.word_size) & self.mod_mask
             a = plaintext & self.mod_mask
         except TypeError:
             print('Invalid plaintext!')
@@ -132,8 +134,9 @@ class SpeckCipher:
                 b, a = self.encrypt_round(b, a, self.key_schedule[x])
 
         elif self.mode == 'CTR':
-            d = self.iv & self.mod_mask
-            c = self.counter & self.mod_mask
+            true_counter = self.iv + self.counter
+            d = (true_counter >> self.word_size) & self.mod_mask
+            c = true_counter & self.mod_mask
             for x in range(self.rounds):
                 d, c = self.encrypt_round(d, c, self.key_schedule[x])
             b ^= d
@@ -141,29 +144,28 @@ class SpeckCipher:
             self.counter += 1
 
         elif self.mode == 'CBC':
-            d = self.iv >> self.word_size
-            c = self.iv & self.mod_mask
-            b ^= d
-            a ^= c
+            b ^= self.iv_upper
+            a ^= self.iv_lower
             for x in range(self.rounds):
                 b, a = self.encrypt_round(b, a, self.key_schedule[x])
 
+            self.iv_upper = b
+            self.iv_lower = a
             self.iv = (b << self.word_size) + a
 
         elif self.mode == 'PCBC':
-            d = self.iv >> self.word_size
-            c = self.iv & self.mod_mask
             f, e = b, a
-            b ^= d
-            a ^= c
+            b ^= self.iv_upper
+            a ^= self.iv_lower
             for x in range(self.rounds):
                 b, a = self.encrypt_round(b, a, self.key_schedule[x])
-
-            self.iv = ((b ^ f) << self.word_size) + (a ^ e)
+            self.iv_upper = (b ^ f)
+            self.iv_lower = (a ^ e)
+            self.iv = (self.iv_upper << self.word_size) + self.iv_lower
 
         elif self.mode == 'CFB':
-            d = self.iv >> self.word_size
-            c = self.iv & self.mod_mask
+            d = self.iv_upper
+            c = self.iv_lower
             for x in range(self.rounds):
                 d, c = self.encrypt_round(d, c, self.key_schedule[x])
             b ^= d
@@ -171,11 +173,13 @@ class SpeckCipher:
             self.iv = (b << self.word_size) + a
 
         elif self.mode == 'OFB':
-            d = self.iv >> self.word_size
-            c = self.iv & self.mod_mask
+            d = self.iv_upper
+            c = self.iv_lower
             for x in range(self.rounds):
                 d, c = self.encrypt_round(d, c, self.key_schedule[x])
 
+            self.iv_upper = d
+            self.iv_lower = c
             self.iv = (d << self.word_size) + c
 
             b ^= d
@@ -187,10 +191,10 @@ class SpeckCipher:
 
     def decrypt(self, ciphertext):
         try:
-            b = ciphertext >> self.word_size
+            b = (ciphertext >> self.word_size) & self.mod_mask
             a = ciphertext & self.mod_mask
         except TypeError:
-            print('Invalid plaintext!')
+            print('Invalid ciphertext!')
             print('Please provide plaintext at int')
             raise
 
@@ -199,10 +203,20 @@ class SpeckCipher:
                 b, a = self.decrypt_round(b, a, self.key_schedule[self.rounds - (x + 1)])
 
         elif self.mode == 'CTR':
-            pass
+            true_counter = self.iv + self.counter
+            d = (true_counter >> self.word_size) & self.mod_mask
+            c = true_counter & self.mod_mask
+            for x in range(self.rounds):
+                d, c = self.encrypt_round(d, c, self.key_schedule[x])
+            b ^= d
+            a ^= c
+            self.counter += 1
 
         elif self.mode == 'CBC':
-            pass
+            for x in range(self.rounds):
+                b, a = self.decrypt_round(b, a, self.key_schedule[self.rounds - (x + 1)])
+                b ^= self.iv_upper
+                a ^= self.iv_lower
 
         elif self.mode == 'PCBC':
             pass
