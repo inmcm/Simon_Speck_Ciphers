@@ -118,7 +118,7 @@ class SimonCipher:
             self.key_schedule.append(k_reg.pop())
             k_reg.appendleft(new_k)
 
-    def round_function(self, x, y, k):
+    def encrypt_round(self, x, y, k):
         """
         Complete One Feistel Round
         :param x: Upper bits of current plaintext
@@ -139,7 +139,7 @@ class SimonCipher:
 
         return new_x, x
 
-    def round_function_inv(self, x, y, k):
+    def decrypt_round(self, x, y, k):
         """Complete One Inverse Feistel Round
         :param x: Upper bits of current ciphertext
         :param y: Lower bits of current ciphertext
@@ -175,14 +175,14 @@ class SimonCipher:
 
         if self.mode == 'ECB':
             for x in self.key_schedule:
-                b, a = self.round_function(b, a, x)
+                b, a = self.encrypt_round(b, a, x)
 
         elif self.mode == 'CTR':
             true_counter = self.iv + self.counter
             d = (true_counter >> self.word_size) & self.mod_mask
             c = true_counter & self.mod_mask
             for x in self.key_schedule:
-                d, c = self.round_function(d, c, x)
+                d, c = self.encrypt_round(d, c, x)
             b ^= d
             a ^= c
             self.counter += 1
@@ -191,7 +191,7 @@ class SimonCipher:
             b ^= self.iv_upper
             a ^= self.iv_lower
             for x in self.key_schedule:
-                b, a = self.round_function(b, a, x)
+                b, a = self.encrypt_round(b, a, x)
 
             self.iv_upper = b
             self.iv_lower = a
@@ -202,7 +202,7 @@ class SimonCipher:
             b ^= self.iv_upper
             a ^= self.iv_lower
             for x in self.key_schedule:
-                b, a = self.round_function(b, a, x)
+                b, a = self.encrypt_round(b, a, x)
 
             self.iv_upper = b ^ f
             self.iv_lower = a ^ e
@@ -212,7 +212,7 @@ class SimonCipher:
             d = self.iv_upper
             c = self.iv_lower
             for x in self.key_schedule:
-                d, c = self.round_function(d, c, x)
+                d, c = self.encrypt_round(d, c, x)
             b ^= d
             a ^= c
             self.iv = (b << self.word_size) + a
@@ -221,7 +221,7 @@ class SimonCipher:
             d = self.iv_upper
             c = self.iv_lower
             for x in self.key_schedule:
-                d, c = self.round_function(d, c, x)
+                d, c = self.encrypt_round(d, c, x)
 
             self.iv = (d << self.word_size) + c
 
@@ -248,21 +248,21 @@ class SimonCipher:
 
         if self.mode == 'ECB':
             for x in reversed(self.key_schedule):
-                b, a = self.round_function_inv(b, a, x)
+                b, a = self.decrypt_round(b, a, x)
 
         elif self.mode == 'CTR':
             true_counter = self.iv + self.counter
             d = (true_counter >> self.word_size) & self.mod_mask
             c = true_counter & self.mod_mask
             for x in self.key_schedule:
-                d, c = self.round_function(d, c, x)
+                d, c = self.encrypt_round(d, c, x)
             b ^= d
             a ^= c
             self.counter += 1
 
         elif self.mode == 'CBC':
             for x in reversed(self.key_schedule):
-                b, a = self.round_function_inv(b, a, x)
+                b, a = self.decrypt_round(b, a, x)
             b ^= self.iv_upper
             a ^= self.iv_lower
 
@@ -274,7 +274,7 @@ class SimonCipher:
             f, e = b, a
 
             for x in reversed(self.key_schedule):
-                b, a = self.round_function_inv(b, a, x)
+                b, a = self.decrypt_round(b, a, x)
 
             b ^= self.iv_upper
             a ^= self.iv_lower
@@ -290,7 +290,7 @@ class SimonCipher:
             self.iv = (b << self.word_size) + a
 
             for x in self.key_schedule:
-                d, c = self.round_function(d, c, x)
+                d, c = self.encrypt_round(d, c, x)
 
             b ^= d
             a ^= c
@@ -300,7 +300,7 @@ class SimonCipher:
             c = self.iv_lower
 
             for x in self.key_schedule:
-                d, c = self.round_function(d, c, x)
+                d, c = self.encrypt_round(d, c, x)
 
             self.iv_upper = d
             self.iv_lower = c
