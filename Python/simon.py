@@ -30,7 +30,7 @@ class SimonCipher:
         :param block_size: Int representing the block size in bits
         :param mode: String representing which cipher block mode the object should initialize with
         :param init: IV for CTR, CBC, PCBC, CFB, and OFB modes
-        :param counter: Initial Conunter value for CTR mode
+        :param counter: Initial Counter value for CTR mode
         :return: None
         """
 
@@ -58,6 +58,8 @@ class SimonCipher:
         # Parse the given iv and truncate it to the block length
         try:
             self.iv = init & ((2 ** block_size) - 1)
+            self.iv_upper = self.iv >> self.word_size
+            self.iv_lower = self.iv & self.mod_mask
         except (ValueError, TypeError):
             print('Invalid IV Value!')
             print('Please Provide IV as int')
@@ -164,7 +166,7 @@ class SimonCipher:
         :return: Int representing encrypted value
         """
         try:
-            b = plaintext >> self.word_size
+            b = (plaintext >> self.word_size) & self.mod_mask
             a = plaintext & self.mod_mask
         except TypeError:
             print('Invalid plaintext!')
@@ -172,53 +174,54 @@ class SimonCipher:
             raise
 
         if self.mode == 'ECB':
-            for x in range(self.rounds):
-                b, a = self.round_function(b, a, self.key_schedule[x])
+            for x in self.key_schedule:
+                b, a = self.round_function(b, a, x)
 
         elif self.mode == 'CTR':
-            d = self.iv & self.mod_mask
-            c = self.counter & self.mod_mask
-            for x in range(self.rounds):
-                d, c = self.round_function(d, c, self.key_schedule[x])
+            true_counter = self.iv + self.counter
+            d = (true_counter >> self.word_size) & self.mod_mask
+            c = true_counter & self.mod_mask
+            for x in self.key_schedule:
+                d, c = self.round_function(d, c, x)
             b ^= d
             a ^= c
             self.counter += 1
 
         elif self.mode == 'CBC':
-            d = self.iv >> self.word_size
-            c = self.iv & self.mod_mask
-            b ^= d
-            a ^= c
-            for x in range(self.rounds):
-                b, a = self.round_function(b, a, self.key_schedule[x])
+            b ^= self.iv_upper
+            a ^= self.iv_lower
+            for x in self.key_schedule:
+                b, a = self.round_function(b, a, x)
 
+            self.iv_upper = b
+            self.iv_lower = a
             self.iv = (b << self.word_size) + a
 
         elif self.mode == 'PCBC':
-            d = self.iv >> self.word_size
-            c = self.iv & self.mod_mask
             f, e = b, a
-            b ^= d
-            a ^= c
-            for x in range(self.rounds):
-                b, a = self.round_function(b, a, self.key_schedule[x])
+            b ^= self.iv_upper
+            a ^= self.iv_lower
+            for x in self.key_schedule:
+                b, a = self.round_function(b, a, x)
 
-            self.iv = ((b ^ f) << self.word_size) + (a ^ e)
+            self.iv_upper = b ^ f
+            self.iv_lower = a ^ e
+            self.iv = (self.iv_upper << self.word_size) + self.iv_lower
 
         elif self.mode == 'CFB':
-            d = self.iv >> self.word_size
-            c = self.iv & self.mod_mask
-            for x in range(self.rounds):
-                d, c = self.round_function(d, c, self.key_schedule[x])
+            d = self.iv_upper
+            c = self.iv_lower
+            for x in self.key_schedule:
+                d, c = self.round_function(d, c, x)
             b ^= d
             a ^= c
             self.iv = (b << self.word_size) + a
 
         elif self.mode == 'OFB':
-            d = self.iv >> self.word_size
-            c = self.iv & self.mod_mask
-            for x in range(self.rounds):
-                d, c = self.round_function(d, c, self.key_schedule[x])
+            d = self.iv_upper
+            c = self.iv_lower
+            for x in self.key_schedule:
+                d, c = self.round_function(d, c, x)
 
             self.iv = (d << self.word_size) + c
 
@@ -236,22 +239,36 @@ class SimonCipher:
         :return: Int representing decrypted value
         """
         try:
-            b = ciphertext >> self.word_size
+            b = (ciphertext >> self.word_size) & self.mod_mask
             a = ciphertext & self.mod_mask
         except TypeError:
-            print('Invalid plaintext!')
-            print('Please provide plaintext at int')
+            print('Invalid ciphertext!')
+            print('Please provide ciphertext as int')
             raise
 
         if self.mode == 'ECB':
-            for x in range(self.rounds):
-                b, a = self.round_function_inv(b, a, self.key_schedule[self.rounds - (x + 1)])
+            for x in reversed(self.key_schedule):
+                b, a = self.round_function_inv(b, a, x)
 
         elif self.mode == 'CTR':
-            pass
+            true_counter = self.iv + self.counter
+            d = (true_counter >> self.word_size) & self.mod_mask
+            c = true_counter & self.mod_mask
+            for x in self.key_schedule:
+                d, c = self.round_function(d, c, x)
+            b ^= d
+            a ^= c
+            self.counter += 1
 
         elif self.mode == 'CBC':
-            pass
+            for x in reversed(self.key_schedule):
+                b, a = self.round_function_inv(b, a, x)
+            b ^= self.iv_upper
+            a ^= self.iv_lower
+
+            self.iv_upper = b
+            self.iv_lower = a
+            self.iv = (b << self.word_size) + a
 
         elif self.mode == 'PCBC':
             pass
@@ -271,3 +288,47 @@ if __name__ == "__main__":
     w = SimonCipher(0x1918111009080100, key_size=64, block_size=32)
     t = w.encrypt(0x65656877)
     print(hex(t))
+
+    # CTR Test
+    counter = 0
+    iv = 0x12345678
+    plaintext = 0xABBACDDC
+    w = SimonCipher(0x868ba8fc5df93731, key_size=64, block_size=32)
+    for u in range(50):
+        main_counter = iv + counter
+        ciphertext = w.encrypt(main_counter)
+        plaintext ^= ciphertext
+        counter += 1
+        print(u,hex(plaintext))
+
+    counter -= 1
+
+    for u in range(50):
+        main_counter = iv + counter
+        ciphertext = w.encrypt(main_counter)
+        plaintext ^= ciphertext
+        counter -= 1
+        print(u,hex(plaintext))
+
+
+    key = 0x1f1e1d1c1b1a191817161514131211100f0e0d0c0b0a09080706050403020100
+    plaintxt = 0x65736f6874206e49202e72656e6f6f70
+    iv = 0x123456789ABCDEF0
+    counter = 0x1
+    block_size = 128
+    key_size = 256
+
+    c = SimonCipher(key, key_size, block_size, 'CTR', init=iv, counter=counter)
+    ctr_out = c.encrypt(plaintxt)
+
+    counter = 0x01
+
+    c = SimonCipher(key, key_size, block_size, 'CTR', init=iv, counter=counter)
+    output_plaintext = c.decrypt(ctr_out)
+
+    assert output_plaintext == plaintxt
+
+
+
+
+
