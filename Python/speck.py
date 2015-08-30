@@ -213,7 +213,7 @@ class SpeckCipher:
             self.counter += 1
 
         elif self.mode == 'CBC':
-            f,e = b, a
+            f, e = b, a
 
             for x in reversed(self.key_schedule):
                 b, a = self.decrypt_round(b, a, x)
@@ -223,7 +223,6 @@ class SpeckCipher:
             self.iv_upper = f
             self.iv_lower = e
             self.iv = (f << self.word_size) + e
-
 
         elif self.mode == 'PCBC':
             f, e = b, a
@@ -238,11 +237,32 @@ class SpeckCipher:
             self.iv = (self.iv_upper << self.word_size) + self.iv_lower
 
         elif self.mode == 'CFB':
-            pass
+            d = self.iv_upper
+            c = self.iv_lower
+            self.iv_upper = b
+            self.iv_lower = a
+            self.iv = (b << self.word_size) + a
+
+            for x in self.key_schedule:
+                d, c = self.encrypt_round(d, c, x)
+
+            b ^= d
+            a ^= c
 
 
         elif self.mode == 'OFB':
-            pass
+            d = self.iv_upper
+            c = self.iv_lower
+
+            for x in self.key_schedule:
+                d, c = self.encrypt_round(d, c, x)
+
+            self.iv_upper = d
+            self.iv_lower = c
+            self.iv = (d << self.word_size) + c
+
+            b ^= d
+            a ^= c
 
         plaintext = (b << self.word_size) + a
 

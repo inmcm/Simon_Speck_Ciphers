@@ -271,13 +271,43 @@ class SimonCipher:
             self.iv = (b << self.word_size) + a
 
         elif self.mode == 'PCBC':
-            pass
+            f, e = b, a
+
+            for x in reversed(self.key_schedule):
+                b, a = self.round_function_inv(b, a, x)
+
+            b ^= self.iv_upper
+            a ^= self.iv_lower
+            self.iv_upper = (b ^ f)
+            self.iv_lower = (a ^ e)
+            self.iv = (self.iv_upper << self.word_size) + self.iv_lower
 
         elif self.mode == 'CFB':
-            pass
+            d = self.iv_upper
+            c = self.iv_lower
+            self.iv_upper = b
+            self.iv_lower = a
+            self.iv = (b << self.word_size) + a
+
+            for x in self.key_schedule:
+                d, c = self.round_function(d, c, x)
+
+            b ^= d
+            a ^= c
 
         elif self.mode == 'OFB':
-            pass
+            d = self.iv_upper
+            c = self.iv_lower
+
+            for x in self.key_schedule:
+                d, c = self.round_function(d, c, x)
+
+            self.iv_upper = d
+            self.iv_lower = c
+            self.iv = (d << self.word_size) + c
+
+            b ^= d
+            a ^= c
 
         plaintext = (b << self.word_size) + a
 
