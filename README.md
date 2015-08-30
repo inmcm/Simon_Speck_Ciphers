@@ -3,7 +3,10 @@ Implementations of the [Speck & Simon] Block Ciphers
 
 ##Status
 #####Python
-Speck cipher and tests mostly complete. Missing decryption block modes and tests.
+- Speck Cipher Implemented
+- Simon Cipher Implemented
+- Some Cipher Mode Test Missing
+- Some Cipher Setup Tests Missing
 #####VHDL
 Round function implemented as modules. Need to add cipher control logic, key/block sizing, amd block mode options.
 #####C
