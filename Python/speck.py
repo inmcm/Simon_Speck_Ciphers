@@ -130,15 +130,15 @@ class SpeckCipher:
             raise
 
         if self.mode == 'ECB':
-            for x in range(self.rounds):
-                b, a = self.encrypt_round(b, a, self.key_schedule[x])
+            for x in self.key_schedule:
+                b, a = self.encrypt_round(b, a, x)
 
         elif self.mode == 'CTR':
             true_counter = self.iv + self.counter
             d = (true_counter >> self.word_size) & self.mod_mask
             c = true_counter & self.mod_mask
-            for x in range(self.rounds):
-                d, c = self.encrypt_round(d, c, self.key_schedule[x])
+            for x in self.key_schedule:
+                d, c = self.encrypt_round(d, c, x)
             b ^= d
             a ^= c
             self.counter += 1
@@ -146,8 +146,8 @@ class SpeckCipher:
         elif self.mode == 'CBC':
             b ^= self.iv_upper
             a ^= self.iv_lower
-            for x in range(self.rounds):
-                b, a = self.encrypt_round(b, a, self.key_schedule[x])
+            for x in self.key_schedule:
+                b, a = self.encrypt_round(b, a, x)
 
             self.iv_upper = b
             self.iv_lower = a
@@ -157,8 +157,8 @@ class SpeckCipher:
             f, e = b, a
             b ^= self.iv_upper
             a ^= self.iv_lower
-            for x in range(self.rounds):
-                b, a = self.encrypt_round(b, a, self.key_schedule[x])
+            for x in self.key_schedule:
+                b, a = self.encrypt_round(b, a, x)
             self.iv_upper = (b ^ f)
             self.iv_lower = (a ^ e)
             self.iv = (self.iv_upper << self.word_size) + self.iv_lower
@@ -166,8 +166,8 @@ class SpeckCipher:
         elif self.mode == 'CFB':
             d = self.iv_upper
             c = self.iv_lower
-            for x in range(self.rounds):
-                d, c = self.encrypt_round(d, c, self.key_schedule[x])
+            for x in self.key_schedule:
+                d, c = self.encrypt_round(d, c, x)
             b ^= d
             a ^= c
             self.iv = (b << self.word_size) + a
@@ -175,8 +175,8 @@ class SpeckCipher:
         elif self.mode == 'OFB':
             d = self.iv_upper
             c = self.iv_lower
-            for x in range(self.rounds):
-                d, c = self.encrypt_round(d, c, self.key_schedule[x])
+            for x in self.key_schedule:
+                d, c = self.encrypt_round(d, c, x)
 
             self.iv_upper = d
             self.iv_lower = c
@@ -199,15 +199,15 @@ class SpeckCipher:
             raise
 
         if self.mode == 'ECB':
-            for x in range(self.rounds):
-                b, a = self.decrypt_round(b, a, self.key_schedule[self.rounds - (x + 1)])
+            for x in reversed(self.key_schedule):
+                b, a = self.decrypt_round(b, a, x)
 
         elif self.mode == 'CTR':
             true_counter = self.iv + self.counter
             d = (true_counter >> self.word_size) & self.mod_mask
             c = true_counter & self.mod_mask
-            for x in range(self.rounds):
-                d, c = self.encrypt_round(d, c, self.key_schedule[x])
+            for x in self.key_schedule:
+                d, c = self.encrypt_round(d, c, x)
             b ^= d
             a ^= c
             self.counter += 1
@@ -215,8 +215,8 @@ class SpeckCipher:
         elif self.mode == 'CBC':
             f,e = b, a
 
-            for x in range(self.rounds):
-                b, a = self.decrypt_round(b, a, self.key_schedule[self.rounds - (x + 1)])
+            for x in reversed(self.key_schedule):
+                b, a = self.decrypt_round(b, a, x)
             b ^= self.iv_upper
             a ^= self.iv_lower
 
@@ -228,8 +228,8 @@ class SpeckCipher:
         elif self.mode == 'PCBC':
             f, e = b, a
 
-            for x in range(self.rounds):
-                b, a = self.decrypt_round(b, a, self.key_schedule[self.rounds - (x + 1)])
+            for x in reversed(self.key_schedule):
+                b, a = self.decrypt_round(b, a, x)
 
             b ^= self.iv_upper
             a ^= self.iv_lower
