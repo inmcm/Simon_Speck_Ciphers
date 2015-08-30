@@ -213,16 +213,33 @@ class SpeckCipher:
             self.counter += 1
 
         elif self.mode == 'CBC':
+            f,e = b, a
+
             for x in range(self.rounds):
                 b, a = self.decrypt_round(b, a, self.key_schedule[self.rounds - (x + 1)])
-                b ^= self.iv_upper
-                a ^= self.iv_lower
+            b ^= self.iv_upper
+            a ^= self.iv_lower
+
+            self.iv_upper = f
+            self.iv_lower = e
+            self.iv = (f << self.word_size) + e
+
 
         elif self.mode == 'PCBC':
-            pass
+            f, e = b, a
+
+            for x in range(self.rounds):
+                b, a = self.decrypt_round(b, a, self.key_schedule[self.rounds - (x + 1)])
+
+            b ^= self.iv_upper
+            a ^= self.iv_lower
+            self.iv_upper = (b ^ f)
+            self.iv_lower = (a ^ e)
+            self.iv = (self.iv_upper << self.word_size) + self.iv_lower
 
         elif self.mode == 'CFB':
             pass
+
 
         elif self.mode == 'OFB':
             pass
