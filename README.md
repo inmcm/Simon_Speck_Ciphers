@@ -7,8 +7,10 @@ Implementations of the [Speck & Simon] Block Ciphers
 - Simon Cipher Implemented
 - Some Cipher Mode Test Missing
 - Some Cipher Setup Tests Missing
+
 #####VHDL
 Round function implemented as modules. Need to add cipher control logic, key/block sizing, amd block mode options.
+
 #####C
 TODO
 
