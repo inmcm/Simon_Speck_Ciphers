@@ -249,7 +249,6 @@ class SpeckCipher:
             b ^= d
             a ^= c
 
-
         elif self.mode == 'OFB':
             d = self.iv_upper
             c = self.iv_lower
