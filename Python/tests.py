@@ -495,6 +495,34 @@ class TestCipherModesSpeck:
         assert pcbc_out == pcbc_equivalent
 
 
+
+    def test_cfb_mode_equivalent(self):
+        c = SpeckCipher(self.key, self.key_size, self.block_size, 'CFB', init=self.iv)
+        cfb_encrypt = c.encrypt(self.plaintxt)
+        c = SpeckCipher(self.key, self.key_size, self.block_size, 'CFB', init=self.iv)
+        cfb_decrypt = c.decrypt(cfb_encrypt)
+
+        c = SpeckCipher(self.key, self.key_size, self.block_size, 'ECB')
+        ecb_out = c.encrypt(self.iv)
+        cfb_equivalent_encrypt = ecb_out ^ self.plaintxt
+        cfb_equivalent_decrypt = ecb_out ^ cfb_equivalent_encrypt
+
+        assert cfb_encrypt == cfb_equivalent_encrypt
+        assert cfb_decrypt == cfb_equivalent_decrypt
+
+
+    def test_cfb_mode_chain(self):
+        plaintxts = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
+
+        c = SpeckCipher(self.key, self.key_size, self.block_size, 'CFB', init=self.iv)
+        ciphertexts = [c.encrypt(x) for x in plaintxts]
+        c = SpeckCipher(self.key, self.key_size, self.block_size, 'CFB', init=self.iv)
+        decryptexts = [c.decrypt(x) for x in ciphertexts]
+
+        assert plaintxts == decryptexts
+
+
+
 class TestCipherModesSimon:
 
     key = 0x1f1e1d1c1b1a191817161514131211100f0e0d0c0b0a09080706050403020100
@@ -597,3 +625,28 @@ class TestCipherModesSimon:
             self.iv = pcbc_equivalent ^ self.plaintxt
 
         assert cbc_out == pcbc_equivalent
+
+    def test_cfb_mode_equivalent(self):
+        c = SimonCipher(self.key, self.key_size, self.block_size, 'CFB', init=self.iv)
+        cfb_encrypt = c.encrypt(self.plaintxt)
+        c = SimonCipher(self.key, self.key_size, self.block_size, 'CFB', init=self.iv)
+        cfb_decrypt = c.decrypt(cfb_encrypt)
+
+        c = SimonCipher(self.key, self.key_size, self.block_size, 'ECB')
+        ecb_out = c.encrypt(self.iv)
+        cfb_equivalent_encrypt = ecb_out ^ self.plaintxt
+        cfb_equivalent_decrypt = ecb_out ^ cfb_equivalent_encrypt
+
+        assert cfb_encrypt == cfb_equivalent_encrypt
+        assert cfb_decrypt == cfb_equivalent_decrypt
+
+
+    def test_cfb_mode_chain(self):
+        plaintxts = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
+
+        c = SimonCipher(self.key, self.key_size, self.block_size, 'CFB', init=self.iv)
+        ciphertexts = [c.encrypt(x) for x in plaintxts]
+        c = SimonCipher(self.key, self.key_size, self.block_size, 'CFB', init=self.iv)
+        decryptexts = [c.decrypt(x) for x in ciphertexts]
+
+        assert plaintxts == decryptexts

@@ -215,6 +215,9 @@ class SimonCipher:
                 d, c = self.encrypt_round(d, c, x)
             b ^= d
             a ^= c
+
+            self.iv_upper = b
+            self.iv_lower = a
             self.iv = (b << self.word_size) + a
 
         elif self.mode == 'OFB':
