@@ -269,6 +269,6 @@ class SpeckCipher:
 
 
 if __name__ == "__main__":
-    cpher = SpeckCipher(0x1f1e1d1c1b1a191817161514131211100f0e0d0c0b0a09080706050403020100, 256, 128, 'ECB')
-    g = cpher.encrypt(0x65736f6874206e49202e72656e6f6f70)
+    cipher = SpeckCipher(0x1f1e1d1c1b1a191817161514131211100f0e0d0c0b0a09080706050403020100, 256, 128, 'ECB')
+    g = cipher.encrypt(0x65736f6874206e49202e72656e6f6f70)
     print(hex(g))
