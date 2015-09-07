@@ -324,41 +324,71 @@ class TestRandomTestVectors:
 class TestCipherInitialization:
     not_ints = [6.22, 'hello', bytearray(b'stuffandbytes'), bytearray([12, 34, 0xAA, 00, 0x00, 34]), '0x1234567']
 
-    def test_bad_keys(self):
+    def test_bad_keys_speck(self):
         for bad_key in self.not_ints:
             with pytest.raises(TypeError):
                 SpeckCipher(bad_key)
 
-    def test_bad_counters(self):
+    def test_bad_keys_simon(self):
+        for bad_key in self.not_ints:
+            with pytest.raises(TypeError):
+                SimonCipher(bad_key)
+
+    def test_bad_counters_speck(self):
+        for bad_counter in self.not_ints:
+            with pytest.raises(TypeError):
+                SpeckCipher(0, counter=bad_counter)
+
+    def test_bad_counters_simon(self):
         for bad_counters in self.not_ints:
             with pytest.raises(TypeError):
-                SpeckCipher(0, counter=bad_counters)
+                SimonCipher(0, counter=bad_counters)
 
-    def test_bad_ivs(self):
+    def test_bad_ivs_speck(self):
         for bad_iv in self.not_ints:
             with pytest.raises(TypeError):
-                SpeckCipher(0, iv=bad_iv)
+                SpeckCipher(0, init=bad_iv)
+
+    def test_bad_ivs_simon(self):
+        for bad_iv in self.not_ints:
+            with pytest.raises(TypeError):
+                SimonCipher(0, init=bad_iv)
 
     not_block_modes = [7.1231, 'ERT', 11]
 
-    def test_bad_modes(self):
+    def test_bad_modes_speck(self):
         for bad_mode in self.not_block_modes:
             with pytest.raises(ValueError):
                 SpeckCipher(0, mode=bad_mode)
 
+    def test_bad_modes_simon(self):
+        for bad_mode in self.not_block_modes:
+            with pytest.raises(ValueError):
+                SimonCipher(0, mode=bad_mode)
+
     not_block_sizes = [10, 'steve', 11.8]
 
-    def test_bad_blocksizes(self):
+    def test_bad_blocksizes_speck(self):
         for bad_bsize in self.not_block_sizes:
             with pytest.raises(KeyError):
                 SpeckCipher(0, block_size=bad_bsize)
 
+    def test_bad_blocksizes_simon(self):
+        for bad_bsize in self.not_block_sizes:
+            with pytest.raises(KeyError):
+                SimonCipher(0, block_size=bad_bsize)
+
     not_key_sizes = [100000, 'eve', 11.8, 127]
 
-    def test_bad_keysize_1(self):
+    def test_bad_keysize_speck(self):
         for bad_ksize in self.not_key_sizes:
             with pytest.raises(KeyError):
                 SpeckCipher(0, key_size=bad_ksize)
+
+    def test_bad_keysize_simon(self):
+        for bad_ksize in self.not_key_sizes:
+            with pytest.raises(KeyError):
+                SimonCipher(0, key_size=bad_ksize)
 
 
 class TestCipherModesSpeck:
@@ -393,7 +423,6 @@ class TestCipherModesSpeck:
         output_plaintext = c.decrypt(ctr_out)
 
         assert output_plaintext == self.plaintxt
-
 
     def test_ctr_mode_chain(self):
 
@@ -466,7 +495,6 @@ class TestCipherModesSpeck:
         assert pcbc_out == pcbc_equivalent
 
 
-
 class TestCipherModesSimon:
 
     key = 0x1f1e1d1c1b1a191817161514131211100f0e0d0c0b0a09080706050403020100
@@ -499,7 +527,6 @@ class TestCipherModesSimon:
         output_plaintext = c.decrypt(ctr_out)
 
         assert output_plaintext == self.plaintxt
-
 
     def test_ctr_mode_chain(self):
 
