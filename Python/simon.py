@@ -226,6 +226,8 @@ class SimonCipher:
             for x in self.key_schedule:
                 d, c = self.encrypt_round(d, c, x)
 
+            self.iv_upper = d
+            self.iv_lower = c
             self.iv = (d << self.word_size) + c
 
             b ^= d

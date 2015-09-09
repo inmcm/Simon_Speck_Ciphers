@@ -522,6 +522,30 @@ class TestCipherModesSpeck:
         assert plaintxts == decryptexts
 
 
+    def test_ofb_mode_equivalent(self):
+        c = SpeckCipher(self.key, self.key_size, self.block_size, 'OFB', init=self.iv)
+        ofb_encrypt = c.encrypt(self.plaintxt)
+        c = SpeckCipher(self.key, self.key_size, self.block_size, 'OFB', init=self.iv)
+        ofb_decrypt = c.decrypt(ofb_encrypt)
+
+        c = SpeckCipher(self.key, self.key_size, self.block_size, 'ECB')
+        ecb_out = c.encrypt(self.iv)
+        ofb_equivalent_encrypt = ecb_out ^ self.plaintxt
+        ofb_equivalent_decrypt = ecb_out ^ ofb_equivalent_encrypt
+
+        assert ofb_encrypt == ofb_equivalent_encrypt
+        assert ofb_decrypt == ofb_equivalent_decrypt
+
+    def test_ofb_mode_chain(self):
+        plaintxts = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
+
+        c = SpeckCipher(self.key, self.key_size, self.block_size, 'OFB', init=self.iv)
+        ciphertexts = [c.encrypt(x) for x in plaintxts]
+        c = SpeckCipher(self.key, self.key_size, self.block_size, 'OFB', init=self.iv)
+        decryptexts = [c.decrypt(x) for x in ciphertexts]
+
+        assert plaintxts == decryptexts
+
 
 class TestCipherModesSimon:
 
@@ -647,6 +671,30 @@ class TestCipherModesSimon:
         c = SimonCipher(self.key, self.key_size, self.block_size, 'CFB', init=self.iv)
         ciphertexts = [c.encrypt(x) for x in plaintxts]
         c = SimonCipher(self.key, self.key_size, self.block_size, 'CFB', init=self.iv)
+        decryptexts = [c.decrypt(x) for x in ciphertexts]
+
+        assert plaintxts == decryptexts
+
+    def test_ofb_mode_equivalent(self):
+        c = SimonCipher(self.key, self.key_size, self.block_size, 'OFB', init=self.iv)
+        ofb_encrypt = c.encrypt(self.plaintxt)
+        c = SimonCipher(self.key, self.key_size, self.block_size, 'OFB', init=self.iv)
+        ofb_decrypt = c.decrypt(ofb_encrypt)
+
+        c = SimonCipher(self.key, self.key_size, self.block_size, 'ECB')
+        ecb_out = c.encrypt(self.iv)
+        ofb_equivalent_encrypt = ecb_out ^ self.plaintxt
+        ofb_equivalent_decrypt = ecb_out ^ ofb_equivalent_encrypt
+
+        assert ofb_encrypt == ofb_equivalent_encrypt
+        assert ofb_decrypt == ofb_equivalent_decrypt
+
+    def test_ofb_mode_chain(self):
+        plaintxts = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
+
+        c = SimonCipher(self.key, self.key_size, self.block_size, 'OFB', init=self.iv)
+        ciphertexts = [c.encrypt(x) for x in plaintxts]
+        c = SimonCipher(self.key, self.key_size, self.block_size, 'OFB', init=self.iv)
         decryptexts = [c.decrypt(x) for x in ciphertexts]
 
         assert plaintxts == decryptexts
