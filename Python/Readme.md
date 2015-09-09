@@ -57,12 +57,12 @@ All inputted values (keys, plaintexts, IVs, etc) will be truncated or padded wit
 ### Block Modes ###
 For convenience, both ciphers support the most common modes of block cipher operation. 
 
-- Electronic Code Book (ECB) (Default mode for Speck/Simon)
-- Counter (CTR)
-- Cipher Block Chaining (CBC)
-- Propagating Cipher Block Chaining (PCBC
-- Cipher Feedback (CFB)
-- Output Feedback (OFB)
+- Electronic Code Book ```ECB``` (Default mode for Speck/Simon)
+- Counter ```CTR```
+- Cipher Block Chaining ```CBC```
+- Propagating Cipher Block Chaining ```PCBC```
+- Cipher Feedback ```CFB```
+- Output Feedback ```OFB```
 
 These can be enabled at initialization using the ```mode``` optional argument or via the ```mode``` attribute after creation.
 Other than ECB, these modes require an additional Initialization Vector (IV) and possibly a Counter. These values can be set at cipher creation using the ```init``` and ```counter``` optional arguments. The IV may be may also be altered or read anytime during the cipher objects life using the ```update_iv()``` method. If new IV is provided, this method returns the current IV, otherwise, it returns the IV that was just set. The ciphers internal counter value may be read and altered through the ```counter``` attribute.
