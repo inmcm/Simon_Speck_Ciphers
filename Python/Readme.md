@@ -55,7 +55,7 @@ If not supplied at initialization, both ciphers will default to 128-bit encrypti
 All inputted values (keys, plaintexts, IVs, etc) will be truncated or padded with zeros to the bit size specified by the block and key sizes. The current key and block sizes can be accessed via the ```key_size``` and ```block_size``` attributes
 
 ### Block Modes ###
-For convenience, both ciphers support the most common modes of block cipher operation. 
+For convenience, both ciphers support the [most common modes] of block cipher operation. 
 
 - Electronic Code Book ```ECB``` (Default mode for Speck/Simon)
 - Counter ```CTR```
@@ -65,7 +65,8 @@ For convenience, both ciphers support the most common modes of block cipher oper
 - Output Feedback ```OFB```
 
 These can be enabled at initialization using the ```mode``` optional argument or via the ```mode``` attribute after creation.
-Other than ECB, these modes require an additional Initialization Vector (IV) and possibly a Counter. These values can be set at cipher creation using the ```init``` and ```counter``` optional arguments. The IV may be may also be altered or read anytime during the cipher objects life using the ```update_iv()``` method. If a new IV is provided, this method returns the current IV, otherwise, it returns the IV that was just updated. The ciphers internal counter value may be read and altered through the ```counter``` attribute.
+Other than ECB, these modes require an additional Initialization Vector (IV) and possibly a Counter. These values can be set at cipher creation using the ```init``` and ```counter``` optional arguments. 
+The ciphers automatically update or increment the IV and counter values internal between encrypt and decrypt operations. There is no need to manual update them between operations.
 
 ```sh
 >>> ofb_cipher = SpeckCipher(1234, mode='OFB', init=0x999999)
@@ -75,6 +76,8 @@ Other than ECB, these modes require an additional Initialization Vector (IV) and
 >>> ofb_cipher.update_iv()
 10066329
 ```
+
+The IV may be may also be altered or read anytime during the cipher objects life using the ```update_iv()``` method. If a new IV is provided, this method returns the current IV, otherwise, it returns the IV that was just updated. The ciphers internal counter value may be read and altered through the ```counter``` attribute.
 
 ### Data Types ###
 Currently, both the Speck and Simon ciphers expect **int** inputs for keys, IVs, counters, plaintexts, and ciphertexts. Any value provided that does not match the bit size for keys, plaintexts, etc, will be truncated down or MSB padded with 0's up to the correct size. If your application requires strings or bytearrays, input and output values can be easily translated to and from ints.
@@ -104,3 +107,4 @@ A robust pytest suite is provided in tests.py. Here all the official test vector
 
 [National Security Agency]:https://www.nsa.gov/
 [Simon and Speck]:http://eprint.iacr.org/2013/404.pdf
+[most common modes]:https://en.wikipedia.org/wiki/Block_cipher_mode_of_operation
