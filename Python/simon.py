@@ -171,7 +171,7 @@ class SimonCipher:
             a = plaintext & self.mod_mask
         except TypeError:
             print('Invalid plaintext!')
-            print('Please provide plaintext at int')
+            print('Please provide plaintext as int')
             raise
 
         if self.mode == 'ECB':
@@ -320,9 +320,16 @@ class SimonCipher:
         return plaintext
 
     def update_iv(self, new_iv):
-        self.iv = new_iv & ((2 ** self.block_size) - 1)
-        self.iv_upper = self.iv >> self.word_size
-        self.iv_lower = self.iv & self.mod_mask
+        if new_iv:
+            try:
+                self.iv = new_iv & ((2 ** self.block_size) - 1)
+                self.iv_upper = self.iv >> self.word_size
+                self.iv_lower = self.iv & self.mod_mask
+            except TypeError:
+                print('Invalid Initialization Vector!')
+                print('Please provide IV as int')
+                raise
+        return self.iv
 
 
 if __name__ == "__main__":
