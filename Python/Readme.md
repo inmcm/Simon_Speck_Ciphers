@@ -25,7 +25,11 @@ Once initialized, the cipher can encrypt or decrypt provided plaintext or cipher
 >>> simon_ciphertext = my_simon.encrypt(0xFFFF0000EEEE1111)
 >>> simon_plaintext = my_simon.decrypt(simon_ciphertext)
 ```
-
+The encryption key may be read or updated by way of the ```key``` attribute
+```sh
+>>> hex(my_speck.key)
+'0x123456789abcdef00fedcba987654321'
+```
 
 ### Block and Key Size ###
 All valid key and block sizes as described in the specification are supported as optional parameters. Valid block and key sizes in bits are:
@@ -48,7 +52,7 @@ If not supplied at initialization, both ciphers will default to 128-bit encrypti
 '0x444455556666777788889999'
 ```
 
-All inputted values (keys, plaintexts, IVs, etc) will be truncated or padded with zeros to the bit size specified by the block and key sizes. The current key and block sizes can be accesse
+All inputted values (keys, plaintexts, IVs, etc) will be truncated or padded with zeros to the bit size specified by the block and key sizes. The current key and block sizes can be accessed via the ```key_size``` and ```block_size``` attributes
 
 ### Block Modes ###
 For convenience, both ciphers support the most common modes of block cipher operation. 
