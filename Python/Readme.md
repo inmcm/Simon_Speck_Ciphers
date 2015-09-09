@@ -103,7 +103,7 @@ bytearray(b'HD\xbb\xe4\xa1\xed\x95\xd8>\x1bx<HOL[')
 ```
 
 ## Tests & Examples ##
-A robust pytest suite is provided in tests.py. Here all the official test vectors are exercised as well as random values. Exceptions are tested as well as block cipher modes. Refer to these tests for clean examples of how to use each mode.
+A robust pytest suite is provided in ```tests.py```. Here all the official test vectors are exercised as well as random values. Exceptions are tested as well as block cipher modes. Refer to these tests for clean examples of how to use each mode.
 
 [National Security Agency]:https://www.nsa.gov/
 [Simon and Speck]:http://eprint.iacr.org/2013/404.pdf
