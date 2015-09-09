@@ -49,7 +49,8 @@ class SpeckCipher:
         # Setup block/word size
         try:
             self.possible_setups = self.__valid_setups[block_size]
-            self.word_size = block_size >> 1
+            self.block_size = block_size
+            self.word_size = self.block_size >> 1
         except KeyError:
             print('Invalid block size!')
             print('Please use one of the following block sizes:', [x for x in self.__valid_setups.keys()])
@@ -68,7 +69,7 @@ class SpeckCipher:
         self.mod_mask = (2 ** self.word_size) - 1
 
         # Setup Circular Shift Parameters
-        if block_size == 32:
+        if self.block_size == 32:
             self.beta_shift = 2
             self.alpha_shift = 7
         else:
@@ -77,7 +78,7 @@ class SpeckCipher:
 
         # Parse the given iv and truncate it to the block length
         try:
-            self.iv = init & ((2 ** block_size) - 1)
+            self.iv = init & ((2 ** self.block_size) - 1)
             self.iv_upper = self.iv >> self.word_size
             self.iv_lower = self.iv & self.mod_mask
         except (ValueError, TypeError):
@@ -87,7 +88,7 @@ class SpeckCipher:
 
         # Parse the given Counter and truncate it to the block length
         try:
-            self.counter = counter & ((2 ** block_size) - 1)
+            self.counter = counter & ((2 ** self.block_size) - 1)
         except (ValueError, TypeError):
             print('Invalid Counter Value!')
             print('Please Provide Counter as int')
@@ -268,6 +269,11 @@ class SpeckCipher:
         plaintext = (b << self.word_size) + a
 
         return plaintext
+
+    def update_iv(self, new_iv):
+        self.iv = new_iv & ((2 ** self.block_size) - 1)
+        self.iv_upper = self.iv >> self.word_size
+        self.iv_lower = self.iv & self.mod_mask
 
 
 if __name__ == "__main__":
