@@ -1,135 +1,50 @@
 library IEEE;
 use IEEE.STD_LOGIC_1164.ALL;
-use IEEE.NUMERIC.ALL;
+use IEEE.numeric_std.all;
+use work.SIMON_CONSTANTS.all;
 
 entity SIMON_CIPHER is
-	Generic(KEY_SIZE : integer range 0 to 256;
-			BLOCK_SIZE : integer range 0 to 128);
+	Generic(KEY_SIZE : integer range 0 to 256 := 256;
+			BLOCK_SIZE : integer range 0 to 128 := 128;
+			ROUND_LIMIT: integer range 0 to 72 := 72);
     
     Port (SYS_CLK,RST : in std_logic;
     		BUSY : out  std_logic;
-    		CONTROL : in  std_logic_vector(2 downto 0);
-    		KEY : in  std_logic_vector (KEY_SIZE - 1 downto 0)
+    		CONTROL : in  std_logic_vector(1 downto 0);
+    		KEY : in  std_logic_vector (KEY_SIZE - 1 downto 0);
 			BLOCK_INPUT : in  std_logic_vector (BLOCK_SIZE - 1 downto 0);
 			BLOCK_OUTPUT : out  std_logic_vector (BLOCK_SIZE - 1 downto 0));
 			
 end SIMON_CIPHER;
 
 
-architecture Behavioral of AES_128_ENCRYPT is
+architecture Behavioral of SIMON_CIPHER is
 -------------------------------------------------------------
 -- Cipher Constants
 constant WORD_SIZE : integer range 0 to 64 := BLOCK_SIZE / 2;
-constant K_SEGMENTS : integer range 0 to 4 := KEY_SIZE /  WORD_SIZE
+constant K_SEGMENTS : integer range 0 to 4 := KEY_SIZE /  WORD_SIZE;
 
-constant ROUND_CONSTANT_HI std_logic_vector(WORD_SIZE - 5 downto 0) := (OTHERS => '1'); 
-constant ROUND_CONSTANT_LO std_logic_vector(3 downto 0) := X"C";
-constant ALL_ZEROS std_logic_vector(WORD_SIZE - 1 downto 0) := (OTHERS => '0');
+constant ROUND_CONSTANT_HI : std_logic_vector(WORD_SIZE - 5 downto 0) := (OTHERS => '1'); 
+constant ROUND_CONSTANT_LO : std_logic_vector(3 downto 0) := X"C";
 -------------------------------------------------------------
 
+signal ZJ : std_logic_vector(61 downto 0);
+signal z_shift : std_logic_vector(61 downto 0);
 
-
-----------------------------------
--- Round Limit and Z Array Assignments
--- Assigned by Block Size and Key Size as Given in Specification
-----------------------------------
-
--- Block Size 32 and Key Size 64 use z0 and 32 rounds
-if (BLOCK_SIZE = 32 and KEY_SIZE = 64) generate
-	constant ZJ : std_logic_vector(61 downto 0) = "01100111000011010100100010111110110011100001101010010001011111";
-	constant ROUND_LIMIT : integer range 0 to 72 = 32;
-end generate;
-
-
--- Block Size 48 and Key Size 72 use z0 and 36 rounds
-if (BLOCK_SIZE = 48 and KEY_SIZE = 72) generate
-	constant ZJ : std_logic_vector(61 downto 0) = "01100111000011010100100010111110110011100001101010010001011111";
-	constant ROUND_LIMIT : integer range 0 to 72 = 36;
-end generate;
-
-
--- Block Size 48 and Key Size 96 use z1 and 36 rounds
-if (BLOCK_SIZE = 48 and KEY_SIZE = 96) generate
-	constant ZJ : std_logic_vector(61 downto 0) = "01011010000110010011111011100010101101000011001001111101110001";
-	constant ROUND_LIMIT : integer range 0 to 72 = 36;
-end generate;
-
-
--- Block Size 64 and Key Size 96 use z2 and 42 rounds
-if (BLOCK_SIZE = 64 and KEY_SIZE = 96 ) generate
-	constant ZJ : std_logic_vector(61 downto 0) = "11001101101001111110001000010100011001001011000000111011110101";
-	constant ROUND_LIMIT : integer range 0 to 72 = 42;
-end generate;
-
-
--- Block Size 64 and Key Size 128 use z3 and 44 rounds
-if (BLOCK_SIZE = 64 and KEY_SIZE = 128) generate
-	constant ZJ : std_logic_vector(61 downto 0) = "11110000101100111001010001001000000111101001100011010111011011";
-	constant ROUND_LIMIT : integer range 0 to 72 = 44;
-end generate;
-
-
--- Block Size 96 and Key Size 96  use z2 and 52 rounds
-if (BLOCK_SIZE = 96 and KEY_SIZE = 96) generate
-	constant ZJ : std_logic_vector(61 downto 0) = "11001101101001111110001000010100011001001011000000111011110101";
-	constant ROUND_LIMIT : integer range 0 to 72 = 52;
-end generate;
-
-
--- Block Size 96 and Key Size 144 use z3 and 54 rounds
-if (BLOCK_SIZE =  and KEY_SIZE = ) generate
-	constant ZJ : std_logic_vector(61 downto 0) = "11110000101100111001010001001000000111101001100011010111011011";
-	constant ROUND_LIMIT : integer range 0 to 72 = 54;
-end generate;
-
-
--- Block Size 128 and Key Size 128 use z2 and 68 rounds 
-if (BLOCK_SIZE = 128 and KEY_SIZE = 128) generate
-	constant ZJ : std_logic_vector(61 downto 0) = "11001101101001111110001000010100011001001011000000111011110101";
-	constant ROUND_LIMIT : integer range 0 to 72 = 68;
-end generate;
-
-
--- Block Size 128 and Key Size 192 use z3  and 69 rounds
-if (BLOCK_SIZE = 128 and KEY_SIZE = 192) generate
-	constant ZJ : std_logic_vector(61 downto 0) = "11110000101100111001010001001000000111101001100011010111011011";
-	constant ROUND_LIMIT : integer range 0 to 72 = 69;
-end generate;
-
-
--- Block Size 128 and Key Size 256 use z4 and 72 rounds
-if (BLOCK_SIZE = 128 and KEY_SIZE = 256) generate
-	constant ZJ : std_logic_vector(61 downto 0) = "11110111001001010011000011101000000100011011010110011110001011";
-	constant ROUND_LIMIT : integer range 0 to 72 = 72;
-end generate;
 
 -- Key Schedule Storage Array
-type ARRAY_ROUNDxWORDSIZE is array(0 to ROUND_LIMIT - 1) of std_logic_vector(WORD_SIZE - 1 downto 0);
-type INV_ARRAY_ROUNDxWORDSIZE is array(ROUND_LIMIT - 1 downto 0) of std_logic_vector(WORD_SIZE - 1 downto 0);
+type ARRAY_ROUNDxWORDSIZE is array(0 to (ROUND_LIMIT - 1)) of std_logic_vector(WORD_SIZE - 1 downto 0);
 signal key_schedule: ARRAY_ROUNDxWORDSIZE;
+signal round_key : std_logic_vector(WORD_SIZE - 1 downto 0);
 
-alias inv_key_schedule : INV_ARRAY_ROUNDxWORDSIZE
-	is key_schedule;
-
--- or i above fails
---signal inv_key_schedule : ARRAY_ROUNDxWORDSIZE
---Map_Inverse_Key_Schedule : for i in 0 to ROUND_LIMIT - 1 generate
---	inv_key_schedule(i) <= key_schedule((ROUND_LIMIT - 1) - i);
---end generate ; -- Map_Inverse_Key_Schedule
 
 signal round_constant : std_logic_vector(WORD_SIZE - 1 downto 0);
 
--- Storage Bit for which direction the cipher is opperating in:
--- 0 - Encryption
--- 1 - Decryption
-signal cipher_direction : std_logic := 0;
-
-type ARRAY_PARTKEYxWORD is array (0 to K-1) of std_logic_vector(WORD_SIZE - 1 downto 0);
+type ARRAY_PARTKEYxWORD is array (0 to K_SEGMENTS-1) of std_logic_vector(WORD_SIZE - 1 downto 0);
 signal key_gen : ARRAY_PARTKEYxWORD;
 
 ------------------------------------------------------
 -- Fiestel Structure Signals
-signal key_buf : STD_LOGIC_VECTOR(WORD_SIZE - 1 downto 0);
 signal b_buf : STD_LOGIC_VECTOR(WORD_SIZE - 1 downto 0);
 signal a_buf : STD_LOGIC_VECTOR(WORD_SIZE - 1 downto 0);
 signal b_lft1 : STD_LOGIC_VECTOR(WORD_SIZE - 1 downto 0);
@@ -146,8 +61,25 @@ signal key_xor : STD_LOGIC_VECTOR(WORD_SIZE - 1 downto 0);
 
 --------------------------------------------------------
 
-type state is (Reset, Idle, Key_Schedule_Generation, Run_Cipher, Encryption_Latch, Decryption_Latch);
+
+--------------------------------------------------------
+-- Key Generation Signals
+signal key_temp_1 : std_logic_vector(WORD_SIZE -1 downto 0);
+signal key_temp_2 : std_logic_vector(WORD_SIZE -1 downto 0);
+signal rs3  : STD_LOGIC_VECTOR(WORD_SIZE - 1 downto 0);
+signal rs1  : STD_LOGIC_VECTOR(WORD_SIZE - 1 downto 0);
+signal zji  : STD_LOGIC_VECTOR(WORD_SIZE - 1 downto 0);
+
+type state is (Reset, Idle, Key_Schedule_Generation_Run, Key_Schedule_Generation_Finish,
+	Run_Encryption, Finish_Encryption, Run_Decryption, Finish_Decryption,
+	Encryption_Latch, Decryption_Latch);
 signal pr_state,nx_state : state;
+
+signal round_count : integer range 0 to (ROUND_LIMIT - 1);
+
+signal key_feedback : std_logic_vector(WORD_SIZE - 1 downto 0);
+
+signal key_gen_wr_en : std_logic;
 
 begin
 
@@ -165,7 +97,7 @@ begin
 	end if;
 end process; -- State_Machine_Head
 
-State_Machine_Body : process (CONTROL, round_count, cipher_direction, pr_state) ---State Machine State Definitions
+State_Machine_Body : process (CONTROL, round_count, pr_state) ---State Machine State Definitions
 begin
 	case pr_state is
 		
@@ -174,33 +106,48 @@ begin
 
 		when Idle =>  
 			if (CONTROL = "01") then
-				nx_state <= Key_Schedule_Generation;
-			elsif (CONTROL = '10' or ONTROL = '11') then
-				nx_state <= Run_Cipher;
+				nx_state <= Key_Schedule_Generation_Run;
+			elsif (CONTROL = "11") then
+				nx_state <= Run_Encryption;
+			elsif (CONTROL = "10") then
+				nx_state <= Run_Decryption;
 			else
-				nx_state <= IDLE;
-			end if;	
-
-		when Key_Schedule_Generation =>  
-			if (round_count = ROUND_LIMIT) then
 				nx_state <= Idle;
-			else
-				nx_state <= Key_Schedule_Generation;
 			end if;	
 
-		when Run_Cipher =>  
-			if (round_count = ROUND_LIMIT) then
-				if (cipher_direction = '0') then
-					nx_state <= Encryption_Latch;
-				else
-					nx_state <= Decryption_Latch;
-				end if ;
+		when Key_Schedule_Generation_Run =>  
+			if (round_count = ROUND_LIMIT - 2) then
+				nx_state <= Key_Schedule_Generation_Finish;
 			else
-				nx_state <= Run_Cipher;
+				nx_state <= Key_Schedule_Generation_Run;
 			end if;	
+
+		when Key_Schedule_Generation_Finish =>  
+			nx_state <= Idle;
+
+
+		when Run_Encryption =>  
+			if (round_count = ROUND_LIMIT - 2) then
+				nx_state <= Finish_Encryption;
+			else
+				nx_state <= Run_Encryption;
+			end if;	
+
+		when Finish_Encryption =>  
+			nx_state <= Encryption_Latch;
 
 		when Encryption_Latch =>
 			nx_state <= Idle;
+
+		when Run_Decryption =>  
+			if (round_count = 1) then
+				nx_state <= Finish_Decryption;
+			else
+				nx_state <= Run_Decryption;
+			end if;	
+
+		when Finish_Decryption =>  
+			nx_state <= Decryption_Latch;
 
 		when Decryption_Latch =>
 			nx_state <= Idle;
@@ -218,20 +165,12 @@ end process;
 -- Register Processes
 ----------------------------------------------------------------------
 
-Cipher_Direction_Buffer : process(SYS_CLK)
-begin
-	if SYS_CLK'event and SYS_CLK = 1 then
-		if (pr_state = Idle) then
-			cipher_direction <= CONTROL(0);
-		end if;
-	end if;	
-end process ; -- Cipher_Direction_Buffer
-
-
 Busy_Flag_Generator : process(SYS_CLK)
 begin
-	if SYS_CLK'event and SYS_CLK = 1 then
-		if (pr_state = Key_Schedule_Generation or pr_state = Run_Cipher) then
+	if SYS_CLK'event and SYS_CLK = '1' then
+		if (pr_state = Key_Schedule_Generation_Run or 
+			pr_state = Run_Encryption or pr_state = Run_Decryption or 
+			pr_state = Finish_Encryption or pr_state = Finish_Decryption) then
 			BUSY <= '1';
 		else
 			BUSY <= '0';
@@ -242,27 +181,23 @@ end process ; -- Busy_Flag_Generator
 
 Key_Schedule_Generator : process(SYS_CLK)
 begin
-	if SYS_CLK'event and SYS_CLK = 1 then
+	if SYS_CLK'event and SYS_CLK = '1' then
 		if (pr_state = Idle) then
-			Init_Gen_Regs : for i in 0 to (K-1) loop
-				key_gen(i) <= key(i+1);
+			Init_Gen_Regs : for i in 0 to (K_SEGMENTS-1) loop
+				key_gen(i) <= key(((i + 1) * WORD_SIZE) - 1 downto (i * WORD_SIZE));
 			end loop ; -- Update_Gen_Regs
 
-		elsif (pr_state = Key_Schedule_Generation) then
-			-- Store new entry in key schedule array
-			key_schedule(round_count) <= key_gen(0);
+			z_shift <= ZJ;
+
+		elsif (pr_state = Key_Schedule_Generation_Run or pr_state = Key_Schedule_Generation_Finish) then
+						
+			key_gen(K_SEGMENTS-1) <= key_feedback;
 			
-			Key_Feedback_1 : if (k != 4) generate
-				key_gen(K-1) <= key_gen(0)	^ s3 ^ s4 ^ z_ji ^ round_constant;
-			end generate;
-
-			Key_Feedback_2 : if (k = 4) generate
-				key_gen(K-1) <= key_gen(0) ^ key_gen(1)	^ s3 ^ s4 ^ z_ji ^ round_constant;
-			end generate;
-
-			Update_Gen_Regs : for i in 0 to (K-2) loop
+			for i in 0 to (K_SEGMENTS-2) loop
 				key_gen(i) <= key_gen(i+1);
-			end loop ; -- Update_Gen_Regs
+			end loop ;
+
+			z_shift <= z_shift(0) & z_shift(61 downto 1);
 		
 		end if;
 	end if;
@@ -271,18 +206,24 @@ end process ; -- Key_Schedule_Generator
 
 Fiestel_Round : process(SYS_CLK)
 begin
-	if SYS_CLK'event and SYS_CLK = 1 then
+	if SYS_CLK'event and SYS_CLK = '1' then
 		if (pr_state = Idle) then
-			if (CONTROL = '10') then
-				a_buf = BLOCK_INPUT(WORD_SIZE - 1 downto 0);
-				b_buf = BLOCK_INPUT(BLOCK_SIZE - 1 downto WORD_SIZE);
-			elsif (CONTROL = '11') then
-				a_buf = BLOCK_INPUT(BLOCK_SIZE - 1 downto WORD_SIZE);
-				b_buf = BLOCK_INPUT(WORD_SIZE - 1 downto 0);
+			
+			-- Load for Encryption
+			if (CONTROL = "11") then
+				a_buf <= BLOCK_INPUT(WORD_SIZE - 1 downto 0);
+				b_buf <= BLOCK_INPUT(BLOCK_SIZE - 1 downto WORD_SIZE);
+			
+			-- Load for Decryption
+			elsif (CONTROL = "10") then
+				a_buf <= BLOCK_INPUT(BLOCK_SIZE - 1 downto WORD_SIZE);
+				b_buf <= BLOCK_INPUT(WORD_SIZE - 1 downto 0);
 			end if;
-		elsif (pr_state = Run_Cipher) then
-			a_buf <= new_b;
-			b_buf <= a_buf;
+		
+		-- Run Cipher Engine
+		elsif (pr_state = Run_Encryption or pr_state = Run_Decryption or pr_state = Finish_Decryption or pr_state = Finish_Encryption) then
+			a_buf <= b_buf;
+			b_buf <= key_xor;
 		end if;
 	end if;
 end process ; -- Fiestel_Round
@@ -290,7 +231,7 @@ end process ; -- Fiestel_Round
 
 Output_Buffer : process(SYS_CLK)
 begin
-	if SYS_CLK'event and SYS_CLK = 1 then
+	if SYS_CLK'event and SYS_CLK = '1' then
 		if (pr_state = Encryption_Latch) then
 			BLOCK_OUTPUT <= b_buf & a_buf;
 		elsif (pr_state = Decryption_Latch) then
@@ -306,16 +247,46 @@ end process ; -- Output_Buffer
 
 
 ----------------------------------------------------------------------
+-- RAM Processes
+----------------------------------------------------------------------
+
+Key_Schedule_Array: process (SYS_CLK)   
+begin   
+	if (SYS_CLK'event and SYS_CLK = '1') then   
+    	--if (pr_state = Key_Schedule_Generation_Run or pr_state = Key_Schedule_Generation_Finish) then   
+		if (key_gen_wr_en = '1') then   
+        	key_schedule(round_count) <= key_gen(0);   
+      	end if;   
+	end if;   
+end process;   
+
+
+
+----------------------------------------------------------------------
+-- End RAM Processes
+----------------------------------------------------------------------
+
+
+
+----------------------------------------------------------------------
 -- Counter Processes
 ----------------------------------------------------------------------
 	
 Round_Counter : process(SYS_CLK)
 begin
-	if (SYS_CLK'event and SYS_CLK = 1) then
-		if pr_state = Reset or pr_state = Idle then
-			round_count = 0;
-		elsif (pr_state = Run_Cipher or pr_state = Generate_Key_Schedule) then
-			round_count = round_count + 1;
+	if (SYS_CLK'event and SYS_CLK = '1') then
+		if (pr_state = Reset) then
+			round_count <= 0;
+		elsif (pr_state = Idle) then
+			if (CONTROL = "11" or CONTROL = "01") then
+				round_count <= 0;
+			elsif (CONTROL = "10") then
+				round_count <= ROUND_LIMIT - 1;
+			end if;
+		elsif (pr_state = Run_Encryption or pr_state = Key_Schedule_Generation_Run) then
+			round_count <= round_count + 1;
+		elsif (pr_state = Run_Decryption) then
+			round_count <= round_count - 1;
 		end if ;
 	end if ;
 end process;
@@ -328,6 +299,9 @@ end process;
 ----------------------------------------------------------------------
 -- Async Signals
 ----------------------------------------------------------------------
+ZJ <= Z_Array_Lookup(KEY_SIZE,BLOCK_SIZE);
+round_key <= key_schedule(round_count);  
+
 
 -- Fiestel Round
 b_lft1 <= b_buf((WORD_SIZE - 2) downto 0) & b_buf(WORD_SIZE - 1);
@@ -340,22 +314,39 @@ b_xor <= b_and xor b_lft2;
 
 a_xor <= a_buf xor b_xor;
 
-with cipher_direction select key_buf <=
-	key_schedule(round_count) when "0",
-	inv_key_schedule(round_count) when "1";
-
-key_xor <= key_buf xor a_xor;
+key_xor <= round_key xor a_xor;
 
 
 -- Key Schedule Generation Logic
-s3 <= key_gen(0)(2 downto 0) & key_gen(0)(WORD_SIZE - 1 downto 3);
-s4 <= key_gen(0)(3 downto 0) & key_gen(0)(WORD_SIZE - 1 downto 4);
-round_constant <= ROUND_CONSTANT_HI & ROUND_CONSTANT_LO;
-zji <= ALL_ZEROS(WORD_SIZE - 1 downto 1) & zj(round_count mod 62);
+rs3 <= key_gen(K_SEGMENTS - 1)(2 downto 0) & key_gen(K_SEGMENTS - 1)(WORD_SIZE - 1 downto 3);
 
-----------------------------------------------------------------------
--- END Async Signals
-----------------------------------------------------------------------
+Key_Feedback_1 : if (K_SEGMENTS /= 4) generate
+begin
+	key_temp_1 <= rs3; 
+end generate;
+
+Key_Feedback_2 : if (K_SEGMENTS = 4) generate
+begin
+	key_temp_1 <= rs3 xor key_gen(1);	
+end generate;
+
+rs1 <= key_temp_1(0) & key_temp_1(WORD_SIZE - 1 downto 1);
+
+key_temp_2 <= (key_gen(0) xor key_temp_1) xor rs1;
+
+round_constant <= ROUND_CONSTANT_HI & ROUND_CONSTANT_LO;
+zji <= round_constant(WORD_SIZE - 1 downto 1) & z_shift(0);
+
+key_feedback <= key_temp_2 xor zji;
+
+Key_Generation_Write_Enable: process(SYS_CLK,pr_state)
+begin
+	if (pr_state = Key_Schedule_Generation_Run or pr_state = Key_Schedule_Generation_Finish) then
+		key_gen_wr_en <= '1';
+	else
+		key_gen_wr_en <= '0';
+	end if;
+end process;
 
 end Behavioral;
 
