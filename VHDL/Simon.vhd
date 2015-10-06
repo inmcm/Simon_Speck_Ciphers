@@ -4,9 +4,9 @@ use IEEE.numeric_std.all;
 use work.SIMON_CONSTANTS.all;
 
 entity SIMON_CIPHER is
-	Generic(KEY_SIZE : integer range 0 to 256 := 256;
-			BLOCK_SIZE : integer range 0 to 128 := 128;
-			ROUND_LIMIT: integer range 0 to 72 := 72);
+	Generic(KEY_SIZE : integer range 0 to 256 := 64;
+			BLOCK_SIZE : integer range 0 to 128 := 32;
+			ROUND_LIMIT: integer range 0 to 72 := 32);
     
     Port (SYS_CLK,RST : in std_logic;
     		BUSY : out  std_logic;
@@ -71,15 +71,14 @@ signal rs1  : STD_LOGIC_VECTOR(WORD_SIZE - 1 downto 0);
 signal zji  : STD_LOGIC_VECTOR(WORD_SIZE - 1 downto 0);
 
 type state is (Reset, Idle, Key_Schedule_Generation_Run, Key_Schedule_Generation_Finish,
-	Run_Encryption, Finish_Encryption, Run_Decryption, Finish_Decryption,
+	Start_Encryption, Run_Encryption, Finish_Encryption_1, Finish_Encryption_2,
+	Start_Decryption, Run_Decryption, Finish_Decryption_1, Finish_Decryption_2,
 	Encryption_Latch, Decryption_Latch);
 signal pr_state,nx_state : state;
 
 signal round_count : integer range 0 to (ROUND_LIMIT - 1);
 
 signal key_feedback : std_logic_vector(WORD_SIZE - 1 downto 0);
-
-signal key_gen_wr_en : std_logic;
 
 begin
 
@@ -108,9 +107,9 @@ begin
 			if (CONTROL = "01") then
 				nx_state <= Key_Schedule_Generation_Run;
 			elsif (CONTROL = "11") then
-				nx_state <= Run_Encryption;
+				nx_state <= Start_Encryption;
 			elsif (CONTROL = "10") then
-				nx_state <= Run_Decryption;
+				nx_state <= Start_Decryption;
 			else
 				nx_state <= Idle;
 			end if;	
@@ -125,28 +124,39 @@ begin
 		when Key_Schedule_Generation_Finish =>  
 			nx_state <= Idle;
 
+		when Start_Encryption =>
+			nx_state <= Run_Encryption;
 
 		when Run_Encryption =>  
 			if (round_count = ROUND_LIMIT - 2) then
-				nx_state <= Finish_Encryption;
+				nx_state <= Finish_Encryption_1;
 			else
 				nx_state <= Run_Encryption;
 			end if;	
 
-		when Finish_Encryption =>  
-			nx_state <= Encryption_Latch;
+		when Finish_Encryption_1 =>  
+			nx_state <= Finish_Encryption_2;
 
+		when Finish_Encryption_2 =>  
+			nx_state <= Encryption_Latch;
+		
 		when Encryption_Latch =>
 			nx_state <= Idle;
 
+		when Start_Decryption =>
+			nx_state <= Run_Decryption;
+
 		when Run_Decryption =>  
 			if (round_count = 1) then
-				nx_state <= Finish_Decryption;
+				nx_state <= Finish_Decryption_1;
 			else
 				nx_state <= Run_Decryption;
 			end if;	
 
-		when Finish_Decryption =>  
+		when Finish_Decryption_1 =>  
+			nx_state <= Finish_Decryption_2;
+			
+		when Finish_Decryption_2 =>  
 			nx_state <= Decryption_Latch;
 
 		when Decryption_Latch =>
@@ -170,7 +180,8 @@ begin
 	if SYS_CLK'event and SYS_CLK = '1' then
 		if (pr_state = Key_Schedule_Generation_Run or 
 			pr_state = Run_Encryption or pr_state = Run_Decryption or 
-			pr_state = Finish_Encryption or pr_state = Finish_Decryption) then
+			pr_state = Finish_Encryption_1 or pr_state = Finish_Decryption_1 or
+			pr_state = Finish_Encryption_2 or pr_state = Finish_Decryption_2) then
 			BUSY <= '1';
 		else
 			BUSY <= '0';
@@ -221,7 +232,7 @@ begin
 			end if;
 		
 		-- Run Cipher Engine
-		elsif (pr_state = Run_Encryption or pr_state = Run_Decryption or pr_state = Finish_Decryption or pr_state = Finish_Encryption) then
+		elsif (pr_state = Run_Encryption or pr_state = Run_Decryption or pr_state = Finish_Decryption_1 or pr_state = Finish_Decryption_2 or pr_state = Finish_Encryption_1 or pr_state = Finish_Encryption_2) then
 			a_buf <= b_buf;
 			b_buf <= key_xor;
 		end if;
@@ -252,9 +263,9 @@ end process ; -- Output_Buffer
 
 Key_Schedule_Array: process (SYS_CLK)   
 begin   
-	if (SYS_CLK'event and SYS_CLK = '1') then   
-    	--if (pr_state = Key_Schedule_Generation_Run or pr_state = Key_Schedule_Generation_Finish) then   
-		if (key_gen_wr_en = '1') then   
+	if (SYS_CLK'event and SYS_CLK = '1') then
+		round_key <= key_schedule(round_count);  
+    	if (pr_state = Key_Schedule_Generation_Run or pr_state = Key_Schedule_Generation_Finish) then   
         	key_schedule(round_count) <= key_gen(0);   
       	end if;   
 	end if;   
@@ -283,9 +294,9 @@ begin
 			elsif (CONTROL = "10") then
 				round_count <= ROUND_LIMIT - 1;
 			end if;
-		elsif (pr_state = Run_Encryption or pr_state = Key_Schedule_Generation_Run) then
+		elsif (pr_state = Start_Encryption or pr_state = Run_Encryption or pr_state = Key_Schedule_Generation_Run) then
 			round_count <= round_count + 1;
-		elsif (pr_state = Run_Decryption) then
+		elsif (pr_state = Start_Decryption or pr_state = Run_Decryption) then
 			round_count <= round_count - 1;
 		end if ;
 	end if ;
@@ -300,7 +311,7 @@ end process;
 -- Async Signals
 ----------------------------------------------------------------------
 ZJ <= Z_Array_Lookup(KEY_SIZE,BLOCK_SIZE);
-round_key <= key_schedule(round_count);  
+
 
 
 -- Fiestel Round
@@ -338,15 +349,6 @@ round_constant <= ROUND_CONSTANT_HI & ROUND_CONSTANT_LO;
 zji <= round_constant(WORD_SIZE - 1 downto 1) & z_shift(0);
 
 key_feedback <= key_temp_2 xor zji;
-
-Key_Generation_Write_Enable: process(SYS_CLK,pr_state)
-begin
-	if (pr_state = Key_Schedule_Generation_Run or pr_state = Key_Schedule_Generation_Finish) then
-		key_gen_wr_en <= '1';
-	else
-		key_gen_wr_en <= '0';
-	end if;
-end process;
 
 end Behavioral;
 

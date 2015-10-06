@@ -501,14 +501,14 @@
       <obj_property name="BkColor">#800080</obj_property>
       <obj_property name="TextColor">230 230 230</obj_property>
    </wvobject>
-   <wvobject fp_name="/simon_cipher_tb/uut/b_buf" type="array" db_ref_id="1">
-      <obj_property name="ElementShortName">b_buf[63:0]</obj_property>
-      <obj_property name="ObjectShortName">b_buf[63:0]</obj_property>
-      <obj_property name="Radix">HEXRADIX</obj_property>
-   </wvobject>
    <wvobject fp_name="/simon_cipher_tb/uut/a_buf" type="array" db_ref_id="1">
       <obj_property name="ElementShortName">a_buf[63:0]</obj_property>
       <obj_property name="ObjectShortName">a_buf[63:0]</obj_property>
+      <obj_property name="Radix">HEXRADIX</obj_property>
+   </wvobject>
+   <wvobject fp_name="/simon_cipher_tb/uut/b_buf" type="array" db_ref_id="1">
+      <obj_property name="ElementShortName">b_buf[63:0]</obj_property>
+      <obj_property name="ObjectShortName">b_buf[63:0]</obj_property>
       <obj_property name="Radix">HEXRADIX</obj_property>
    </wvobject>
    <wvobject fp_name="/simon_cipher_tb/uut/round_key" type="array" db_ref_id="1">

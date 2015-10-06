@@ -115,7 +115,14 @@ BEGIN
 		wait for SYS_CLK_period*3;
 		CONTROL <= "00";
 		
-		wait for SYS_CLK_period*500;
+		wait for SYS_CLK_period*100;
+		
+		BLOCK_INPUT <= X"8d2b5579afc8a3a03bf72a87efe7b868";
+		CONTROL <= "10";
+		wait for SYS_CLK_period*3;
+		CONTROL <= "00";
+		
+		
 
       -- insert stimulus here 
 
