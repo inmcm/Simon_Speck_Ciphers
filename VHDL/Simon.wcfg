@@ -12,7 +12,7 @@
          </top_modules>
       </db_ref>
    </db_ref_list>
-   <WVObjectSize size="27" />
+   <WVObjectSize size="54" />
    <wvobject fp_name="/simon_cipher_tb/sys_clk" type="logic" db_ref_id="1">
       <obj_property name="ElementShortName">sys_clk</obj_property>
       <obj_property name="ObjectShortName">sys_clk</obj_property>
@@ -21,503 +21,262 @@
       <obj_property name="ElementShortName">rst</obj_property>
       <obj_property name="ObjectShortName">rst</obj_property>
    </wvobject>
-   <wvobject fp_name="/simon_cipher_tb/control" type="array" db_ref_id="1">
-      <obj_property name="ElementShortName">control[1:0]</obj_property>
-      <obj_property name="ObjectShortName">control[1:0]</obj_property>
-   </wvobject>
-   <wvobject fp_name="/simon_cipher_tb/key" type="array" db_ref_id="1">
-      <obj_property name="ElementShortName">key[255:0]</obj_property>
-      <obj_property name="ObjectShortName">key[255:0]</obj_property>
-      <obj_property name="Radix">HEXRADIX</obj_property>
-   </wvobject>
-   <wvobject fp_name="/simon_cipher_tb/block_input" type="array" db_ref_id="1">
-      <obj_property name="ElementShortName">block_input[127:0]</obj_property>
-      <obj_property name="ObjectShortName">block_input[127:0]</obj_property>
-      <obj_property name="Radix">HEXRADIX</obj_property>
-   </wvobject>
-   <wvobject fp_name="/simon_cipher_tb/busy" type="logic" db_ref_id="1">
-      <obj_property name="ElementShortName">busy</obj_property>
-      <obj_property name="ObjectShortName">busy</obj_property>
-   </wvobject>
-   <wvobject fp_name="/simon_cipher_tb/block_output" type="array" db_ref_id="1">
-      <obj_property name="ElementShortName">block_output[127:0]</obj_property>
-      <obj_property name="ObjectShortName">block_output[127:0]</obj_property>
-      <obj_property name="Radix">HEXRADIX</obj_property>
-   </wvobject>
    <wvobject fp_name="/simon_cipher_tb/sys_clk_period" type="other" db_ref_id="1">
       <obj_property name="ElementShortName">sys_clk_period</obj_property>
       <obj_property name="ObjectShortName">sys_clk_period</obj_property>
    </wvobject>
-   <wvobject fp_name="divider12" type="divider">
-      <obj_property name="label">State Machine</obj_property>
-      <obj_property name="DisplayName">label</obj_property>
-      <obj_property name="BkColor">128 128 255</obj_property>
-      <obj_property name="TextColor">230 230 230</obj_property>
-   </wvobject>
-   <wvobject fp_name="/simon_cipher_tb/uut/nx_state" type="other" db_ref_id="1">
-      <obj_property name="ElementShortName">nx_state</obj_property>
-      <obj_property name="ObjectShortName">nx_state</obj_property>
-   </wvobject>
-   <wvobject fp_name="/simon_cipher_tb/uut/pr_state" type="other" db_ref_id="1">
-      <obj_property name="ElementShortName">pr_state</obj_property>
-      <obj_property name="ObjectShortName">pr_state</obj_property>
-   </wvobject>
-   <wvobject fp_name="/simon_cipher_tb/uut/round_count" type="other" db_ref_id="1">
-      <obj_property name="ElementShortName">round_count</obj_property>
-      <obj_property name="ObjectShortName">round_count</obj_property>
-   </wvobject>
-   <wvobject fp_name="/simon_cipher_tb/uut/inv_round_count" type="other" db_ref_id="1">
-      <obj_property name="ElementShortName">inv_round_count</obj_property>
-      <obj_property name="ObjectShortName">inv_round_count</obj_property>
+   <wvobject fp_name="/simon_cipher_tb/control" type="array" db_ref_id="1">
+      <obj_property name="ElementShortName">control[1:0]</obj_property>
+      <obj_property name="ObjectShortName">control[1:0]</obj_property>
    </wvobject>
    <wvobject fp_name="divider10" type="divider">
-      <obj_property name="label">Key Gen</obj_property>
+      <obj_property name="label">UUT1 Key: 64 Block: 32</obj_property>
       <obj_property name="DisplayName">label</obj_property>
-      <obj_property name="BkColor">#008000</obj_property>
+      <obj_property name="BkColor">#ffa500</obj_property>
       <obj_property name="TextColor">230 230 230</obj_property>
    </wvobject>
-   <wvobject fp_name="/simon_cipher_tb/uut/key_schedule" type="array" db_ref_id="1">
-      <obj_property name="ElementShortName">key_schedule[0:71]</obj_property>
-      <obj_property name="ObjectShortName">key_schedule[0:71]</obj_property>
-      <obj_property name="Radix">HEXRADIX</obj_property>
-      <wvobject fp_name="/simon_cipher_tb/uut/key_schedule[0]" type="array" db_ref_id="1">
-         <obj_property name="ElementShortName">[0]</obj_property>
-         <obj_property name="ObjectShortName">key_schedule[0]</obj_property>
-         <obj_property name="Radix">HEXRADIX</obj_property>
-      </wvobject>
-      <wvobject fp_name="/simon_cipher_tb/uut/key_schedule[1]" type="array" db_ref_id="1">
-         <obj_property name="ElementShortName">[1]</obj_property>
-         <obj_property name="ObjectShortName">key_schedule[1]</obj_property>
-         <obj_property name="Radix">HEXRADIX</obj_property>
-      </wvobject>
-      <wvobject fp_name="/simon_cipher_tb/uut/key_schedule[2]" type="array" db_ref_id="1">
-         <obj_property name="ElementShortName">[2]</obj_property>
-         <obj_property name="ObjectShortName">key_schedule[2]</obj_property>
-         <obj_property name="Radix">HEXRADIX</obj_property>
-      </wvobject>
-      <wvobject fp_name="/simon_cipher_tb/uut/key_schedule[3]" type="array" db_ref_id="1">
-         <obj_property name="ElementShortName">[3]</obj_property>
-         <obj_property name="ObjectShortName">key_schedule[3]</obj_property>
-         <obj_property name="Radix">HEXRADIX</obj_property>
-      </wvobject>
-      <wvobject fp_name="/simon_cipher_tb/uut/key_schedule[4]" type="array" db_ref_id="1">
-         <obj_property name="ElementShortName">[4]</obj_property>
-         <obj_property name="ObjectShortName">key_schedule[4]</obj_property>
-         <obj_property name="Radix">HEXRADIX</obj_property>
-      </wvobject>
-      <wvobject fp_name="/simon_cipher_tb/uut/key_schedule[5]" type="array" db_ref_id="1">
-         <obj_property name="ElementShortName">[5]</obj_property>
-         <obj_property name="ObjectShortName">key_schedule[5]</obj_property>
-         <obj_property name="Radix">HEXRADIX</obj_property>
-      </wvobject>
-      <wvobject fp_name="/simon_cipher_tb/uut/key_schedule[6]" type="array" db_ref_id="1">
-         <obj_property name="ElementShortName">[6]</obj_property>
-         <obj_property name="ObjectShortName">key_schedule[6]</obj_property>
-         <obj_property name="Radix">HEXRADIX</obj_property>
-      </wvobject>
-      <wvobject fp_name="/simon_cipher_tb/uut/key_schedule[7]" type="array" db_ref_id="1">
-         <obj_property name="ElementShortName">[7]</obj_property>
-         <obj_property name="ObjectShortName">key_schedule[7]</obj_property>
-         <obj_property name="Radix">HEXRADIX</obj_property>
-      </wvobject>
-      <wvobject fp_name="/simon_cipher_tb/uut/key_schedule[8]" type="array" db_ref_id="1">
-         <obj_property name="ElementShortName">[8]</obj_property>
-         <obj_property name="ObjectShortName">key_schedule[8]</obj_property>
-         <obj_property name="Radix">HEXRADIX</obj_property>
-      </wvobject>
-      <wvobject fp_name="/simon_cipher_tb/uut/key_schedule[9]" type="array" db_ref_id="1">
-         <obj_property name="ElementShortName">[9]</obj_property>
-         <obj_property name="ObjectShortName">key_schedule[9]</obj_property>
-         <obj_property name="Radix">HEXRADIX</obj_property>
-      </wvobject>
-      <wvobject fp_name="/simon_cipher_tb/uut/key_schedule[10]" type="array" db_ref_id="1">
-         <obj_property name="ElementShortName">[10]</obj_property>
-         <obj_property name="ObjectShortName">key_schedule[10]</obj_property>
-         <obj_property name="Radix">HEXRADIX</obj_property>
-      </wvobject>
-      <wvobject fp_name="/simon_cipher_tb/uut/key_schedule[11]" type="array" db_ref_id="1">
-         <obj_property name="ElementShortName">[11]</obj_property>
-         <obj_property name="ObjectShortName">key_schedule[11]</obj_property>
-         <obj_property name="Radix">HEXRADIX</obj_property>
-      </wvobject>
-      <wvobject fp_name="/simon_cipher_tb/uut/key_schedule[12]" type="array" db_ref_id="1">
-         <obj_property name="ElementShortName">[12]</obj_property>
-         <obj_property name="ObjectShortName">key_schedule[12]</obj_property>
-         <obj_property name="Radix">HEXRADIX</obj_property>
-      </wvobject>
-      <wvobject fp_name="/simon_cipher_tb/uut/key_schedule[13]" type="array" db_ref_id="1">
-         <obj_property name="ElementShortName">[13]</obj_property>
-         <obj_property name="ObjectShortName">key_schedule[13]</obj_property>
-         <obj_property name="Radix">HEXRADIX</obj_property>
-      </wvobject>
-      <wvobject fp_name="/simon_cipher_tb/uut/key_schedule[14]" type="array" db_ref_id="1">
-         <obj_property name="ElementShortName">[14]</obj_property>
-         <obj_property name="ObjectShortName">key_schedule[14]</obj_property>
-         <obj_property name="Radix">HEXRADIX</obj_property>
-      </wvobject>
-      <wvobject fp_name="/simon_cipher_tb/uut/key_schedule[15]" type="array" db_ref_id="1">
-         <obj_property name="ElementShortName">[15]</obj_property>
-         <obj_property name="ObjectShortName">key_schedule[15]</obj_property>
-         <obj_property name="Radix">HEXRADIX</obj_property>
-      </wvobject>
-      <wvobject fp_name="/simon_cipher_tb/uut/key_schedule[16]" type="array" db_ref_id="1">
-         <obj_property name="ElementShortName">[16]</obj_property>
-         <obj_property name="ObjectShortName">key_schedule[16]</obj_property>
-         <obj_property name="Radix">HEXRADIX</obj_property>
-      </wvobject>
-      <wvobject fp_name="/simon_cipher_tb/uut/key_schedule[17]" type="array" db_ref_id="1">
-         <obj_property name="ElementShortName">[17]</obj_property>
-         <obj_property name="ObjectShortName">key_schedule[17]</obj_property>
-         <obj_property name="Radix">HEXRADIX</obj_property>
-      </wvobject>
-      <wvobject fp_name="/simon_cipher_tb/uut/key_schedule[18]" type="array" db_ref_id="1">
-         <obj_property name="ElementShortName">[18]</obj_property>
-         <obj_property name="ObjectShortName">key_schedule[18]</obj_property>
-         <obj_property name="Radix">HEXRADIX</obj_property>
-      </wvobject>
-      <wvobject fp_name="/simon_cipher_tb/uut/key_schedule[19]" type="array" db_ref_id="1">
-         <obj_property name="ElementShortName">[19]</obj_property>
-         <obj_property name="ObjectShortName">key_schedule[19]</obj_property>
-         <obj_property name="Radix">HEXRADIX</obj_property>
-      </wvobject>
-      <wvobject fp_name="/simon_cipher_tb/uut/key_schedule[20]" type="array" db_ref_id="1">
-         <obj_property name="ElementShortName">[20]</obj_property>
-         <obj_property name="ObjectShortName">key_schedule[20]</obj_property>
-         <obj_property name="Radix">HEXRADIX</obj_property>
-      </wvobject>
-      <wvobject fp_name="/simon_cipher_tb/uut/key_schedule[21]" type="array" db_ref_id="1">
-         <obj_property name="ElementShortName">[21]</obj_property>
-         <obj_property name="ObjectShortName">key_schedule[21]</obj_property>
-         <obj_property name="Radix">HEXRADIX</obj_property>
-      </wvobject>
-      <wvobject fp_name="/simon_cipher_tb/uut/key_schedule[22]" type="array" db_ref_id="1">
-         <obj_property name="ElementShortName">[22]</obj_property>
-         <obj_property name="ObjectShortName">key_schedule[22]</obj_property>
-         <obj_property name="Radix">HEXRADIX</obj_property>
-      </wvobject>
-      <wvobject fp_name="/simon_cipher_tb/uut/key_schedule[23]" type="array" db_ref_id="1">
-         <obj_property name="ElementShortName">[23]</obj_property>
-         <obj_property name="ObjectShortName">key_schedule[23]</obj_property>
-         <obj_property name="Radix">HEXRADIX</obj_property>
-      </wvobject>
-      <wvobject fp_name="/simon_cipher_tb/uut/key_schedule[24]" type="array" db_ref_id="1">
-         <obj_property name="ElementShortName">[24]</obj_property>
-         <obj_property name="ObjectShortName">key_schedule[24]</obj_property>
-         <obj_property name="Radix">HEXRADIX</obj_property>
-      </wvobject>
-      <wvobject fp_name="/simon_cipher_tb/uut/key_schedule[25]" type="array" db_ref_id="1">
-         <obj_property name="ElementShortName">[25]</obj_property>
-         <obj_property name="ObjectShortName">key_schedule[25]</obj_property>
-         <obj_property name="Radix">HEXRADIX</obj_property>
-      </wvobject>
-      <wvobject fp_name="/simon_cipher_tb/uut/key_schedule[26]" type="array" db_ref_id="1">
-         <obj_property name="ElementShortName">[26]</obj_property>
-         <obj_property name="ObjectShortName">key_schedule[26]</obj_property>
-         <obj_property name="Radix">HEXRADIX</obj_property>
-      </wvobject>
-      <wvobject fp_name="/simon_cipher_tb/uut/key_schedule[27]" type="array" db_ref_id="1">
-         <obj_property name="ElementShortName">[27]</obj_property>
-         <obj_property name="ObjectShortName">key_schedule[27]</obj_property>
-         <obj_property name="Radix">HEXRADIX</obj_property>
-      </wvobject>
-      <wvobject fp_name="/simon_cipher_tb/uut/key_schedule[28]" type="array" db_ref_id="1">
-         <obj_property name="ElementShortName">[28]</obj_property>
-         <obj_property name="ObjectShortName">key_schedule[28]</obj_property>
-         <obj_property name="Radix">HEXRADIX</obj_property>
-      </wvobject>
-      <wvobject fp_name="/simon_cipher_tb/uut/key_schedule[29]" type="array" db_ref_id="1">
-         <obj_property name="ElementShortName">[29]</obj_property>
-         <obj_property name="ObjectShortName">key_schedule[29]</obj_property>
-         <obj_property name="Radix">HEXRADIX</obj_property>
-      </wvobject>
-      <wvobject fp_name="/simon_cipher_tb/uut/key_schedule[30]" type="array" db_ref_id="1">
-         <obj_property name="ElementShortName">[30]</obj_property>
-         <obj_property name="ObjectShortName">key_schedule[30]</obj_property>
-         <obj_property name="Radix">HEXRADIX</obj_property>
-      </wvobject>
-      <wvobject fp_name="/simon_cipher_tb/uut/key_schedule[31]" type="array" db_ref_id="1">
-         <obj_property name="ElementShortName">[31]</obj_property>
-         <obj_property name="ObjectShortName">key_schedule[31]</obj_property>
-         <obj_property name="Radix">HEXRADIX</obj_property>
-      </wvobject>
-      <wvobject fp_name="/simon_cipher_tb/uut/key_schedule[32]" type="array" db_ref_id="1">
-         <obj_property name="ElementShortName">[32]</obj_property>
-         <obj_property name="ObjectShortName">key_schedule[32]</obj_property>
-         <obj_property name="Radix">HEXRADIX</obj_property>
-      </wvobject>
-      <wvobject fp_name="/simon_cipher_tb/uut/key_schedule[33]" type="array" db_ref_id="1">
-         <obj_property name="ElementShortName">[33]</obj_property>
-         <obj_property name="ObjectShortName">key_schedule[33]</obj_property>
-         <obj_property name="Radix">HEXRADIX</obj_property>
-      </wvobject>
-      <wvobject fp_name="/simon_cipher_tb/uut/key_schedule[34]" type="array" db_ref_id="1">
-         <obj_property name="ElementShortName">[34]</obj_property>
-         <obj_property name="ObjectShortName">key_schedule[34]</obj_property>
-         <obj_property name="Radix">HEXRADIX</obj_property>
-      </wvobject>
-      <wvobject fp_name="/simon_cipher_tb/uut/key_schedule[35]" type="array" db_ref_id="1">
-         <obj_property name="ElementShortName">[35]</obj_property>
-         <obj_property name="ObjectShortName">key_schedule[35]</obj_property>
-         <obj_property name="Radix">HEXRADIX</obj_property>
-      </wvobject>
-      <wvobject fp_name="/simon_cipher_tb/uut/key_schedule[36]" type="array" db_ref_id="1">
-         <obj_property name="ElementShortName">[36]</obj_property>
-         <obj_property name="ObjectShortName">key_schedule[36]</obj_property>
-         <obj_property name="Radix">HEXRADIX</obj_property>
-      </wvobject>
-      <wvobject fp_name="/simon_cipher_tb/uut/key_schedule[37]" type="array" db_ref_id="1">
-         <obj_property name="ElementShortName">[37]</obj_property>
-         <obj_property name="ObjectShortName">key_schedule[37]</obj_property>
-         <obj_property name="Radix">HEXRADIX</obj_property>
-      </wvobject>
-      <wvobject fp_name="/simon_cipher_tb/uut/key_schedule[38]" type="array" db_ref_id="1">
-         <obj_property name="ElementShortName">[38]</obj_property>
-         <obj_property name="ObjectShortName">key_schedule[38]</obj_property>
-         <obj_property name="Radix">HEXRADIX</obj_property>
-      </wvobject>
-      <wvobject fp_name="/simon_cipher_tb/uut/key_schedule[39]" type="array" db_ref_id="1">
-         <obj_property name="ElementShortName">[39]</obj_property>
-         <obj_property name="ObjectShortName">key_schedule[39]</obj_property>
-         <obj_property name="Radix">HEXRADIX</obj_property>
-      </wvobject>
-      <wvobject fp_name="/simon_cipher_tb/uut/key_schedule[40]" type="array" db_ref_id="1">
-         <obj_property name="ElementShortName">[40]</obj_property>
-         <obj_property name="ObjectShortName">key_schedule[40]</obj_property>
-         <obj_property name="Radix">HEXRADIX</obj_property>
-      </wvobject>
-      <wvobject fp_name="/simon_cipher_tb/uut/key_schedule[41]" type="array" db_ref_id="1">
-         <obj_property name="ElementShortName">[41]</obj_property>
-         <obj_property name="ObjectShortName">key_schedule[41]</obj_property>
-         <obj_property name="Radix">HEXRADIX</obj_property>
-      </wvobject>
-      <wvobject fp_name="/simon_cipher_tb/uut/key_schedule[42]" type="array" db_ref_id="1">
-         <obj_property name="ElementShortName">[42]</obj_property>
-         <obj_property name="ObjectShortName">key_schedule[42]</obj_property>
-         <obj_property name="Radix">HEXRADIX</obj_property>
-      </wvobject>
-      <wvobject fp_name="/simon_cipher_tb/uut/key_schedule[43]" type="array" db_ref_id="1">
-         <obj_property name="ElementShortName">[43]</obj_property>
-         <obj_property name="ObjectShortName">key_schedule[43]</obj_property>
-         <obj_property name="Radix">HEXRADIX</obj_property>
-      </wvobject>
-      <wvobject fp_name="/simon_cipher_tb/uut/key_schedule[44]" type="array" db_ref_id="1">
-         <obj_property name="ElementShortName">[44]</obj_property>
-         <obj_property name="ObjectShortName">key_schedule[44]</obj_property>
-         <obj_property name="Radix">HEXRADIX</obj_property>
-      </wvobject>
-      <wvobject fp_name="/simon_cipher_tb/uut/key_schedule[45]" type="array" db_ref_id="1">
-         <obj_property name="ElementShortName">[45]</obj_property>
-         <obj_property name="ObjectShortName">key_schedule[45]</obj_property>
-         <obj_property name="Radix">HEXRADIX</obj_property>
-      </wvobject>
-      <wvobject fp_name="/simon_cipher_tb/uut/key_schedule[46]" type="array" db_ref_id="1">
-         <obj_property name="ElementShortName">[46]</obj_property>
-         <obj_property name="ObjectShortName">key_schedule[46]</obj_property>
-         <obj_property name="Radix">HEXRADIX</obj_property>
-      </wvobject>
-      <wvobject fp_name="/simon_cipher_tb/uut/key_schedule[47]" type="array" db_ref_id="1">
-         <obj_property name="ElementShortName">[47]</obj_property>
-         <obj_property name="ObjectShortName">key_schedule[47]</obj_property>
-         <obj_property name="Radix">HEXRADIX</obj_property>
-      </wvobject>
-      <wvobject fp_name="/simon_cipher_tb/uut/key_schedule[48]" type="array" db_ref_id="1">
-         <obj_property name="ElementShortName">[48]</obj_property>
-         <obj_property name="ObjectShortName">key_schedule[48]</obj_property>
-         <obj_property name="Radix">HEXRADIX</obj_property>
-      </wvobject>
-      <wvobject fp_name="/simon_cipher_tb/uut/key_schedule[49]" type="array" db_ref_id="1">
-         <obj_property name="ElementShortName">[49]</obj_property>
-         <obj_property name="ObjectShortName">key_schedule[49]</obj_property>
-         <obj_property name="Radix">HEXRADIX</obj_property>
-      </wvobject>
-      <wvobject fp_name="/simon_cipher_tb/uut/key_schedule[50]" type="array" db_ref_id="1">
-         <obj_property name="ElementShortName">[50]</obj_property>
-         <obj_property name="ObjectShortName">key_schedule[50]</obj_property>
-         <obj_property name="Radix">HEXRADIX</obj_property>
-      </wvobject>
-      <wvobject fp_name="/simon_cipher_tb/uut/key_schedule[51]" type="array" db_ref_id="1">
-         <obj_property name="ElementShortName">[51]</obj_property>
-         <obj_property name="ObjectShortName">key_schedule[51]</obj_property>
-         <obj_property name="Radix">HEXRADIX</obj_property>
-      </wvobject>
-      <wvobject fp_name="/simon_cipher_tb/uut/key_schedule[52]" type="array" db_ref_id="1">
-         <obj_property name="ElementShortName">[52]</obj_property>
-         <obj_property name="ObjectShortName">key_schedule[52]</obj_property>
-         <obj_property name="Radix">HEXRADIX</obj_property>
-      </wvobject>
-      <wvobject fp_name="/simon_cipher_tb/uut/key_schedule[53]" type="array" db_ref_id="1">
-         <obj_property name="ElementShortName">[53]</obj_property>
-         <obj_property name="ObjectShortName">key_schedule[53]</obj_property>
-         <obj_property name="Radix">HEXRADIX</obj_property>
-      </wvobject>
-      <wvobject fp_name="/simon_cipher_tb/uut/key_schedule[54]" type="array" db_ref_id="1">
-         <obj_property name="ElementShortName">[54]</obj_property>
-         <obj_property name="ObjectShortName">key_schedule[54]</obj_property>
-         <obj_property name="Radix">HEXRADIX</obj_property>
-      </wvobject>
-      <wvobject fp_name="/simon_cipher_tb/uut/key_schedule[55]" type="array" db_ref_id="1">
-         <obj_property name="ElementShortName">[55]</obj_property>
-         <obj_property name="ObjectShortName">key_schedule[55]</obj_property>
-         <obj_property name="Radix">HEXRADIX</obj_property>
-      </wvobject>
-      <wvobject fp_name="/simon_cipher_tb/uut/key_schedule[56]" type="array" db_ref_id="1">
-         <obj_property name="ElementShortName">[56]</obj_property>
-         <obj_property name="ObjectShortName">key_schedule[56]</obj_property>
-         <obj_property name="Radix">HEXRADIX</obj_property>
-      </wvobject>
-      <wvobject fp_name="/simon_cipher_tb/uut/key_schedule[57]" type="array" db_ref_id="1">
-         <obj_property name="ElementShortName">[57]</obj_property>
-         <obj_property name="ObjectShortName">key_schedule[57]</obj_property>
-         <obj_property name="Radix">HEXRADIX</obj_property>
-      </wvobject>
-      <wvobject fp_name="/simon_cipher_tb/uut/key_schedule[58]" type="array" db_ref_id="1">
-         <obj_property name="ElementShortName">[58]</obj_property>
-         <obj_property name="ObjectShortName">key_schedule[58]</obj_property>
-         <obj_property name="Radix">HEXRADIX</obj_property>
-      </wvobject>
-      <wvobject fp_name="/simon_cipher_tb/uut/key_schedule[59]" type="array" db_ref_id="1">
-         <obj_property name="ElementShortName">[59]</obj_property>
-         <obj_property name="ObjectShortName">key_schedule[59]</obj_property>
-         <obj_property name="Radix">HEXRADIX</obj_property>
-      </wvobject>
-      <wvobject fp_name="/simon_cipher_tb/uut/key_schedule[60]" type="array" db_ref_id="1">
-         <obj_property name="ElementShortName">[60]</obj_property>
-         <obj_property name="ObjectShortName">key_schedule[60]</obj_property>
-         <obj_property name="Radix">HEXRADIX</obj_property>
-      </wvobject>
-      <wvobject fp_name="/simon_cipher_tb/uut/key_schedule[61]" type="array" db_ref_id="1">
-         <obj_property name="ElementShortName">[61]</obj_property>
-         <obj_property name="ObjectShortName">key_schedule[61]</obj_property>
-         <obj_property name="Radix">HEXRADIX</obj_property>
-      </wvobject>
-      <wvobject fp_name="/simon_cipher_tb/uut/key_schedule[62]" type="array" db_ref_id="1">
-         <obj_property name="ElementShortName">[62]</obj_property>
-         <obj_property name="ObjectShortName">key_schedule[62]</obj_property>
-         <obj_property name="Radix">HEXRADIX</obj_property>
-      </wvobject>
-      <wvobject fp_name="/simon_cipher_tb/uut/key_schedule[63]" type="array" db_ref_id="1">
-         <obj_property name="ElementShortName">[63]</obj_property>
-         <obj_property name="ObjectShortName">key_schedule[63]</obj_property>
-         <obj_property name="Radix">HEXRADIX</obj_property>
-      </wvobject>
-      <wvobject fp_name="/simon_cipher_tb/uut/key_schedule[64]" type="array" db_ref_id="1">
-         <obj_property name="ElementShortName">[64]</obj_property>
-         <obj_property name="ObjectShortName">key_schedule[64]</obj_property>
-         <obj_property name="Radix">HEXRADIX</obj_property>
-      </wvobject>
-      <wvobject fp_name="/simon_cipher_tb/uut/key_schedule[65]" type="array" db_ref_id="1">
-         <obj_property name="ElementShortName">[65]</obj_property>
-         <obj_property name="ObjectShortName">key_schedule[65]</obj_property>
-         <obj_property name="Radix">HEXRADIX</obj_property>
-      </wvobject>
-      <wvobject fp_name="/simon_cipher_tb/uut/key_schedule[66]" type="array" db_ref_id="1">
-         <obj_property name="ElementShortName">[66]</obj_property>
-         <obj_property name="ObjectShortName">key_schedule[66]</obj_property>
-         <obj_property name="Radix">HEXRADIX</obj_property>
-      </wvobject>
-      <wvobject fp_name="/simon_cipher_tb/uut/key_schedule[67]" type="array" db_ref_id="1">
-         <obj_property name="ElementShortName">[67]</obj_property>
-         <obj_property name="ObjectShortName">key_schedule[67]</obj_property>
-         <obj_property name="Radix">HEXRADIX</obj_property>
-      </wvobject>
-      <wvobject fp_name="/simon_cipher_tb/uut/key_schedule[68]" type="array" db_ref_id="1">
-         <obj_property name="ElementShortName">[68]</obj_property>
-         <obj_property name="ObjectShortName">key_schedule[68]</obj_property>
-         <obj_property name="Radix">HEXRADIX</obj_property>
-      </wvobject>
-      <wvobject fp_name="/simon_cipher_tb/uut/key_schedule[69]" type="array" db_ref_id="1">
-         <obj_property name="ElementShortName">[69]</obj_property>
-         <obj_property name="ObjectShortName">key_schedule[69]</obj_property>
-         <obj_property name="Radix">HEXRADIX</obj_property>
-      </wvobject>
-      <wvobject fp_name="/simon_cipher_tb/uut/key_schedule[70]" type="array" db_ref_id="1">
-         <obj_property name="ElementShortName">[70]</obj_property>
-         <obj_property name="ObjectShortName">key_schedule[70]</obj_property>
-         <obj_property name="Radix">HEXRADIX</obj_property>
-      </wvobject>
-      <wvobject fp_name="/simon_cipher_tb/uut/key_schedule[71]" type="array" db_ref_id="1">
-         <obj_property name="ElementShortName">[71]</obj_property>
-         <obj_property name="ObjectShortName">key_schedule[71]</obj_property>
-         <obj_property name="Radix">HEXRADIX</obj_property>
-      </wvobject>
+   <wvobject fp_name="/simon_cipher_tb/busy_1" type="logic" db_ref_id="1">
+      <obj_property name="ElementShortName">busy_1</obj_property>
+      <obj_property name="ObjectShortName">busy_1</obj_property>
    </wvobject>
-   <wvobject fp_name="/simon_cipher_tb/uut/zj" type="array" db_ref_id="1">
-      <obj_property name="ElementShortName">zj[61:0]</obj_property>
-      <obj_property name="ObjectShortName">zj[61:0]</obj_property>
-   </wvobject>
-   <wvobject fp_name="/simon_cipher_tb/uut/key_gen" type="array" db_ref_id="1">
-      <obj_property name="ElementShortName">key_gen[0:3]</obj_property>
-      <obj_property name="ObjectShortName">key_gen[0:3]</obj_property>
-      <obj_property name="Radix">HEXRADIX</obj_property>
-      <wvobject fp_name="/simon_cipher_tb/uut/key_gen[0]" type="array" db_ref_id="1">
-         <obj_property name="ElementShortName">[0]</obj_property>
-         <obj_property name="ObjectShortName">key_gen[0]</obj_property>
-         <obj_property name="Radix">HEXRADIX</obj_property>
-      </wvobject>
-      <wvobject fp_name="/simon_cipher_tb/uut/key_gen[1]" type="array" db_ref_id="1">
-         <obj_property name="ElementShortName">[1]</obj_property>
-         <obj_property name="ObjectShortName">key_gen[1]</obj_property>
-         <obj_property name="Radix">HEXRADIX</obj_property>
-      </wvobject>
-      <wvobject fp_name="/simon_cipher_tb/uut/key_gen[2]" type="array" db_ref_id="1">
-         <obj_property name="ElementShortName">[2]</obj_property>
-         <obj_property name="ObjectShortName">key_gen[2]</obj_property>
-         <obj_property name="Radix">HEXRADIX</obj_property>
-      </wvobject>
-      <wvobject fp_name="/simon_cipher_tb/uut/key_gen[3]" type="array" db_ref_id="1">
-         <obj_property name="ElementShortName">[3]</obj_property>
-         <obj_property name="ObjectShortName">key_gen[3]</obj_property>
-         <obj_property name="Radix">HEXRADIX</obj_property>
-      </wvobject>
-   </wvobject>
-   <wvobject fp_name="/simon_cipher_tb/uut/rs3" type="array" db_ref_id="1">
-      <obj_property name="ElementShortName">rs3[63:0]</obj_property>
-      <obj_property name="ObjectShortName">rs3[63:0]</obj_property>
+   <wvobject fp_name="/simon_cipher_tb/key_1" type="array" db_ref_id="1">
+      <obj_property name="ElementShortName">key_1[63:0]</obj_property>
+      <obj_property name="ObjectShortName">key_1[63:0]</obj_property>
       <obj_property name="Radix">HEXRADIX</obj_property>
    </wvobject>
-   <wvobject fp_name="/simon_cipher_tb/uut/key_temp_1" type="array" db_ref_id="1">
-      <obj_property name="ElementShortName">key_temp_1[63:0]</obj_property>
-      <obj_property name="ObjectShortName">key_temp_1[63:0]</obj_property>
+   <wvobject fp_name="/simon_cipher_tb/block_input_1" type="array" db_ref_id="1">
+      <obj_property name="ElementShortName">block_input_1[31:0]</obj_property>
+      <obj_property name="ObjectShortName">block_input_1[31:0]</obj_property>
       <obj_property name="Radix">HEXRADIX</obj_property>
    </wvobject>
-   <wvobject fp_name="/simon_cipher_tb/uut/rs1" type="array" db_ref_id="1">
-      <obj_property name="ElementShortName">rs1[63:0]</obj_property>
-      <obj_property name="ObjectShortName">rs1[63:0]</obj_property>
-      <obj_property name="Radix">HEXRADIX</obj_property>
-   </wvobject>
-   <wvobject fp_name="/simon_cipher_tb/uut/key_temp_2" type="array" db_ref_id="1">
-      <obj_property name="ElementShortName">key_temp_2[63:0]</obj_property>
-      <obj_property name="ObjectShortName">key_temp_2[63:0]</obj_property>
-      <obj_property name="Radix">HEXRADIX</obj_property>
-   </wvobject>
-   <wvobject fp_name="/simon_cipher_tb/uut/zji" type="array" db_ref_id="1">
-      <obj_property name="ElementShortName">zji[63:0]</obj_property>
-      <obj_property name="ObjectShortName">zji[63:0]</obj_property>
-   </wvobject>
-   <wvobject fp_name="/simon_cipher_tb/uut/key_feedback" type="array" db_ref_id="1">
-      <obj_property name="ElementShortName">key_feedback[63:0]</obj_property>
-      <obj_property name="ObjectShortName">key_feedback[63:0]</obj_property>
+   <wvobject fp_name="/simon_cipher_tb/block_output_1" type="array" db_ref_id="1">
+      <obj_property name="ElementShortName">block_output_1[31:0]</obj_property>
+      <obj_property name="ObjectShortName">block_output_1[31:0]</obj_property>
       <obj_property name="Radix">HEXRADIX</obj_property>
    </wvobject>
    <wvobject fp_name="divider218" type="divider">
-      <obj_property name="label">Fiestel</obj_property>
+      <obj_property name="label">UUT2 Key: 72 Block: 48</obj_property>
       <obj_property name="DisplayName">label</obj_property>
       <obj_property name="BkColor">#800080</obj_property>
       <obj_property name="TextColor">230 230 230</obj_property>
    </wvobject>
-   <wvobject fp_name="/simon_cipher_tb/uut/a_buf" type="array" db_ref_id="1">
-      <obj_property name="ElementShortName">a_buf[63:0]</obj_property>
-      <obj_property name="ObjectShortName">a_buf[63:0]</obj_property>
+   <wvobject fp_name="/simon_cipher_tb/busy_2" type="logic" db_ref_id="1">
+      <obj_property name="ElementShortName">busy_2</obj_property>
+      <obj_property name="ObjectShortName">busy_2</obj_property>
+   </wvobject>
+   <wvobject fp_name="/simon_cipher_tb/key_2" type="array" db_ref_id="1">
+      <obj_property name="ElementShortName">key_2[71:0]</obj_property>
+      <obj_property name="ObjectShortName">key_2[71:0]</obj_property>
       <obj_property name="Radix">HEXRADIX</obj_property>
    </wvobject>
-   <wvobject fp_name="/simon_cipher_tb/uut/b_buf" type="array" db_ref_id="1">
-      <obj_property name="ElementShortName">b_buf[63:0]</obj_property>
-      <obj_property name="ObjectShortName">b_buf[63:0]</obj_property>
+   <wvobject fp_name="/simon_cipher_tb/block_input_2" type="array" db_ref_id="1">
+      <obj_property name="ElementShortName">block_input_2[47:0]</obj_property>
+      <obj_property name="ObjectShortName">block_input_2[47:0]</obj_property>
       <obj_property name="Radix">HEXRADIX</obj_property>
    </wvobject>
-   <wvobject fp_name="/simon_cipher_tb/uut/round_key" type="array" db_ref_id="1">
-      <obj_property name="ElementShortName">round_key[63:0]</obj_property>
-      <obj_property name="ObjectShortName">round_key[63:0]</obj_property>
+   <wvobject fp_name="/simon_cipher_tb/block_output_2" type="array" db_ref_id="1">
+      <obj_property name="ElementShortName">block_output_2[47:0]</obj_property>
+      <obj_property name="ObjectShortName">block_output_2[47:0]</obj_property>
+      <obj_property name="Radix">HEXRADIX</obj_property>
+   </wvobject>
+   <wvobject fp_name="divider20" type="divider">
+      <obj_property name="label">UUT3 Key: 96 Block 48</obj_property>
+      <obj_property name="DisplayName">label</obj_property>
+      <obj_property name="BkColor">#800000</obj_property>
+      <obj_property name="TextColor">230 230 230</obj_property>
+   </wvobject>
+   <wvobject fp_name="/simon_cipher_tb/busy_3" type="logic" db_ref_id="1">
+      <obj_property name="ElementShortName">busy_3</obj_property>
+      <obj_property name="ObjectShortName">busy_3</obj_property>
+   </wvobject>
+   <wvobject fp_name="/simon_cipher_tb/key_3" type="array" db_ref_id="1">
+      <obj_property name="ElementShortName">key_3[95:0]</obj_property>
+      <obj_property name="ObjectShortName">key_3[95:0]</obj_property>
+      <obj_property name="Radix">HEXRADIX</obj_property>
+   </wvobject>
+   <wvobject fp_name="/simon_cipher_tb/block_input_3" type="array" db_ref_id="1">
+      <obj_property name="ElementShortName">block_input_3[47:0]</obj_property>
+      <obj_property name="ObjectShortName">block_input_3[47:0]</obj_property>
+      <obj_property name="Radix">HEXRADIX</obj_property>
+   </wvobject>
+   <wvobject fp_name="/simon_cipher_tb/block_output_3" type="array" db_ref_id="1">
+      <obj_property name="ElementShortName">block_output_3[47:0]</obj_property>
+      <obj_property name="ObjectShortName">block_output_3[47:0]</obj_property>
+      <obj_property name="Radix">HEXRADIX</obj_property>
+   </wvobject>
+   <wvobject fp_name="divider25" type="divider">
+      <obj_property name="label">UUT4 Key: 96 Block: 64</obj_property>
+      <obj_property name="DisplayName">label</obj_property>
+      <obj_property name="BkColor">#00ff00</obj_property>
+      <obj_property name="TextColor">230 230 230</obj_property>
+   </wvobject>
+   <wvobject fp_name="/simon_cipher_tb/busy_4" type="logic" db_ref_id="1">
+      <obj_property name="ElementShortName">busy_4</obj_property>
+      <obj_property name="ObjectShortName">busy_4</obj_property>
+   </wvobject>
+   <wvobject fp_name="/simon_cipher_tb/key_4" type="array" db_ref_id="1">
+      <obj_property name="ElementShortName">key_4[95:0]</obj_property>
+      <obj_property name="ObjectShortName">key_4[95:0]</obj_property>
+      <obj_property name="Radix">HEXRADIX</obj_property>
+   </wvobject>
+   <wvobject fp_name="/simon_cipher_tb/block_input_4" type="array" db_ref_id="1">
+      <obj_property name="ElementShortName">block_input_4[63:0]</obj_property>
+      <obj_property name="ObjectShortName">block_input_4[63:0]</obj_property>
+      <obj_property name="Radix">HEXRADIX</obj_property>
+   </wvobject>
+   <wvobject fp_name="/simon_cipher_tb/block_output_4" type="array" db_ref_id="1">
+      <obj_property name="ElementShortName">block_output_4[63:0]</obj_property>
+      <obj_property name="ObjectShortName">block_output_4[63:0]</obj_property>
+      <obj_property name="Radix">HEXRADIX</obj_property>
+   </wvobject>
+   <wvobject fp_name="divider31" type="divider">
+      <obj_property name="label">UUT5 Key: 128 Block: 64</obj_property>
+      <obj_property name="DisplayName">label</obj_property>
+      <obj_property name="BkColor">128 128 255</obj_property>
+      <obj_property name="TextColor">230 230 230</obj_property>
+   </wvobject>
+   <wvobject fp_name="/simon_cipher_tb/busy_5" type="logic" db_ref_id="1">
+      <obj_property name="ElementShortName">busy_5</obj_property>
+      <obj_property name="ObjectShortName">busy_5</obj_property>
+   </wvobject>
+   <wvobject fp_name="/simon_cipher_tb/key_5" type="array" db_ref_id="1">
+      <obj_property name="ElementShortName">key_5[127:0]</obj_property>
+      <obj_property name="ObjectShortName">key_5[127:0]</obj_property>
+      <obj_property name="Radix">HEXRADIX</obj_property>
+   </wvobject>
+   <wvobject fp_name="/simon_cipher_tb/block_input_5" type="array" db_ref_id="1">
+      <obj_property name="ElementShortName">block_input_5[63:0]</obj_property>
+      <obj_property name="ObjectShortName">block_input_5[63:0]</obj_property>
+      <obj_property name="Radix">HEXRADIX</obj_property>
+   </wvobject>
+   <wvobject fp_name="/simon_cipher_tb/block_output_5" type="array" db_ref_id="1">
+      <obj_property name="ElementShortName">block_output_5[63:0]</obj_property>
+      <obj_property name="ObjectShortName">block_output_5[63:0]</obj_property>
+      <obj_property name="Radix">HEXRADIX</obj_property>
+   </wvobject>
+   <wvobject fp_name="divider30" type="divider">
+      <obj_property name="label">UUT6 Key: 96 Block: 96</obj_property>
+      <obj_property name="DisplayName">label</obj_property>
+      <obj_property name="BkColor">#000080</obj_property>
+      <obj_property name="TextColor">230 230 230</obj_property>
+   </wvobject>
+   <wvobject fp_name="/simon_cipher_tb/busy_6" type="logic" db_ref_id="1">
+      <obj_property name="ElementShortName">busy_6</obj_property>
+      <obj_property name="ObjectShortName">busy_6</obj_property>
+   </wvobject>
+   <wvobject fp_name="/simon_cipher_tb/key_6" type="array" db_ref_id="1">
+      <obj_property name="ElementShortName">key_6[95:0]</obj_property>
+      <obj_property name="ObjectShortName">key_6[95:0]</obj_property>
+      <obj_property name="Radix">HEXRADIX</obj_property>
+   </wvobject>
+   <wvobject fp_name="/simon_cipher_tb/block_input_6" type="array" db_ref_id="1">
+      <obj_property name="ElementShortName">block_input_6[95:0]</obj_property>
+      <obj_property name="ObjectShortName">block_input_6[95:0]</obj_property>
+      <obj_property name="Radix">HEXRADIX</obj_property>
+   </wvobject>
+   <wvobject fp_name="/simon_cipher_tb/block_output_6" type="array" db_ref_id="1">
+      <obj_property name="ElementShortName">block_output_6[95:0]</obj_property>
+      <obj_property name="ObjectShortName">block_output_6[95:0]</obj_property>
+      <obj_property name="Radix">HEXRADIX</obj_property>
+   </wvobject>
+   <wvobject fp_name="divider32" type="divider">
+      <obj_property name="label">UUT7 Key: 144 Block: 96</obj_property>
+      <obj_property name="DisplayName">label</obj_property>
+      <obj_property name="BkColor">#00ffff</obj_property>
+      <obj_property name="TextColor">230 230 230</obj_property>
+   </wvobject>
+   <wvobject fp_name="/simon_cipher_tb/busy_7" type="logic" db_ref_id="1">
+      <obj_property name="ElementShortName">busy_7</obj_property>
+      <obj_property name="ObjectShortName">busy_7</obj_property>
+   </wvobject>
+   <wvobject fp_name="/simon_cipher_tb/key_7" type="array" db_ref_id="1">
+      <obj_property name="ElementShortName">key_7[143:0]</obj_property>
+      <obj_property name="ObjectShortName">key_7[143:0]</obj_property>
+      <obj_property name="Radix">HEXRADIX</obj_property>
+   </wvobject>
+   <wvobject fp_name="/simon_cipher_tb/block_input_7" type="array" db_ref_id="1">
+      <obj_property name="ElementShortName">block_input_7[95:0]</obj_property>
+      <obj_property name="ObjectShortName">block_input_7[95:0]</obj_property>
+      <obj_property name="Radix">HEXRADIX</obj_property>
+   </wvobject>
+   <wvobject fp_name="/simon_cipher_tb/block_output_7" type="array" db_ref_id="1">
+      <obj_property name="ElementShortName">block_output_7[95:0]</obj_property>
+      <obj_property name="ObjectShortName">block_output_7[95:0]</obj_property>
+      <obj_property name="Radix">HEXRADIX</obj_property>
+   </wvobject>
+   <wvobject fp_name="divider33" type="divider">
+      <obj_property name="label">UUT8 Key: 128 Block: 128</obj_property>
+      <obj_property name="DisplayName">label</obj_property>
+      <obj_property name="BkColor">#ff0000</obj_property>
+      <obj_property name="TextColor">230 230 230</obj_property>
+   </wvobject>
+   <wvobject fp_name="/simon_cipher_tb/busy_8" type="logic" db_ref_id="1">
+      <obj_property name="ElementShortName">busy_8</obj_property>
+      <obj_property name="ObjectShortName">busy_8</obj_property>
+   </wvobject>
+   <wvobject fp_name="/simon_cipher_tb/key_8" type="array" db_ref_id="1">
+      <obj_property name="ElementShortName">key_8[127:0]</obj_property>
+      <obj_property name="ObjectShortName">key_8[127:0]</obj_property>
+      <obj_property name="Radix">HEXRADIX</obj_property>
+   </wvobject>
+   <wvobject fp_name="/simon_cipher_tb/block_input_8" type="array" db_ref_id="1">
+      <obj_property name="ElementShortName">block_input_8[127:0]</obj_property>
+      <obj_property name="ObjectShortName">block_input_8[127:0]</obj_property>
+      <obj_property name="Radix">HEXRADIX</obj_property>
+   </wvobject>
+   <wvobject fp_name="/simon_cipher_tb/block_output_8" type="array" db_ref_id="1">
+      <obj_property name="ElementShortName">block_output_8[127:0]</obj_property>
+      <obj_property name="ObjectShortName">block_output_8[127:0]</obj_property>
+      <obj_property name="Radix">HEXRADIX</obj_property>
+   </wvobject>
+   <wvobject fp_name="divider34" type="divider">
+      <obj_property name="label">UUT9 Key: 192 Block: 128</obj_property>
+      <obj_property name="DisplayName">label</obj_property>
+      <obj_property name="BkColor">#c0c0c0</obj_property>
+      <obj_property name="TextColor">230 230 230</obj_property>
+   </wvobject>
+   <wvobject fp_name="/simon_cipher_tb/busy_9" type="logic" db_ref_id="1">
+      <obj_property name="ElementShortName">busy_9</obj_property>
+      <obj_property name="ObjectShortName">busy_9</obj_property>
+   </wvobject>
+   <wvobject fp_name="/simon_cipher_tb/key_9" type="array" db_ref_id="1">
+      <obj_property name="ElementShortName">key_9[191:0]</obj_property>
+      <obj_property name="ObjectShortName">key_9[191:0]</obj_property>
+      <obj_property name="Radix">HEXRADIX</obj_property>
+   </wvobject>
+   <wvobject fp_name="/simon_cipher_tb/block_input_9" type="array" db_ref_id="1">
+      <obj_property name="ElementShortName">block_input_9[127:0]</obj_property>
+      <obj_property name="ObjectShortName">block_input_9[127:0]</obj_property>
+      <obj_property name="Radix">HEXRADIX</obj_property>
+   </wvobject>
+   <wvobject fp_name="/simon_cipher_tb/block_output_9" type="array" db_ref_id="1">
+      <obj_property name="ElementShortName">block_output_9[127:0]</obj_property>
+      <obj_property name="ObjectShortName">block_output_9[127:0]</obj_property>
+      <obj_property name="Radix">HEXRADIX</obj_property>
+   </wvobject>
+   <wvobject fp_name="divider12" type="divider">
+      <obj_property name="label">UUT10 Key: 256 Block: 128</obj_property>
+      <obj_property name="DisplayName">label</obj_property>
+      <obj_property name="BkColor">#0000ff</obj_property>
+      <obj_property name="TextColor">230 230 230</obj_property>
+   </wvobject>
+   <wvobject fp_name="/simon_cipher_tb/busy_10" type="logic" db_ref_id="1">
+      <obj_property name="ElementShortName">busy_10</obj_property>
+      <obj_property name="ObjectShortName">busy_10</obj_property>
+   </wvobject>
+   <wvobject fp_name="/simon_cipher_tb/key_10" type="array" db_ref_id="1">
+      <obj_property name="ElementShortName">key_10[255:0]</obj_property>
+      <obj_property name="ObjectShortName">key_10[255:0]</obj_property>
+      <obj_property name="Radix">HEXRADIX</obj_property>
+   </wvobject>
+   <wvobject fp_name="/simon_cipher_tb/block_input_10" type="array" db_ref_id="1">
+      <obj_property name="ElementShortName">block_input_10[127:0]</obj_property>
+      <obj_property name="ObjectShortName">block_input_10[127:0]</obj_property>
+      <obj_property name="Radix">HEXRADIX</obj_property>
+   </wvobject>
+   <wvobject fp_name="/simon_cipher_tb/block_output_10" type="array" db_ref_id="1">
+      <obj_property name="ElementShortName">block_output_10[127:0]</obj_property>
+      <obj_property name="ObjectShortName">block_output_10[127:0]</obj_property>
       <obj_property name="Radix">HEXRADIX</obj_property>
    </wvobject>
 </wave_config>
