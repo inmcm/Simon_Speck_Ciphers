@@ -90,7 +90,7 @@ begin
 
 	-- Block Size 64 and Key Size 128 use z3 and 44 rounds
 	elsif (BLOCK_SIZE = 64 and KEY_SIZE = 128) then
-		z_tmp := z_array(4);
+		z_tmp := z_array(3);
 
 	-- Block Size 96 and Key Size 96  use z2 and 52 rounds
 	elsif (BLOCK_SIZE = 96 and KEY_SIZE = 96) then
