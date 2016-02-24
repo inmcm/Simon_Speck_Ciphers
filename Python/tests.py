@@ -226,9 +226,8 @@ class TestRandomTestVectors:
         for x in range(self.test_cnt):
             key = randint(0, (2**key_size) - 1)
             plaintxt = randint(0, (2**block_size) - 1)
-            print(x, hex(key), hex(plaintxt))
             c = SpeckCipher(key, key_size, block_size, 'ECB')
-            assert c.decrypt(c.encrypt(plaintxt)) == plaintxt
+            assert c.decrypt(c.encrypt(plaintxt)) == plaintxt, 'Test %r Failed with Random Key %r and Random Plaintext %r' % (x, hex(key), hex(plaintxt))
 
     def test_speck48_72(self):
         block_size = 48
@@ -236,9 +235,8 @@ class TestRandomTestVectors:
         for x in range(self.test_cnt):
             key = randint(0, (2**key_size) - 1)
             plaintxt = randint(0, (2**block_size) - 1)
-            print(x, hex(key), hex(plaintxt))
             c = SpeckCipher(key, key_size, block_size, 'ECB')
-            assert c.decrypt(c.encrypt(plaintxt)) == plaintxt
+            assert c.decrypt(c.encrypt(plaintxt)) == plaintxt, 'Test %r Failed with Random Key %r and Random Plaintext %r' % (x, hex(key), hex(plaintxt))
 
     def test_speck48_96(self):
         block_size = 48
@@ -246,9 +244,8 @@ class TestRandomTestVectors:
         for x in range(self.test_cnt):
             key = randint(0, (2**key_size) - 1)
             plaintxt = randint(0, (2**block_size) - 1)
-            print(x, hex(key), hex(plaintxt))
             c = SpeckCipher(key, key_size, block_size, 'ECB')
-            assert c.decrypt(c.encrypt(plaintxt)) == plaintxt
+            assert c.decrypt(c.encrypt(plaintxt)) == plaintxt, 'Test %r Failed with Random Key %r and Random Plaintext %r' % (x, hex(key), hex(plaintxt))
 
     def test_speck64_96(self):
         block_size = 64
@@ -256,9 +253,8 @@ class TestRandomTestVectors:
         for x in range(self.test_cnt):
             key = randint(0, (2**key_size) - 1)
             plaintxt = randint(0, (2**block_size) - 1)
-            print(x, hex(key), hex(plaintxt))
             c = SpeckCipher(key, key_size, block_size, 'ECB')
-            assert c.decrypt(c.encrypt(plaintxt)) == plaintxt
+            assert c.decrypt(c.encrypt(plaintxt)) == plaintxt, 'Test %r Failed with Random Key %r and Random Plaintext %r' % (x, hex(key), hex(plaintxt))
 
     def test_speck64_128(self):
         block_size = 64
@@ -266,9 +262,8 @@ class TestRandomTestVectors:
         for x in range(self.test_cnt):
             key = randint(0, (2**key_size) - 1)
             plaintxt = randint(0, (2**block_size) - 1)
-            print(x, hex(key), hex(plaintxt))
             c = SpeckCipher(key, key_size, block_size, 'ECB')
-            assert c.decrypt(c.encrypt(plaintxt)) == plaintxt
+            assert c.decrypt(c.encrypt(plaintxt)) == plaintxt, 'Test %r Failed with Random Key %r and Random Plaintext %r' % (x, hex(key), hex(plaintxt))
 
     def test_speck96_96(self):
         block_size = 96
@@ -276,9 +271,8 @@ class TestRandomTestVectors:
         for x in range(self.test_cnt):
             key = randint(0, (2**key_size) - 1)
             plaintxt = randint(0, (2**block_size) - 1)
-            print(x, hex(key), hex(plaintxt))
             c = SpeckCipher(key, key_size, block_size, 'ECB')
-            assert c.decrypt(c.encrypt(plaintxt)) == plaintxt
+            assert c.decrypt(c.encrypt(plaintxt)) == plaintxt, 'Test %r Failed with Random Key %r and Random Plaintext %r' % (x, hex(key), hex(plaintxt))
 
     def test_speck96_144(self):
         block_size = 96
@@ -286,9 +280,8 @@ class TestRandomTestVectors:
         for x in range(self.test_cnt):
             key = randint(0, (2**key_size) - 1)
             plaintxt = randint(0, (2**block_size) - 1)
-            print(x, hex(key), hex(plaintxt))
             c = SpeckCipher(key, key_size, block_size, 'ECB')
-            assert c.decrypt(c.encrypt(plaintxt)) == plaintxt
+            assert c.decrypt(c.encrypt(plaintxt)) == plaintxt, 'Test %r Failed with Random Key %r and Random Plaintext %r' % (x, hex(key), hex(plaintxt))
 
     def test_speck128_128(self):
         block_size = 128
@@ -296,9 +289,8 @@ class TestRandomTestVectors:
         for x in range(self.test_cnt):
             key = randint(0, (2**key_size) - 1)
             plaintxt = randint(0, (2**block_size) - 1)
-            print(x, hex(key), hex(plaintxt))
             c = SpeckCipher(key, key_size, block_size, 'ECB')
-            assert c.decrypt(c.encrypt(plaintxt)) == plaintxt
+            assert c.decrypt(c.encrypt(plaintxt)) == plaintxt, 'Test %r Failed with Random Key %r and Random Plaintext %r' % (x, hex(key), hex(plaintxt))
 
     def test_speck128_192(self):
         block_size = 128
@@ -306,9 +298,8 @@ class TestRandomTestVectors:
         for x in range(self.test_cnt):
             key = randint(0, (2**key_size) - 1)
             plaintxt = randint(0, (2**block_size) - 1)
-            print(x, hex(key), hex(plaintxt))
             c = SpeckCipher(key, key_size, block_size, 'ECB')
-            assert c.decrypt(c.encrypt(plaintxt)) == plaintxt
+            assert c.decrypt(c.encrypt(plaintxt)) == plaintxt, 'Test %r Failed with Random Key %r and Random Plaintext %r' % (x, hex(key), hex(plaintxt))
 
     def test_speck128_256(self):
         block_size = 128
@@ -316,9 +307,98 @@ class TestRandomTestVectors:
         for x in range(self.test_cnt):
             key = randint(0, (2**key_size) - 1)
             plaintxt = randint(0, (2**block_size) - 1)
-            print(x, hex(key), hex(plaintxt))
             c = SpeckCipher(key, key_size, block_size, 'ECB')
-            assert c.decrypt(c.encrypt(plaintxt)) == plaintxt
+            assert c.decrypt(c.encrypt(plaintxt)) == plaintxt, 'Test %r Failed with Random Key %r and Random Plaintext %r' % (x, hex(key), hex(plaintxt))
+
+    def test_simon32_64(self):
+        block_size = 32
+        key_size = 64
+        for x in range(self.test_cnt):
+            key = randint(0, (2**key_size) - 1)
+            plaintxt = randint(0, (2**block_size) - 1)
+            c = SimonCipher(key, key_size, block_size, 'ECB')
+            assert c.decrypt(c.encrypt(plaintxt)) == plaintxt, 'Test %r Failed with Random Key %r and Random Plaintext %r' % (x, hex(key), hex(plaintxt))
+
+    def test_simon48_72(self):
+        block_size = 48
+        key_size = 72
+        for x in range(self.test_cnt):
+            key = randint(0, (2**key_size) - 1)
+            plaintxt = randint(0, (2**block_size) - 1)
+            c = SimonCipher(key, key_size, block_size, 'ECB')
+            assert c.decrypt(c.encrypt(plaintxt)) == plaintxt, 'Test %r Failed with Random Key %r and Random Plaintext %r' % (x, hex(key), hex(plaintxt))
+
+    def test_simon48_96(self):
+        block_size = 48
+        key_size = 96
+        for x in range(self.test_cnt):
+            key = randint(0, (2**key_size) - 1)
+            plaintxt = randint(0, (2**block_size) - 1)
+            c = SimonCipher(key, key_size, block_size, 'ECB')
+            assert c.decrypt(c.encrypt(plaintxt)) == plaintxt, 'Test %r Failed with Random Key %r and Random Plaintext %r' % (x, hex(key), hex(plaintxt))
+
+    def test_simon64_96(self):
+        block_size = 64
+        key_size = 96
+        for x in range(self.test_cnt):
+            key = randint(0, (2**key_size) - 1)
+            plaintxt = randint(0, (2**block_size) - 1)
+            c = SimonCipher(key, key_size, block_size, 'ECB')
+            assert c.decrypt(c.encrypt(plaintxt)) == plaintxt, 'Test %r Failed with Random Key %r and Random Plaintext %r' % (x, hex(key), hex(plaintxt))
+
+    def test_simon64_128(self):
+        block_size = 64
+        key_size = 128
+        for x in range(self.test_cnt):
+            key = randint(0, (2**key_size) - 1)
+            plaintxt = randint(0, (2**block_size) - 1)
+            c = SimonCipher(key, key_size, block_size, 'ECB')
+            assert c.decrypt(c.encrypt(plaintxt)) == plaintxt, 'Test %r Failed with Random Key %r and Random Plaintext %r' % (x, hex(key), hex(plaintxt))
+
+    def test_simon96_96(self):
+        block_size = 96
+        key_size = 96
+        for x in range(self.test_cnt):
+            key = randint(0, (2**key_size) - 1)
+            plaintxt = randint(0, (2**block_size) - 1)
+            c = SimonCipher(key, key_size, block_size, 'ECB')
+            assert c.decrypt(c.encrypt(plaintxt)) == plaintxt, 'Test %r Failed with Random Key %r and Random Plaintext %r' % (x, hex(key), hex(plaintxt))
+
+    def test_simon96_144(self):
+        block_size = 96
+        key_size = 144
+        for x in range(self.test_cnt):
+            key = randint(0, (2**key_size) - 1)
+            plaintxt = randint(0, (2**block_size) - 1)
+            c = SimonCipher(key, key_size, block_size, 'ECB')
+            assert c.decrypt(c.encrypt(plaintxt)) == plaintxt, 'Test %r Failed with Random Key %r and Random Plaintext %r' % (x, hex(key), hex(plaintxt))
+
+    def test_simon128_128(self):
+        block_size = 128
+        key_size = 128
+        for x in range(self.test_cnt):
+            key = randint(0, (2**key_size) - 1)
+            plaintxt = randint(0, (2**block_size) - 1)
+            c = SimonCipher(key, key_size, block_size, 'ECB')
+            assert c.decrypt(c.encrypt(plaintxt)) == plaintxt, 'Test %r Failed with Random Key %r and Random Plaintext %r' % (x, hex(key), hex(plaintxt))
+
+    def test_simon128_192(self):
+        block_size = 128
+        key_size = 192
+        for x in range(self.test_cnt):
+            key = randint(0, (2**key_size) - 1)
+            plaintxt = randint(0, (2**block_size) - 1)
+            c = SimonCipher(key, key_size, block_size, 'ECB')
+            assert c.decrypt(c.encrypt(plaintxt)) == plaintxt, 'Test %r Failed with Random Key %r and Random Plaintext %r' % (x, hex(key), hex(plaintxt))
+
+    def test_simon128_256(self):
+        block_size = 128
+        key_size = 256
+        for x in range(self.test_cnt):
+            key = randint(0, (2**key_size) - 1)
+            plaintxt = randint(0, (2**block_size) - 1)
+            c = SimonCipher(key, key_size, block_size, 'ECB')
+            assert c.decrypt(c.encrypt(plaintxt)) == plaintxt, 'Test %r Failed with Random Key %r and Random Plaintext %r' % (x, hex(key), hex(plaintxt))
 
 
 class TestCipherInitialization:
