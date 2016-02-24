@@ -35,10 +35,7 @@ class SpeckCipher:
 
         xor_xk = x ^ k
 
-        if xor_xk >= new_y:
-            msub = xor_xk - new_y
-        else:
-            msub = ((xor_xk - new_y) % self.mod_mask) + 1
+        msub = ((xor_xk - new_y) + self.mod_mask_sub) % self.mod_mask_sub
 
         new_x = ((msub >> (self.word_size - self.alpha_shift)) + (msub << self.alpha_shift)) & self.mod_mask
 
@@ -67,6 +64,9 @@ class SpeckCipher:
 
         # Create Properly Sized bit mask for truncating addition and left shift outputs
         self.mod_mask = (2 ** self.word_size) - 1
+
+        # Mod mask for modular subtraction
+        self.mod_mask_sub = (2 ** self.word_size)
 
         # Setup Circular Shift Parameters
         if self.block_size == 32:
@@ -281,7 +281,6 @@ class SpeckCipher:
                 print('Please provide IV as int')
                 raise
         return self.iv
-
 
 
 if __name__ == "__main__":
