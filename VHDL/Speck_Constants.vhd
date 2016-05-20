@@ -11,7 +11,6 @@ end SPECK_CONSTANTS;
 
 package body SPECK_CONSTANTS is
 
-
 function  Round_Count_Lookup(key_size,block_size : integer range 0 to 256) return integer is
   variable round_count_tmp : integer range 0 to 63 := 0;
 begin
@@ -60,7 +59,6 @@ begin
 end Round_Count_Lookup;
 
 
-
 function  Beta_Lookup(key_size,block_size : integer range 0 to 256) return std_logic_vector is
   variable b_tmp : integer range 0 to 3 := 0;
 begin
@@ -73,12 +71,12 @@ begin
 		b_tmp := 3;
 	
     end if;
-  	return z_tmp;
+  	return b_tmp;
 end Beta_Lookup;
 
 
 function  Alpha_Lookup(key_size,block_size : integer range 0 to 256) return std_logic_vector is
-  variable a_tmp : integer range 0 to 3 := 0;
+  variable a_tmp : integer range 0 to 15 := 0;
 begin
 	-- Block Size 32 and Key Size 64 use alpha rotate 7 bits
 	if (BLOCK_SIZE = 32 and KEY_SIZE = 64) then
@@ -89,7 +87,7 @@ begin
 		a_tmp := 8;
 	
     end if;
-  	return z_tmp;
+  	return a_tmp;
 end Alpha_Lookup;
 
 end SPECK_CONSTANTS;
