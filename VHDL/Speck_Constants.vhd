@@ -4,8 +4,8 @@ use IEEE.STD_LOGIC_1164.all;
 package SPECK_CONSTANTS is
 
 function  Round_Count_Lookup(key_size,block_size : integer range 0 to 256) return integer;
-function  Beta_Lookup(key_size,block_size : integer range 0 to 256) return std_logic_vector;
-function  Alpha_Lookup(key_size,block_size : integer range 0 to 256) return std_logic_vector;
+function  Beta_Lookup(key_size,block_size : integer range 0 to 256) return integer;
+function  Alpha_Lookup(key_size,block_size : integer range 0 to 256) return integer;
 
 end SPECK_CONSTANTS;
 
@@ -59,7 +59,7 @@ begin
 end Round_Count_Lookup;
 
 
-function  Beta_Lookup(key_size,block_size : integer range 0 to 256) return std_logic_vector is
+function  Beta_Lookup(key_size,block_size : integer range 0 to 256) return integer is
   variable b_tmp : integer range 0 to 3 := 0;
 begin
 	-- Block Size 32 and Key Size 64 use beta rotate 2 bits
@@ -75,7 +75,7 @@ begin
 end Beta_Lookup;
 
 
-function  Alpha_Lookup(key_size,block_size : integer range 0 to 256) return std_logic_vector is
+function  Alpha_Lookup(key_size,block_size : integer range 0 to 256) return integer is
   variable a_tmp : integer range 0 to 15 := 0;
 begin
 	-- Block Size 32 and Key Size 64 use alpha rotate 7 bits

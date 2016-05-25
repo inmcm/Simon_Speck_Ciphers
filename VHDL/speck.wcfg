@@ -1,0 +1,414 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<wave_config>
+   <wave_state>
+   </wave_state>
+   <db_ref_list>
+      <db_ref path="/home/inmcm/Dev/speck/working/SPECK_CIPHER_TB_isim_beh.wdb" id="1" type="auto">
+         <top_modules>
+            <top_module name="numeric_std" />
+            <top_module name="speck_cipher_tb" />
+            <top_module name="speck_constants" />
+            <top_module name="std_logic_1164" />
+         </top_modules>
+      </db_ref>
+   </db_ref_list>
+   <WVObjectSize size="57" />
+   <wvobject fp_name="/speck_cipher_tb/sys_clk" type="logic" db_ref_id="1">
+      <obj_property name="ElementShortName">sys_clk</obj_property>
+      <obj_property name="ObjectShortName">sys_clk</obj_property>
+   </wvobject>
+   <wvobject fp_name="/speck_cipher_tb/rst" type="logic" db_ref_id="1">
+      <obj_property name="ElementShortName">rst</obj_property>
+      <obj_property name="ObjectShortName">rst</obj_property>
+   </wvobject>
+   <wvobject fp_name="/speck_cipher_tb/control" type="array" db_ref_id="1">
+      <obj_property name="ElementShortName">control[1:0]</obj_property>
+      <obj_property name="ObjectShortName">control[1:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/speck_cipher_tb/key_1" type="array" db_ref_id="1">
+      <obj_property name="ElementShortName">key_1[63:0]</obj_property>
+      <obj_property name="ObjectShortName">key_1[63:0]</obj_property>
+      <obj_property name="Radix">HEXRADIX</obj_property>
+   </wvobject>
+   <wvobject fp_name="divider82" type="divider">
+      <obj_property name="label">UUT1</obj_property>
+      <obj_property name="DisplayName">label</obj_property>
+      <obj_property name="BkColor">#800000</obj_property>
+      <obj_property name="TextColor">230 230 230</obj_property>
+   </wvobject>
+   <wvobject fp_name="/speck_cipher_tb/block_input_1" type="array" db_ref_id="1">
+      <obj_property name="ElementShortName">block_input_1[31:0]</obj_property>
+      <obj_property name="ObjectShortName">block_input_1[31:0]</obj_property>
+      <obj_property name="Radix">HEXRADIX</obj_property>
+   </wvobject>
+   <wvobject fp_name="/speck_cipher_tb/busy_1" type="logic" db_ref_id="1">
+      <obj_property name="ElementShortName">busy_1</obj_property>
+      <obj_property name="ObjectShortName">busy_1</obj_property>
+   </wvobject>
+   <wvobject fp_name="/speck_cipher_tb/block_output_1" type="array" db_ref_id="1">
+      <obj_property name="ElementShortName">block_output_1[31:0]</obj_property>
+      <obj_property name="ObjectShortName">block_output_1[31:0]</obj_property>
+      <obj_property name="Radix">HEXRADIX</obj_property>
+   </wvobject>
+   <wvobject fp_name="divider73" type="divider">
+      <obj_property name="label">UUT1 Internal</obj_property>
+      <obj_property name="DisplayName">label</obj_property>
+      <obj_property name="BkColor">128 128 255</obj_property>
+      <obj_property name="TextColor">230 230 230</obj_property>
+   </wvobject>
+   <wvobject fp_name="/speck_cipher_tb/uut_1/key_l" type="array" db_ref_id="1">
+      <obj_property name="ElementShortName">key_l[0:3]</obj_property>
+      <obj_property name="ObjectShortName">key_l[0:3]</obj_property>
+      <wvobject fp_name="/speck_cipher_tb/uut_1/key_l[0]" type="array" db_ref_id="1">
+         <obj_property name="ElementShortName">[0]</obj_property>
+         <obj_property name="ObjectShortName">key_l[0]</obj_property>
+         <obj_property name="Radix">HEXRADIX</obj_property>
+      </wvobject>
+      <wvobject fp_name="/speck_cipher_tb/uut_1/key_l[1]" type="array" db_ref_id="1">
+         <obj_property name="ElementShortName">[1]</obj_property>
+         <obj_property name="ObjectShortName">key_l[1]</obj_property>
+         <obj_property name="Radix">HEXRADIX</obj_property>
+      </wvobject>
+      <wvobject fp_name="/speck_cipher_tb/uut_1/key_l[2]" type="array" db_ref_id="1">
+         <obj_property name="ElementShortName">[2]</obj_property>
+         <obj_property name="ObjectShortName">key_l[2]</obj_property>
+         <obj_property name="Radix">HEXRADIX</obj_property>
+      </wvobject>
+      <wvobject fp_name="/speck_cipher_tb/uut_1/key_l[3]" type="array" db_ref_id="1">
+         <obj_property name="ElementShortName">[3]</obj_property>
+         <obj_property name="ObjectShortName">key_l[3]</obj_property>
+         <obj_property name="Radix">HEXRADIX</obj_property>
+      </wvobject>
+   </wvobject>
+   <wvobject fp_name="/speck_cipher_tb/uut_1/key_schedule" type="array" db_ref_id="1">
+      <obj_property name="ElementShortName">key_schedule[0:21]</obj_property>
+      <obj_property name="ObjectShortName">key_schedule[0:21]</obj_property>
+      <wvobject fp_name="/speck_cipher_tb/uut_1/key_schedule[0]" type="array" db_ref_id="1">
+         <obj_property name="ElementShortName">[0]</obj_property>
+         <obj_property name="ObjectShortName">key_schedule[0]</obj_property>
+         <obj_property name="Radix">HEXRADIX</obj_property>
+      </wvobject>
+      <wvobject fp_name="/speck_cipher_tb/uut_1/key_schedule[1]" type="array" db_ref_id="1">
+         <obj_property name="ElementShortName">[1]</obj_property>
+         <obj_property name="ObjectShortName">key_schedule[1]</obj_property>
+         <obj_property name="Radix">HEXRADIX</obj_property>
+      </wvobject>
+      <wvobject fp_name="/speck_cipher_tb/uut_1/key_schedule[2]" type="array" db_ref_id="1">
+         <obj_property name="ElementShortName">[2]</obj_property>
+         <obj_property name="ObjectShortName">key_schedule[2]</obj_property>
+         <obj_property name="Radix">HEXRADIX</obj_property>
+      </wvobject>
+      <wvobject fp_name="/speck_cipher_tb/uut_1/key_schedule[3]" type="array" db_ref_id="1">
+         <obj_property name="ElementShortName">[3]</obj_property>
+         <obj_property name="ObjectShortName">key_schedule[3]</obj_property>
+         <obj_property name="Radix">HEXRADIX</obj_property>
+      </wvobject>
+      <wvobject fp_name="/speck_cipher_tb/uut_1/key_schedule[4]" type="array" db_ref_id="1">
+         <obj_property name="ElementShortName">[4]</obj_property>
+         <obj_property name="ObjectShortName">key_schedule[4]</obj_property>
+         <obj_property name="Radix">HEXRADIX</obj_property>
+      </wvobject>
+      <wvobject fp_name="/speck_cipher_tb/uut_1/key_schedule[5]" type="array" db_ref_id="1">
+         <obj_property name="ElementShortName">[5]</obj_property>
+         <obj_property name="ObjectShortName">key_schedule[5]</obj_property>
+         <obj_property name="Radix">HEXRADIX</obj_property>
+      </wvobject>
+      <wvobject fp_name="/speck_cipher_tb/uut_1/key_schedule[6]" type="array" db_ref_id="1">
+         <obj_property name="ElementShortName">[6]</obj_property>
+         <obj_property name="ObjectShortName">key_schedule[6]</obj_property>
+         <obj_property name="Radix">HEXRADIX</obj_property>
+      </wvobject>
+      <wvobject fp_name="/speck_cipher_tb/uut_1/key_schedule[7]" type="array" db_ref_id="1">
+         <obj_property name="ElementShortName">[7]</obj_property>
+         <obj_property name="ObjectShortName">key_schedule[7]</obj_property>
+         <obj_property name="Radix">HEXRADIX</obj_property>
+      </wvobject>
+      <wvobject fp_name="/speck_cipher_tb/uut_1/key_schedule[8]" type="array" db_ref_id="1">
+         <obj_property name="ElementShortName">[8]</obj_property>
+         <obj_property name="ObjectShortName">key_schedule[8]</obj_property>
+         <obj_property name="Radix">HEXRADIX</obj_property>
+      </wvobject>
+      <wvobject fp_name="/speck_cipher_tb/uut_1/key_schedule[9]" type="array" db_ref_id="1">
+         <obj_property name="ElementShortName">[9]</obj_property>
+         <obj_property name="ObjectShortName">key_schedule[9]</obj_property>
+         <obj_property name="Radix">HEXRADIX</obj_property>
+      </wvobject>
+      <wvobject fp_name="/speck_cipher_tb/uut_1/key_schedule[10]" type="array" db_ref_id="1">
+         <obj_property name="ElementShortName">[10]</obj_property>
+         <obj_property name="ObjectShortName">key_schedule[10]</obj_property>
+         <obj_property name="Radix">HEXRADIX</obj_property>
+      </wvobject>
+      <wvobject fp_name="/speck_cipher_tb/uut_1/key_schedule[11]" type="array" db_ref_id="1">
+         <obj_property name="ElementShortName">[11]</obj_property>
+         <obj_property name="ObjectShortName">key_schedule[11]</obj_property>
+         <obj_property name="Radix">HEXRADIX</obj_property>
+      </wvobject>
+      <wvobject fp_name="/speck_cipher_tb/uut_1/key_schedule[12]" type="array" db_ref_id="1">
+         <obj_property name="ElementShortName">[12]</obj_property>
+         <obj_property name="ObjectShortName">key_schedule[12]</obj_property>
+         <obj_property name="Radix">HEXRADIX</obj_property>
+      </wvobject>
+      <wvobject fp_name="/speck_cipher_tb/uut_1/key_schedule[13]" type="array" db_ref_id="1">
+         <obj_property name="ElementShortName">[13]</obj_property>
+         <obj_property name="ObjectShortName">key_schedule[13]</obj_property>
+         <obj_property name="Radix">HEXRADIX</obj_property>
+      </wvobject>
+      <wvobject fp_name="/speck_cipher_tb/uut_1/key_schedule[14]" type="array" db_ref_id="1">
+         <obj_property name="ElementShortName">[14]</obj_property>
+         <obj_property name="ObjectShortName">key_schedule[14]</obj_property>
+         <obj_property name="Radix">HEXRADIX</obj_property>
+      </wvobject>
+      <wvobject fp_name="/speck_cipher_tb/uut_1/key_schedule[15]" type="array" db_ref_id="1">
+         <obj_property name="ElementShortName">[15]</obj_property>
+         <obj_property name="ObjectShortName">key_schedule[15]</obj_property>
+         <obj_property name="Radix">HEXRADIX</obj_property>
+      </wvobject>
+      <wvobject fp_name="/speck_cipher_tb/uut_1/key_schedule[16]" type="array" db_ref_id="1">
+         <obj_property name="ElementShortName">[16]</obj_property>
+         <obj_property name="ObjectShortName">key_schedule[16]</obj_property>
+         <obj_property name="Radix">HEXRADIX</obj_property>
+      </wvobject>
+      <wvobject fp_name="/speck_cipher_tb/uut_1/key_schedule[17]" type="array" db_ref_id="1">
+         <obj_property name="ElementShortName">[17]</obj_property>
+         <obj_property name="ObjectShortName">key_schedule[17]</obj_property>
+         <obj_property name="Radix">HEXRADIX</obj_property>
+      </wvobject>
+      <wvobject fp_name="/speck_cipher_tb/uut_1/key_schedule[18]" type="array" db_ref_id="1">
+         <obj_property name="ElementShortName">[18]</obj_property>
+         <obj_property name="ObjectShortName">key_schedule[18]</obj_property>
+         <obj_property name="Radix">HEXRADIX</obj_property>
+      </wvobject>
+      <wvobject fp_name="/speck_cipher_tb/uut_1/key_schedule[19]" type="array" db_ref_id="1">
+         <obj_property name="ElementShortName">[19]</obj_property>
+         <obj_property name="ObjectShortName">key_schedule[19]</obj_property>
+         <obj_property name="Radix">HEXRADIX</obj_property>
+      </wvobject>
+      <wvobject fp_name="/speck_cipher_tb/uut_1/key_schedule[20]" type="array" db_ref_id="1">
+         <obj_property name="ElementShortName">[20]</obj_property>
+         <obj_property name="ObjectShortName">key_schedule[20]</obj_property>
+         <obj_property name="Radix">HEXRADIX</obj_property>
+      </wvobject>
+      <wvobject fp_name="/speck_cipher_tb/uut_1/key_schedule[21]" type="array" db_ref_id="1">
+         <obj_property name="ElementShortName">[21]</obj_property>
+         <obj_property name="ObjectShortName">key_schedule[21]</obj_property>
+         <obj_property name="Radix">HEXRADIX</obj_property>
+      </wvobject>
+   </wvobject>
+   <wvobject fp_name="/speck_cipher_tb/uut_1/round_key" type="array" db_ref_id="1">
+      <obj_property name="ElementShortName">round_key[15:0]</obj_property>
+      <obj_property name="ObjectShortName">round_key[15:0]</obj_property>
+      <obj_property name="Radix">HEXRADIX</obj_property>
+   </wvobject>
+   <wvobject fp_name="/speck_cipher_tb/uut_1/round_count" type="other" db_ref_id="1">
+      <obj_property name="ElementShortName">round_count</obj_property>
+      <obj_property name="ObjectShortName">round_count</obj_property>
+   </wvobject>
+   <wvobject fp_name="/speck_cipher_tb/uut_1/inv_round_count" type="other" db_ref_id="1">
+      <obj_property name="ElementShortName">inv_round_count</obj_property>
+      <obj_property name="ObjectShortName">inv_round_count</obj_property>
+   </wvobject>
+   <wvobject fp_name="/speck_cipher_tb/uut_1/round_count_mux" type="other" db_ref_id="1">
+      <obj_property name="ElementShortName">round_count_mux</obj_property>
+      <obj_property name="ObjectShortName">round_count_mux</obj_property>
+   </wvobject>
+   <wvobject fp_name="/speck_cipher_tb/uut_1/cipher_direction" type="logic" db_ref_id="1">
+      <obj_property name="ElementShortName">cipher_direction</obj_property>
+      <obj_property name="ObjectShortName">cipher_direction</obj_property>
+   </wvobject>
+   <wvobject fp_name="/speck_cipher_tb/uut_1/b_buf" type="array" db_ref_id="1">
+      <obj_property name="ElementShortName">b_buf[15:0]</obj_property>
+      <obj_property name="ObjectShortName">b_buf[15:0]</obj_property>
+      <obj_property name="Radix">HEXRADIX</obj_property>
+   </wvobject>
+   <wvobject fp_name="/speck_cipher_tb/uut_1/a_buf" type="array" db_ref_id="1">
+      <obj_property name="ElementShortName">a_buf[15:0]</obj_property>
+      <obj_property name="ObjectShortName">a_buf[15:0]</obj_property>
+      <obj_property name="Radix">HEXRADIX</obj_property>
+   </wvobject>
+   <wvobject fp_name="/speck_cipher_tb/uut_1/encryption_round_output" type="array" db_ref_id="1">
+      <obj_property name="ElementShortName">encryption_round_output[31:0]</obj_property>
+      <obj_property name="ObjectShortName">encryption_round_output[31:0]</obj_property>
+      <obj_property name="Radix">HEXRADIX</obj_property>
+   </wvobject>
+   <wvobject fp_name="divider83" type="divider">
+      <obj_property name="label">UUT2</obj_property>
+      <obj_property name="DisplayName">label</obj_property>
+      <obj_property name="BkColor">#008080</obj_property>
+      <obj_property name="TextColor">230 230 230</obj_property>
+   </wvobject>
+   <wvobject fp_name="/speck_cipher_tb/key_2" type="array" db_ref_id="1">
+      <obj_property name="ElementShortName">key_2[71:0]</obj_property>
+      <obj_property name="ObjectShortName">key_2[71:0]</obj_property>
+      <obj_property name="Radix">HEXRADIX</obj_property>
+   </wvobject>
+   <wvobject fp_name="/speck_cipher_tb/block_input_2" type="array" db_ref_id="1">
+      <obj_property name="ElementShortName">block_input_2[47:0]</obj_property>
+      <obj_property name="ObjectShortName">block_input_2[47:0]</obj_property>
+      <obj_property name="Radix">HEXRADIX</obj_property>
+   </wvobject>
+   <wvobject fp_name="/speck_cipher_tb/busy_2" type="logic" db_ref_id="1">
+      <obj_property name="ElementShortName">busy_2</obj_property>
+      <obj_property name="ObjectShortName">busy_2</obj_property>
+   </wvobject>
+   <wvobject fp_name="/speck_cipher_tb/block_output_2" type="array" db_ref_id="1">
+      <obj_property name="ElementShortName">block_output_2[47:0]</obj_property>
+      <obj_property name="ObjectShortName">block_output_2[47:0]</obj_property>
+      <obj_property name="Radix">HEXRADIX</obj_property>
+   </wvobject>
+   <wvobject fp_name="/speck_cipher_tb/key_3" type="array" db_ref_id="1">
+      <obj_property name="ElementShortName">key_3[95:0]</obj_property>
+      <obj_property name="ObjectShortName">key_3[95:0]</obj_property>
+      <obj_property name="Radix">HEXRADIX</obj_property>
+   </wvobject>
+   <wvobject fp_name="/speck_cipher_tb/block_input_3" type="array" db_ref_id="1">
+      <obj_property name="ElementShortName">block_input_3[47:0]</obj_property>
+      <obj_property name="ObjectShortName">block_input_3[47:0]</obj_property>
+      <obj_property name="Radix">HEXRADIX</obj_property>
+   </wvobject>
+   <wvobject fp_name="/speck_cipher_tb/busy_3" type="logic" db_ref_id="1">
+      <obj_property name="ElementShortName">busy_3</obj_property>
+      <obj_property name="ObjectShortName">busy_3</obj_property>
+   </wvobject>
+   <wvobject fp_name="/speck_cipher_tb/block_output_3" type="array" db_ref_id="1">
+      <obj_property name="ElementShortName">block_output_3[47:0]</obj_property>
+      <obj_property name="ObjectShortName">block_output_3[47:0]</obj_property>
+      <obj_property name="Radix">HEXRADIX</obj_property>
+   </wvobject>
+   <wvobject fp_name="/speck_cipher_tb/key_4" type="array" db_ref_id="1">
+      <obj_property name="ElementShortName">key_4[95:0]</obj_property>
+      <obj_property name="ObjectShortName">key_4[95:0]</obj_property>
+      <obj_property name="Radix">HEXRADIX</obj_property>
+   </wvobject>
+   <wvobject fp_name="/speck_cipher_tb/block_input_4" type="array" db_ref_id="1">
+      <obj_property name="ElementShortName">block_input_4[63:0]</obj_property>
+      <obj_property name="ObjectShortName">block_input_4[63:0]</obj_property>
+      <obj_property name="Radix">HEXRADIX</obj_property>
+   </wvobject>
+   <wvobject fp_name="/speck_cipher_tb/busy_4" type="logic" db_ref_id="1">
+      <obj_property name="ElementShortName">busy_4</obj_property>
+      <obj_property name="ObjectShortName">busy_4</obj_property>
+   </wvobject>
+   <wvobject fp_name="/speck_cipher_tb/block_output_4" type="array" db_ref_id="1">
+      <obj_property name="ElementShortName">block_output_4[63:0]</obj_property>
+      <obj_property name="ObjectShortName">block_output_4[63:0]</obj_property>
+      <obj_property name="Radix">HEXRADIX</obj_property>
+   </wvobject>
+   <wvobject fp_name="/speck_cipher_tb/key_5" type="array" db_ref_id="1">
+      <obj_property name="ElementShortName">key_5[127:0]</obj_property>
+      <obj_property name="ObjectShortName">key_5[127:0]</obj_property>
+      <obj_property name="Radix">HEXRADIX</obj_property>
+   </wvobject>
+   <wvobject fp_name="/speck_cipher_tb/block_input_5" type="array" db_ref_id="1">
+      <obj_property name="ElementShortName">block_input_5[63:0]</obj_property>
+      <obj_property name="ObjectShortName">block_input_5[63:0]</obj_property>
+      <obj_property name="Radix">HEXRADIX</obj_property>
+   </wvobject>
+   <wvobject fp_name="/speck_cipher_tb/busy_5" type="logic" db_ref_id="1">
+      <obj_property name="ElementShortName">busy_5</obj_property>
+      <obj_property name="ObjectShortName">busy_5</obj_property>
+   </wvobject>
+   <wvobject fp_name="/speck_cipher_tb/block_output_5" type="array" db_ref_id="1">
+      <obj_property name="ElementShortName">block_output_5[63:0]</obj_property>
+      <obj_property name="ObjectShortName">block_output_5[63:0]</obj_property>
+      <obj_property name="Radix">HEXRADIX</obj_property>
+   </wvobject>
+   <wvobject fp_name="/speck_cipher_tb/key_6" type="array" db_ref_id="1">
+      <obj_property name="ElementShortName">key_6[95:0]</obj_property>
+      <obj_property name="ObjectShortName">key_6[95:0]</obj_property>
+      <obj_property name="Radix">HEXRADIX</obj_property>
+   </wvobject>
+   <wvobject fp_name="/speck_cipher_tb/block_input_6" type="array" db_ref_id="1">
+      <obj_property name="ElementShortName">block_input_6[95:0]</obj_property>
+      <obj_property name="ObjectShortName">block_input_6[95:0]</obj_property>
+      <obj_property name="Radix">HEXRADIX</obj_property>
+   </wvobject>
+   <wvobject fp_name="/speck_cipher_tb/busy_6" type="logic" db_ref_id="1">
+      <obj_property name="ElementShortName">busy_6</obj_property>
+      <obj_property name="ObjectShortName">busy_6</obj_property>
+   </wvobject>
+   <wvobject fp_name="/speck_cipher_tb/block_output_6" type="array" db_ref_id="1">
+      <obj_property name="ElementShortName">block_output_6[95:0]</obj_property>
+      <obj_property name="ObjectShortName">block_output_6[95:0]</obj_property>
+      <obj_property name="Radix">HEXRADIX</obj_property>
+   </wvobject>
+   <wvobject fp_name="/speck_cipher_tb/key_7" type="array" db_ref_id="1">
+      <obj_property name="ElementShortName">key_7[143:0]</obj_property>
+      <obj_property name="ObjectShortName">key_7[143:0]</obj_property>
+      <obj_property name="Radix">HEXRADIX</obj_property>
+   </wvobject>
+   <wvobject fp_name="/speck_cipher_tb/block_input_7" type="array" db_ref_id="1">
+      <obj_property name="ElementShortName">block_input_7[95:0]</obj_property>
+      <obj_property name="ObjectShortName">block_input_7[95:0]</obj_property>
+      <obj_property name="Radix">HEXRADIX</obj_property>
+   </wvobject>
+   <wvobject fp_name="/speck_cipher_tb/busy_7" type="logic" db_ref_id="1">
+      <obj_property name="ElementShortName">busy_7</obj_property>
+      <obj_property name="ObjectShortName">busy_7</obj_property>
+   </wvobject>
+   <wvobject fp_name="/speck_cipher_tb/block_output_7" type="array" db_ref_id="1">
+      <obj_property name="ElementShortName">block_output_7[95:0]</obj_property>
+      <obj_property name="ObjectShortName">block_output_7[95:0]</obj_property>
+      <obj_property name="Radix">HEXRADIX</obj_property>
+   </wvobject>
+   <wvobject fp_name="/speck_cipher_tb/key_8" type="array" db_ref_id="1">
+      <obj_property name="ElementShortName">key_8[127:0]</obj_property>
+      <obj_property name="ObjectShortName">key_8[127:0]</obj_property>
+      <obj_property name="Radix">HEXRADIX</obj_property>
+   </wvobject>
+   <wvobject fp_name="/speck_cipher_tb/block_input_8" type="array" db_ref_id="1">
+      <obj_property name="ElementShortName">block_input_8[127:0]</obj_property>
+      <obj_property name="ObjectShortName">block_input_8[127:0]</obj_property>
+      <obj_property name="Radix">HEXRADIX</obj_property>
+   </wvobject>
+   <wvobject fp_name="/speck_cipher_tb/busy_8" type="logic" db_ref_id="1">
+      <obj_property name="ElementShortName">busy_8</obj_property>
+      <obj_property name="ObjectShortName">busy_8</obj_property>
+   </wvobject>
+   <wvobject fp_name="/speck_cipher_tb/block_output_8" type="array" db_ref_id="1">
+      <obj_property name="ElementShortName">block_output_8[127:0]</obj_property>
+      <obj_property name="ObjectShortName">block_output_8[127:0]</obj_property>
+      <obj_property name="Radix">HEXRADIX</obj_property>
+   </wvobject>
+   <wvobject fp_name="/speck_cipher_tb/key_9" type="array" db_ref_id="1">
+      <obj_property name="ElementShortName">key_9[191:0]</obj_property>
+      <obj_property name="ObjectShortName">key_9[191:0]</obj_property>
+      <obj_property name="Radix">HEXRADIX</obj_property>
+   </wvobject>
+   <wvobject fp_name="/speck_cipher_tb/block_input_9" type="array" db_ref_id="1">
+      <obj_property name="ElementShortName">block_input_9[127:0]</obj_property>
+      <obj_property name="ObjectShortName">block_input_9[127:0]</obj_property>
+      <obj_property name="Radix">HEXRADIX</obj_property>
+   </wvobject>
+   <wvobject fp_name="/speck_cipher_tb/busy_9" type="logic" db_ref_id="1">
+      <obj_property name="ElementShortName">busy_9</obj_property>
+      <obj_property name="ObjectShortName">busy_9</obj_property>
+   </wvobject>
+   <wvobject fp_name="/speck_cipher_tb/block_output_9" type="array" db_ref_id="1">
+      <obj_property name="ElementShortName">block_output_9[127:0]</obj_property>
+      <obj_property name="ObjectShortName">block_output_9[127:0]</obj_property>
+      <obj_property name="Radix">HEXRADIX</obj_property>
+   </wvobject>
+   <wvobject fp_name="/speck_cipher_tb/key_10" type="array" db_ref_id="1">
+      <obj_property name="ElementShortName">key_10[255:0]</obj_property>
+      <obj_property name="ObjectShortName">key_10[255:0]</obj_property>
+      <obj_property name="Radix">HEXRADIX</obj_property>
+   </wvobject>
+   <wvobject fp_name="/speck_cipher_tb/block_input_10" type="array" db_ref_id="1">
+      <obj_property name="ElementShortName">block_input_10[127:0]</obj_property>
+      <obj_property name="ObjectShortName">block_input_10[127:0]</obj_property>
+      <obj_property name="Radix">HEXRADIX</obj_property>
+   </wvobject>
+   <wvobject fp_name="/speck_cipher_tb/busy_10" type="logic" db_ref_id="1">
+      <obj_property name="ElementShortName">busy_10</obj_property>
+      <obj_property name="ObjectShortName">busy_10</obj_property>
+   </wvobject>
+   <wvobject fp_name="/speck_cipher_tb/block_output_10" type="array" db_ref_id="1">
+      <obj_property name="ElementShortName">block_output_10[127:0]</obj_property>
+      <obj_property name="ObjectShortName">block_output_10[127:0]</obj_property>
+      <obj_property name="Radix">HEXRADIX</obj_property>
+   </wvobject>
+   <wvobject fp_name="/speck_cipher_tb/sys_clk_period" type="other" db_ref_id="1">
+      <obj_property name="ElementShortName">sys_clk_period</obj_property>
+      <obj_property name="ObjectShortName">sys_clk_period</obj_property>
+   </wvobject>
+</wave_config>
