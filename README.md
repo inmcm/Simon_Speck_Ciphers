@@ -10,7 +10,7 @@ Implementations of the [Speck & Simon] Block Ciphers
 
 #####VHDL
 - Pre-liminary Simon implementation and test bench is complete. All key/block sizes working
-- Speck in progress
+- Pre-liminary Speck implementation and test bench is complete. All key/block sizes working
 - Need to add top layer that add cipher block mode options.
 
 #####C
