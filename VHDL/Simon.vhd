@@ -172,11 +172,9 @@ end process;
 Busy_Flag_Generator : process(SYS_CLK)
 begin
 	if SYS_CLK'event and SYS_CLK = '1' then
-		if (pr_state = Key_Schedule_Generation_Run or pr_state = Cipher_Start or
-			pr_state = Cipher_Run  or pr_state = Cipher_Finish_1 or
-			pr_state = Cipher_Finish_2) then
+		if (pr_state = Reset or (pr_state = Idle and CONTROL /= "00")) then
 			BUSY <= '1';
-		else
+		elsif ((pr_state = Idle and CONTROL = "00") or pr_state = Cipher_Latch or pr_state = Key_Schedule_Generation_Finish) then
 			BUSY <= '0';
 		end if;
 	end if;	
