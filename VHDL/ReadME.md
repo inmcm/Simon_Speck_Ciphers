@@ -8,10 +8,10 @@ Synthesizable VHDL implementations of the [Simon and Speck] block ciphers. These
 ##  Basic Usage ##
 Simon and Speck work identically. Instaniate the each module while speci
 
-![Key_Generation]:http://i.imgur.com/9q1tPhK.png
-![Encryption]:http://i.imgur.com/qZ4NwJa.png
-![Decryption]:http://i.imgur.com/pcPImY8.png
-![Back to Back Encryption]:http://i.imgur.com/sRvHRwP.png
+![Key_Generation](http://i.imgur.com/9q1tPhK.png)
+![Encryption](http://i.imgur.com/qZ4NwJa.png)
+![Decryption](http://i.imgur.com/pcPImY8.png)
+![Back to Back Encryption](http://i.imgur.com/sRvHRwP.png)
 
 
 ### Block and Key Size ###
