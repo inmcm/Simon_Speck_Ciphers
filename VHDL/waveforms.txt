@@ -1,0 +1,55 @@
+{signal: [
+  {name: 'SYS_CLK', wave:     'p.....|...'},
+  {name: 'CNTRL', wave:       '3..33.|...', data: ['00', '01', '00']},
+  {name: 'BUSY', wave:        '0...1.|.0.'},
+  {name: 'BLOCK_INPUT', wave: 'x.....|...'},
+  {name: 'BLOCK_OUTPUT', wave:'x.....|...'},
+  {name: 'KEY_INPUT', wave:   'x.4.x.|...', data: ['KEY']}
+],
+	head:{ text:'Key Generation Timing'},
+  "config" : { "hscale" : 2 }
+}
+
+
+
+
+{signal: [
+  {name: 'SYS_CLK', wave:     'p.....|...'},
+  {name: 'CNTRL', wave:       '3..33.|...', data: ['00', '11', '00']},
+  {name: 'BUSY', wave:        '0...1.|.0.'},
+  {name: 'BLOCK_INPUT', wave: 'x.5.x.|...', data: ['Plaintext']},
+  {name: 'BLOCK_OUTPUT', wave:'x.....|.5.', data: ['Ciphertext']},
+  {name: 'KEY_INPUT', wave:   'x.....|...', data: ['KEY']}
+],
+	head:{ text:'Encryption Timing'},
+  "config" : { "hscale" : 2 }
+}
+    
+    
+    
+{signal: [
+  {name: 'SYS_CLK', wave:     'p.....|...'},
+  {name: 'CNTRL', wave:       '3..33.|...', data: ['00', '10', '00']},
+  {name: 'BUSY', wave:        '0...1.|.0.'},
+  {name: 'BLOCK_INPUT', wave: 'x.5.x.|...', data: ['Ciphertext']},
+  {name: 'BLOCK_OUTPUT', wave:'x.....|.5.', data: ['Plaintext']},
+  {name: 'KEY_INPUT', wave:   'x.....|...', data: ['KEY']}
+],
+ 	head:{ text:'Decryption Timing'},
+	"config" : { "hscale" : 2 }
+}
+
+
+
+{signal: [
+  {name: 'SYS_CLK', wave:     'p...|....|.....'},
+  {name: 'CNTRL', wave:       '3.3.|...3|.....', data: ['00', '11', '00']},
+  {name: 'BUSY', wave:        '0..1|..01|..0..'},
+  {name: 'BLOCK_INPUT', wave: 'x5.5|...x|.....', data: ['Plaintext1','Plaintext2']},
+  {name: 'BLOCK_OUTPUT', wave:'x...|..5....5..', data: ['CipherText1','CipherText2']},
+  {name: 'KEY_INPUT', wave:   'x...|....|.....', data: ['KEY']}
+],
+	head:{ text:'Back to Back Encryption Timing'},
+  "config" : { "hscale" : 1 }
+}
+
