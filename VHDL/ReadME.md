@@ -4,24 +4,25 @@ Synthesizable VHDL implementations of the [Simon and Speck] block ciphers. These
 
 **WARNING** The following implementations are for reference/research/entertainment only and should not be considered 100% free of bugs or side channel attacks. Use in a production environment is discouraged.
 
-
 ##  Basic Usage ##
 Simon and Speck work identically: simply declare and instaniate the modules into your large design and specify what key/block combination you want to use.
 The ciphers have a simple operational flow that has two main sequnces: Key Schedule and Encryption/Decryption
 
-For Key Schedule Generation
+#### For Key Schedule Generation ####
+
 1. Set your cipher key on the `KEY` input bus
 2. Set the `CONTROL` to `b01` to start the generation process
-3. `BUSY` will assert while the key schedule is processed
+3. The `BUSY`signal  will assert while the key schedule is processed
 4. Once `BUSY` deasserts, the cipher engine is ready to encrypt and decrypt with your chosen key; `KEY` will remain unused unless you wish to change the cipher key
 
-To encipher or decipher data
+#### To encipher or decipher data ####
+
 1. Set your plaintext (if encrypting) or ciphertext (if decrypting) on the `BLOCK_INPUT` input bus
 2. Set the `CONTROL` to `b11` to begin encrypting or `b10` to decrypt
 3. `BUSY` will assert while the cipher is processed
-4.  Once `BUSY` deasserts, your new ciphertext or plaintext is available on `BLOCK_OUTPUT`. This ouput remains until a new encryption/decryption operation is completed
+4. Once `BUSY` deasserts, your new ciphertext or plaintext is available on `BLOCK_OUTPUT`. This ouput remains until a new encryption/decryption operation is completed
 
-Additional Function Notes:
+#### Additional Function Notes: ####
 * `RST` hold the cipher in the a reset state that will not respond to inputs and outputs are undefined.
 * When the cipher engine unused, `CONTROL` should be held at `b00`
 * Encryption and Decryption Operations can be done back to back by simple holding CONTROL at `b10` or `b11` and changing `BLOCK_INPUT` anytime after `BUSY` is asserted
