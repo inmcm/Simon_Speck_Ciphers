@@ -23,6 +23,8 @@ The ciphers have a simple operational flow that has two main sequnces: Key Sched
 4. Once `BUSY` deasserts, your new ciphertext or plaintext is available on `BLOCK_OUTPUT`. This ouput remains until a new encryption/decryption operation is completed
 
 #### Additional Function Notes: ####
+
+* Once a key schedule has been calculated for a particular key, the cipher engine will store that key schedule until a new key is processed
 * `RST` hold the cipher in the a reset state that will not respond to inputs and outputs are undefined.
 * When the cipher engine unused, `CONTROL` should be held at `b00`
 * Encryption and Decryption Operations can be done back to back by simple holding CONTROL at `b10` or `b11` and changing `BLOCK_INPUT` anytime after `BUSY` is asserted
