@@ -1,3 +1,7 @@
+-- SPECK_CIPHER_TB.vhd
+-- Copyright 2016 Michael Calvin McCoy
+-- calvin.mccoy@gmail.com
+-- see LICENSE.md
 --------------------------------------------------------------------------------
 -- Company: 
 -- Engineer:

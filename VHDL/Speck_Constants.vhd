@@ -1,3 +1,7 @@
+-- Speck_Constants.vhd
+-- Copyright 2016 Michael Calvin McCoy
+-- calvin.mccoy@gmail.com
+-- see LICENSE.md
 library IEEE;
 use IEEE.STD_LOGIC_1164.all;
 
