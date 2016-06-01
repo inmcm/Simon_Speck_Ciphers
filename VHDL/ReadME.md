@@ -1,12 +1,13 @@
 # Simon & Speck Block Ciphers in VHDL
 
-Synthesizable VHDL implementations of the [Simon and Speck] block ciphers. These are small ciphers designed by the [National Security Agency] for use in constrained hardware and software environments such as micro controllers or small ASICs/FPGAs.
+VHDL implementations of the [Simon and Speck] block ciphers. These are small ciphers designed by the [National Security Agency] for use in constrained hardware and software environments such as micro controllers or small ASICs/FPGAs.
+The code provided is synthesizable VHDL-93 compatible code appropriate for use in FPGAs and ASICs. Developement and testing was done with Xilinx ISE and Vivado tools using ISim for verification. 
 
-**WARNING** The following implementations are for reference/research/entertainment only and should not be considered 100% free of bugs or side channel attacks. Use in a production environment is discouraged.
+**WARNING** The following implementations are for reference/research/entertainment only and should not be considered 100% free of bugs or side channel vulnerabilities. Use in a production environment is discouraged.
 
 ##  Basic Usage ##
-Simon and Speck work identically: simply declare and instaniate the modules into your large design and specify what key/block combination you want to use.
-The ciphers have a simple operational flow that has two main sequnces: Key Schedule and Encryption/Decryption
+Simon and Speck work identically: simply declare and instantiate the modules into your large design and specify what key/block combination you want to use.
+The ciphers have a simple operational flow that has two main sequences: Key Schedule and Encryption/Decryption
 
 #### For Key Schedule Generation ####
 
@@ -30,7 +31,7 @@ The ciphers have a simple operational flow that has two main sequnces: Key Sched
 * Encryption and Decryption Operations can be done back to back by simple holding CONTROL at `b10` or `b11` and changing `BLOCK_INPUT` anytime after `BUSY` is asserted
 * No block cipher mode other than ECB are currently supported.
 
-Declaration/Instaniation examples as well as functional timing diagrams for various operations are given below. 
+Declaration/Instantiation examples as well as functional timing diagrams for various operations are given below. 
 
 ### Simon  Declaration ###
 
@@ -51,7 +52,7 @@ COMPONENT SIMON_CIPHER
     END COMPONENT;
 ```
 
-### Simon Instaniation ###
+### Simon Instantiation ###
 
 ```vhdl
 uut_1: SIMON_CIPHER
@@ -88,7 +89,7 @@ COMPONENT SPECK_CIPHER
     END COMPONENT;
 ```
 
-### Speck Instaniation ###
+### Speck Instantiation ###
 
 ```vhdl
 uut_1: SPECK_CIPHER
@@ -115,23 +116,23 @@ uut_1: SPECK_CIPHER
 
 
 ### Block and Key Size ###
-All valid key and block sizes as described in the specification are supported as generics. Valid block and key sizes in bits are:
+All valid key and block sizes as described in the specification are supported as generics. Valid block and key sizes in bits are given below. Additionally, the number of clock cycles to process an encryption or decryption operation is given. Due to the design, this value matches the number of rounds each version of respective ciphers is designed to run.
 
-| **block size** | **key sizes** |
-|:--------------:|:-------------:|
-|       32       |       64      |
-|       48       |     72,96     |
-|       64       |     96,128    |
-|       96       |     96,144    |
-|       128      |  128,192,256  |
+| **block size** | **key sizes** | **clock cycles (simon)** | **clock cycles (speck)** |
+|:--------------:|:-------------:|:------------------------:|:------------------------:|
+|       32       |       64      |             32           |             22           |
+|       48       |     72,96     |           36,36          |           22,23          |
+|       64       |     96,128    |           42,44          |           26,27          |
+|       96       |     96,144    |           52,54          |           28,29          |
+|       128      |  128,192,256  |          68,69,72        |          32,33,34        |
 
-If not supplied at initialization, both ciphers will default to 256-bit encryption keys and 128-bit block sizes. If the defaults are not used, it is reccomended to specify both the key size and block explictly. 
+If not supplied at initialization, both ciphers will default to 256-bit encryption keys and 128-bit block sizes. If the defaults are not used, it is recommended to specify both the key size and block explicitly. 
 
 ## Tests Benches ##
 
-A basic testbench for each cipher is included in SIMON_CIPHER_TB.vhd and SPECK_CIPHER_TB.vhd. These exercise key generation, encryption, and decryption for all key/block size combinations using the offical test vectors. These all serve as examples on instantiating the different cipher sizes. 
+A basic testbench for each cipher is included in SIMON_CIPHER_TB.vhd and SPECK_CIPHER_TB.vhd. These exercise key generation, encryption, and decryption for all key/block size combinations using the official test vectors. These all serve as examples on instantiating the different cipher sizes. 
 
-Waveform configuration files (.wcfg) are inclued for use under Xilinx ISim. 
+Waveform configuration files (.wcfg) are included for use under Xilinx ISim. 
 
 [National Security Agency]:https://www.nsa.gov/
 [Simon and Speck]:http://eprint.iacr.org/2013/404.pdf
