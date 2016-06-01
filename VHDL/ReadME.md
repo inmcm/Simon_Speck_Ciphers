@@ -6,7 +6,8 @@ The code provided is synthesizable VHDL-93 compatible code appropriate for use i
 **WARNING** The following implementations are for reference/research/entertainment only and should not be considered 100% free of bugs or side channel vulnerabilities. Use in a production environment is discouraged.
 
 ##  Basic Usage ##
-Simon and Speck work identically: simply declare and instantiate the modules into your large design and specify what key/block combination you want to use.
+Simon and Speck work identically: simply declare and instantiate the modules into your design and specify what key/block combination you want to use. You will also need to specify the number of rounds cipher rounds but this can calculated for your using the Round_Count_Lookup() function within each ciphers constants package (Simon_Constants.vhd and Speck_Constants.vhd)
+ 
 The ciphers have a simple operational flow that has two main sequences: Key Schedule and Encryption/Decryption
 
 #### For Key Schedule Generation ####
@@ -21,11 +22,11 @@ The ciphers have a simple operational flow that has two main sequences: Key Sche
 1. Set your plaintext (if encrypting) or ciphertext (if decrypting) on the `BLOCK_INPUT` input bus
 2. Set the `CONTROL` to `b11` to begin encrypting or `b10` to decrypt
 3. `BUSY` will assert while the cipher is processed
-4. Once `BUSY` deasserts, your new ciphertext or plaintext is available on `BLOCK_OUTPUT`. This ouput remains until a new encryption/decryption operation is completed
+4. Once `BUSY` deasserts, your new ciphertext or plaintext is available on `BLOCK_OUTPUT`. This output remains until a new encryption/decryption operation is completed
 
 #### Additional Function Notes: ####
 
-* Once a key schedule has been calculated for a particular key, the cipher engine will store that key schedule until a new key is processed
+* Once key schedule calculation completes for a particular key, the cipher engine will store that key schedule until a new key is processed
 * `RST` hold the cipher in the a reset state that will not respond to inputs and outputs are undefined.
 * When the cipher engine unused, `CONTROL` should be held at `b00`
 * Encryption and Decryption Operations can be done back to back by simple holding CONTROL at `b10` or `b11` and changing `BLOCK_INPUT` anytime after `BUSY` is asserted
@@ -130,7 +131,7 @@ If not supplied at initialization, both ciphers will default to 256-bit encrypti
 
 ## Tests Benches ##
 
-A basic testbench for each cipher is included in SIMON_CIPHER_TB.vhd and SPECK_CIPHER_TB.vhd. These exercise key generation, encryption, and decryption for all key/block size combinations using the official test vectors. These all serve as examples on instantiating the different cipher sizes. 
+A basic testbench for each cipher is included in SIMON_CIPHER_TB.vhd and SPECK_CIPHER_TB.vhd. These exercise key generation, encryption, and decryption for all key/block size combinations using the official test vectors. These also serve as examples on instantiating the different cipher sizes. 
 
 Waveform configuration files (.wcfg) are included for use under Xilinx ISim. 
 
