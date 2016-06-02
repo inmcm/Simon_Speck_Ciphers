@@ -5,16 +5,15 @@ Implementations of the [Speck & Simon] Block Ciphers
 #####Python
 - Speck Cipher Implemented
 - Simon Cipher Implemented
-- Some Cipher Mode Test Missing
-- Some Cipher Setup Tests Missing
 
 #####VHDL
-- Pre-liminary Simon implementation and test bench is complete. All key/block sizes working
-- Pre-liminary Speck implementation and test bench is complete. All key/block sizes working
+- Speck Cipher Implemented
+- Simon Cipher Implemented
 - Need to add top layer that add cipher block mode options.
+- Need to create Zynq AXI peripheral interface and clock boundary translator
 
 #####C
-TODO
+- In Progress - Basic Code Skeletons Complete
 
 
 [Speck & Simon]: http://eprint.iacr.org/2013/404
