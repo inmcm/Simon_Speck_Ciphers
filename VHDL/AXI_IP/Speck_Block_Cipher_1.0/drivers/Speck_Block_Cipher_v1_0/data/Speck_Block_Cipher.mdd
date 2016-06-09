@@ -1,0 +1,10 @@
+
+
+OPTION psf_version = 2.1;
+
+BEGIN DRIVER Speck_Block_Cipher
+	OPTION supported_peripherals = (Speck_Block_Cipher);
+	OPTION copyfiles = all;
+	OPTION VERSION = 1.0;
+	OPTION NAME = Speck_Block_Cipher;
+END DRIVER
