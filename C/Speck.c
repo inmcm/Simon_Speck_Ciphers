@@ -29,7 +29,7 @@ typedef struct {
   uint8_t key_schedule[272];
 } Speck_Cipher;
 
-uint8_t Speck_Init(uint8_t key_size, uint8_t block_size, *uint8_t key, *uint8_t iv, *uint8_t counter) {
+uint8_t Speck_Init(cipher_config_t c_mode, *uint8_t key, *uint8_t iv, *uint8_t counter) {
     return 0;
 }
 

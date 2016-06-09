@@ -15,7 +15,7 @@ enum typedef { Simon_64_32,
                Simon_256_128
 } cipher_config_t; 
 
-const uint8_t *simon_rounds[] = {22, 22, 23, 26, 27, 28, 29, 32, 33, 34};
+const uint8_t *simon_rounds[] = {32, 36, 36, 42, 44, 52, 54, 68, 69, 72};
 const uint8_t *block_sizes[] = {32, 48, 48, 64, 64, 96, 96, 128, 128, 128};
 const uint8_t *key_sizes[] = {64, 72, 96, 96, 128, 96, 144, 128, 192, 256};
 
@@ -29,7 +29,7 @@ typedef struct {
   uint8_t key_schedule[272];
 } Simon_Cipher;
 
-uint8_t Simon_Init(uint8_t key_size, uint8_t block_size, *uint8_t key, *uint8_t iv, *uint8_t counter) {
+uint8_t Simon_Init(cipher_config_t c_mode, *uint8_t key, *uint8_t iv, *uint8_t counter) {
     return 0;
 }
 
