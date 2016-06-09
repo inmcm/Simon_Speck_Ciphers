@@ -37,6 +37,6 @@ uint8_t Speck_Encrypt(Speck_Cipher cipher_object, *uint8_t plaintext,*uint8_t ci
     return 0;
 }
 
-uint8_t Speck_Decrypt(Speck_Cipher cipher_object *uint8_t ciphertext, *uint8_t plaintext) {
+uint8_t Speck_Decrypt(Speck_Cipher cipher_object, *uint8_t ciphertext, *uint8_t plaintext) {
     return 0;
 }
