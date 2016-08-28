@@ -276,10 +276,13 @@ BEGIN
   -- Clock process definitions
   SYS_CLK_process :process
   begin
-    SYS_CLK <= '0';
-  	wait for SYS_CLK_period/2;
-  	SYS_CLK <= '1';
-  	wait for SYS_CLK_period/2;
+    for i in 0 to 500 loop
+		  SYS_CLK <= '0';
+  	  wait for SYS_CLK_period/2;
+  	  SYS_CLK <= '1';
+  	  wait for SYS_CLK_period/2;
+		end loop ;
+    wait;
   end process;
  
 
@@ -398,11 +401,8 @@ stim_proc: process
 
   assert BLOCK_OUTPUT_10 /= X"74206e69206d6f6f6d69732061207369" report "UUT10 Decryption Success" severity note;
   assert BLOCK_OUTPUT_10 = X"74206e69206d6f6f6d69732061207369" report "UUT10 Decryption Failed" severity failure;
-		
 
-      -- insert stimulus here 
-
-      wait;
-   end process;
-
-END;
+	wait;	
+end process;
+  
+END behavior;

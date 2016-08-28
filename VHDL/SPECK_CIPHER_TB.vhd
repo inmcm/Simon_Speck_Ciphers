@@ -275,10 +275,13 @@ BEGIN
   -- Clock process definitions
   SYS_CLK_process :process
   begin
-    SYS_CLK <= '0';
-  	wait for SYS_CLK_period/2;
-  	SYS_CLK <= '1';
-  	wait for SYS_CLK_period/2;
+        for i in 0 to 500 loop
+                SYS_CLK <= '0';
+  	        wait for SYS_CLK_period/2;
+  	        SYS_CLK <= '1';
+  	        wait for SYS_CLK_period/2;
+        end loop ;
+        wait;       
   end process;
  
 
