@@ -1,10 +1,40 @@
 #ifndef SIMON_H
 #define SIMON_H
 
-uint8_t Simon_Init(cipher_config_t c_mode, *uint8_t key, *uint8_t iv, *uint8_t counter);
+enum mode_t { ECB, CTR, CBC, CFB, OFB };
 
-uint8_t Simon_Encrypt(Simon_Cipher cipher_object, *uint8_t plaintext,*uint8_t ciphertext);
+enum cipher_config_t { Simon_64_32,
+                       Simon_72_48,
+                       Simon_96_48,
+                       Simon_96_64,
+                       Simon_128_64,
+                       Simon_96_96,
+                       Simon_144_96,
+                       Simon_128_128,
+                       Simon_192_128,
+                       Simon_256_128
+}; 
 
-uint8_t Simon_Decrypt(Simon_Cipher cipher_object, *uint8_t ciphertext, *uint8_t plaintext);
+typedef struct {
+  enum cipher_config_t cipher_cfg;
+  uint8_t key_size;
+  uint8_t block_size;
+  uint8_t round_limit;
+  uint8_t init_vector[16];
+  uint8_t counter[16];  
+  uint8_t key_schedule[272];
+} Simon_Cipher;
+
+uint8_t Simon_Init(Simon_Cipher cipher_object, enum cipher_config_t cipher_cfg, enum mode_t c_mode, uint8_t *key, uint8_t *iv, uint8_t *counter);
+
+uint8_t Simon_Encrypt(Simon_Cipher cipher_object, uint8_t *plaintext, uint8_t *ciphertext);
+
+void Simon_Encrypt_32(uint8_t round_limit, uint8_t *key_schedule, uint8_t *plaintext, uint8_t *ciphertext);
+void Simon_Encrypt_48(uint8_t round_limit, uint8_t *key_schedule, uint8_t *plaintext, uint8_t *ciphertext);
+void Simon_Encrypt_64(uint8_t round_limit, uint8_t *key_schedule, uint8_t *plaintext, uint8_t *ciphertext);
+void Simon_Encrypt_96(uint8_t round_limit, uint8_t *key_schedule, uint8_t *plaintext, uint8_t *ciphertext);
+void Simon_Encrypt_128(uint8_t round_limit, uint8_t *key_schedule, uint8_t *plaintext, uint8_t *ciphertext);
+
+uint8_t Simon_Decrypt(Simon_Cipher cipher_object, uint8_t *ciphertext, uint8_t *plaintext);
 
 #endif

@@ -1,42 +1,265 @@
 #include <stdio.h>
 #include <stdint.h>
+#include "Simon.h"
 
-enum typedef { ECB, CTR, CBC, CFB, OFB } mode_t;
 
-enum typedef { Simon_64_32,
-               Simon_72_48,
-               Simon_96_48,
-               Simon_96_64,
-               Simon_128_64,
-               Simon_96_96,
-               Simon_144_96,
-               Simon_128_128,
-               Simon_192_128,
-               Simon_256_128
-} cipher_config_t; 
 
-const uint8_t *simon_rounds[] = {32, 36, 36, 42, 44, 52, 54, 68, 69, 72};
-const uint8_t *block_sizes[] = {32, 48, 48, 64, 64, 96, 96, 128, 128, 128};
-const uint8_t *key_sizes[] = {64, 72, 96, 96, 128, 96, 144, 128, 192, 256};
+// Cipher Operation Macros
+#define shift_one ((x_word << 1) | (x_word >> (word_size - 1)))
+#define shift_eight ((x_word << 8) | (x_word >> (word_size - 8)))
+#define shift_two ((x_word << 2) | (x_word >> (word_size - 2)))
 
-typedef struct {
-  mode_t cipher_mode;
-  uint8_t key_size;
-  uint8_t block_size;
-  uint8_t round_limit;
-  uint8_t init_vector[16];
-  uint8_t counter[16];  
-  uint8_t key_schedule[272];
-} Simon_Cipher;
 
-uint8_t Simon_Init(cipher_config_t c_mode, *uint8_t key, *uint8_t iv, *uint8_t counter) {
+
+const uint8_t simon_rounds[] = {32, 36, 36, 42, 44, 52, 54, 68, 69, 72};
+const uint8_t block_sizes[] = {32, 48, 48, 64, 64, 96, 96, 128, 128, 128};
+const uint16_t key_sizes[] = {64, 72, 96, 96, 128, 96, 144, 128, 192, 256};
+
+uint8_t Simon_Init(Simon_Cipher cipher_object, enum cipher_config_t cipher_cfg, enum mode_t c_mode, uint8_t *key, uint8_t *iv, uint8_t *counter) {
+    printf("Key Size: %d\n", cipher_object.key_size);
     return 0;
 }
 
-uint8_t Simon_Encrypt(Simon_Cipher cipher_object, *uint8_t plaintext,*uint8_t ciphertext) {
+
+uint8_t Simon_Encrypt(Simon_Cipher cipher_object, uint8_t *plaintext, uint8_t *ciphertext) {
+ 
+    if (cipher_object.block_size == Simon_64_32) {
+        Simon_Encrypt_32(cipher_object.round_limit, cipher_object.key_schedule, plaintext, ciphertext);
+    }
+    
+    else if(cipher_object.block_size <= Simon_96_48) {
+        Simon_Encrypt_48(cipher_object.round_limit, cipher_object.key_schedule, plaintext, ciphertext);
+    }
+    
+    else if(cipher_object.block_size <= Simon_128_64) {
+        Simon_Encrypt_64(cipher_object.round_limit, cipher_object.key_schedule, plaintext, ciphertext);
+    }
+    
+    else if(cipher_object.block_size <= Simon_144_96) {
+        Simon_Encrypt_96(cipher_object.round_limit, cipher_object.key_schedule, plaintext, ciphertext);
+    }
+
+    else if(cipher_object.block_size <= Simon_256_128) {
+        Simon_Encrypt_128(cipher_object.round_limit, cipher_object.key_schedule, plaintext, ciphertext);
+    }
+    
+    else return -1;
+
     return 0;
 }
 
-uint8_t Simon_Decrypt(Simon_Cipher cipher_object *uint8_t ciphertext, *uint8_t plaintext) {
+
+void Simon_Encrypt_32(uint8_t round_limit, uint8_t *key_schedule, uint8_t *plaintext, uint8_t *ciphertext) {
+    
+    const uint8_t word_size = 16;
+    uint16_t *word2_ptr = (uint16_t *)plaintext;
+    uint16_t *word1_ptr = (uint16_t *)plaintext;
+    word1_ptr += 1;
+    uint16_t x_word = *word1_ptr;
+    uint16_t y_word = *word2_ptr;
+
+    uint16_t *round_key_ptr = (uint16_t *)key_schedule;
+
+    for(uint8_t i = 0; i < 32; i++) {  // Block size 32 has only one round number option
+
+        // Shift, AND , XOR ops
+        uint16_t temp = (shift_one & shift_eight) ^ y_word ^ shift_two;
+        
+        // Feistel Cross
+        y_word = x_word;
+        
+        // XOR with Round Key
+        x_word = temp ^ *(round_key_ptr + i);
+    }
+    // Assemble Ciphertext Output Array    
+    word2_ptr = (uint16_t *)ciphertext;
+    word1_ptr = (uint16_t *)ciphertext;
+    word1_ptr += 1;
+    *word1_ptr = x_word;
+    *word2_ptr = y_word;
+}
+
+
+
+
+void Simon_Encrypt_48(uint8_t round_limit, uint8_t *key_schedule, uint8_t *plaintext, uint8_t *ciphertext) {
+    
+    const uint8_t word_size = 24;
+    uint32_t *word2_ptr = (uint32_t *)plaintext;
+    uint32_t *word1_ptr = (uint32_t *)(plaintext + 3);
+    uint32_t x_word = (*word1_ptr) & 0x00FFFFFF;
+    uint32_t y_word = (*word2_ptr) & 0x00FFFFFF;
+
+    uint32_t *round_key_ptr = (uint32_t *)key_schedule;
+
+    for(uint8_t i = 0; i < 32; i++) {  // Block size 32 has only one round number option
+
+        // Shift, AND , XOR ops
+        uint16_t temp = (shift_one & shift_eight) ^ y_word ^ shift_two;
+        
+        // Feistel Cross
+        y_word = x_word;
+        
+        // XOR with Round Key
+        x_word = (temp ^ *(round_key_ptr + i)) & 0x00FFFFFF;
+    }
+    // Assemble Ciphertext Output Array    
+    word2_ptr = (uint32_t *)ciphertext;
+    word1_ptr = (uint32_t *)(ciphertext +3);
+    *word1_ptr = x_word;
+    *word2_ptr = y_word;
+}
+
+
+
+
+
+
+
+void Simon_Encrypt_64(uint8_t round_limit, uint8_t *key_schedule, uint8_t *plaintext, uint8_t *ciphertext) {
+    
+    const uint8_t word_size = 32;
+    uint32_t *word2_ptr = (uint32_t *)plaintext;
+    uint32_t *word1_ptr = (uint32_t *)plaintext;
+    word1_ptr += 1;
+    uint32_t x_word = *word1_ptr;
+    uint32_t y_word = *word2_ptr;
+
+    uint32_t *round_key_ptr = (uint32_t *)key_schedule;
+
+    for(uint8_t i = 0; i < round_limit; i++) {
+
+        // Shift, AND , XOR ops
+        uint32_t temp = (shift_one & shift_eight) ^ y_word ^ shift_two;
+        
+        // Feistel Cross
+        y_word = x_word;
+        
+        // XOR with Round Key
+        x_word = temp ^ *(round_key_ptr + i);
+    }
+    // Assemble Ciphertext Output Array    
+    word2_ptr = (uint32_t *)ciphertext;
+    word1_ptr = (uint32_t *)ciphertext;
+    word1_ptr += 1;
+    *word1_ptr = x_word;
+    *word2_ptr = y_word;
+}
+
+
+
+
+
+
+
+void Simon_Encrypt_96(uint8_t round_limit, uint8_t *key_schedule, uint8_t *plaintext, uint8_t *ciphertext) {
+    
+    const uint8_t word_size = 48;
+    uint64_t *word2_ptr = (uint64_t *)plaintext;
+    uint64_t *word1_ptr = (uint64_t *)(plaintext + 6);
+    uint64_t x_word = (*word1_ptr) & 0x0000FFFFFFFFFFFF;
+    uint64_t y_word = (*word2_ptr) & 0x0000FFFFFFFFFFFF;
+
+    uint64_t *round_key_ptr = (uint64_t *)key_schedule;
+
+    for(uint8_t i = 0; i < round_limit; i++) {
+
+        // Shift, AND , XOR ops
+        uint64_t temp = (shift_one & shift_eight) ^ y_word ^ shift_two;
+        
+        // Feistel Cross
+        y_word = x_word;
+        
+        // XOR with Round Key
+        x_word = (temp ^ *(round_key_ptr + i)) & 0x0000FFFFFFFFFFFF;
+    }
+    // Assemble Ciphertext Output Array    
+    word2_ptr = (uint64_t *)ciphertext;
+    word1_ptr = (uint64_t *)(ciphertext + 6);
+    *word2_ptr = y_word;
+    *word1_ptr = x_word;
+    
+}
+
+
+
+
+
+
+
+void Simon_Encrypt_128(uint8_t round_limit, uint8_t *key_schedule, uint8_t *plaintext, uint8_t *ciphertext) {
+    
+    const uint8_t word_size = 64;
+    uint64_t *word2_ptr = (uint64_t *)plaintext;
+    uint64_t *word1_ptr = (uint64_t *)plaintext;
+    word1_ptr += 1;
+    uint64_t x_word = *word1_ptr;
+    uint64_t y_word = *word2_ptr;
+
+    uint64_t *round_key_ptr = (uint64_t *)key_schedule;
+
+    for(uint8_t i = 0; i < round_limit; i++) {
+
+        // Shift, AND , XOR ops
+        uint64_t temp = (shift_one & shift_eight) ^ y_word ^ shift_two;
+        
+        // Feistel Cross
+        y_word = x_word;
+        
+        // XOR with Round Key
+        x_word = temp ^ *(round_key_ptr + i);
+    }
+    // Assemble Ciphertext Output Array    
+    word2_ptr = (uint64_t *)ciphertext;
+    word1_ptr = (uint64_t *)ciphertext;
+    word1_ptr += 1;
+    *word1_ptr = x_word;
+    *word2_ptr = y_word;
+}
+
+
+
+uint8_t Simon_Decrypt(Simon_Cipher cipher_object, uint8_t *ciphertext, uint8_t *plaintext) {
     return 0;
+}
+
+
+int main(void){
+    Simon_Cipher my_cipher;
+
+    my_cipher.cipher_cfg = Simon_128_64;
+    my_cipher.block_size = 32;
+    my_cipher.key_size = 64;
+    uint8_t init_vector[] = {0x00, 0x00, 0x00, 0xFF};
+    uint8_t counter[] = {0xCC, 0xDD, 0xAA, 0xBB};
+
+    uint8_t my_key[] = {0x19, 0x18, 0x11, 0x10, 0x09, 0x08, 0x01, 0x00};
+    uint8_t my_plaintext_32[] = {0x65, 0x65, 0x68, 0x77};
+    uint8_t my_plaintext_64[] = {0x65, 0x65, 0x68, 0x77, 0x31, 0x032, 0x33, 0x34};
+    uint8_t rands[] = {0xaf, 0x14, 0x38, 0x51, 0x66, 0xd3, 0xad, 0x7f, 0xc5, 0x60, 0x2c, 0x5c, 0xa4, 0xe, 0x19, 0x17, 0x6e, 0xf6, 0x4, 0xbb, 0xeb, 0x64, 0xe, 0x1a, 0x1d, 0x6b, 0x4e, 0x8b, 0x3d, 0x9f, 0xae, 0x49, 0x26, 0x83, 0xda, 0x97, 0x6f, 0xb9, 0x3f, 0xfb, 0x6c, 0x52, 0x92, 0x5d, 0x31, 0xf0, 0xa5, 0xff, 0x9d, 0x6, 0x46, 0xd5, 0xd, 0x99, 0x8d, 0x7e, 0xd1, 0x59, 0xb0, 0x8f, 0x8b, 0xa5, 0xc4, 0x93, 0x71, 0x45, 0x8b, 0xbb, 0xe2, 0x5d, 0x7a, 0x69, 0xde, 0x2a, 0x48, 0xbe, 0x1a, 0xc1, 0xc0, 0x62, 0x6d, 0x74, 0x6d, 0x7, 0xff, 0x2e, 0xc5, 0xc0, 0x89, 0xa1, 0xc4, 0x83, 0x35, 0x5a, 0xb7, 0xf4, 0x57, 0xdb, 0xdd, 0xe8, 0x3c, 0x4d, 0x1a, 0xe0, 0x9, 0xd1, 0x3a, 0xa8, 0xe, 0xcc, 0xc7, 0x1, 0xee, 0x4a, 0x43, 0xe4, 0x21, 0x3, 0x12, 0x8d, 0x4e, 0xa2, 0x33, 0xfa, 0x7d, 0x6f, 0x7e, 0xa0, 0x2e, 0xc8, 0x39, 0x32, 0xc8, 0xae, 0x2e, 0x9, 0x59, 0xb2, 0x9f, 0xff, 0x44, 0x64, 0x58, 0xd4, 0xd9, 0xa0, 0xdc, 0x46, 0x30, 0x90, 0x6e, 0xcb, 0xb, 0x5b, 0x22, 0x4f, 0x6, 0x1, 0xb9, 0xa1, 0x20, 0x77, 0xf9, 0x94, 0x2b, 0x90, 0x45, 0x67, 0xb2, 0x5d, 0x71, 0x3a, 0x82, 0x92, 0xea, 0xc8, 0x7e, 0xd5, 0xbe, 0xcf, 0xfd, 0xe9, 0x88, 0x69, 0x93, 0xf1, 0xc9, 0x14, 0xec, 0x36, 0xc0, 0xff, 0xa7, 0x55, 0x70, 0xfc, 0x9e, 0xad, 0x23, 0x22, 0x26, 0xc7, 0x9c, 0x27, 0x24, 0x8c, 0xc7, 0x4f, 0xee, 0x49, 0xeb, 0x42, 0x50, 0x65, 0x27, 0xed, 0xd, 0xb7, 0xec, 0x1b, 0x6b, 0x83, 0x9d, 0x3f, 0xed, 0xe8, 0x19, 0xfd, 0x66, 0xed, 0xaf, 0x24, 0xf6, 0x26, 0xf2, 0x2f, 0x37, 0x7f, 0x6d, 0xe3, 0xfc, 0x72, 0xd3, 0x1, 0x2c, 0xda, 0x83, 0xe4, 0x54, 0x2, 0xed, 0x6e, 0x6c, 0x8e, 0xe0, 0xeb, 0x48, 0xfa, 0x5b, 0xb8, 0xb9, 0x7, 0xb7, 0xba, 0xaf, 0xb2, 0x2a, 0xb8, 0xf0, 0xa6, 0x27, 0x4c, 0xb0, 0xeb, 0x93, 0x14, 0xbd, 0xec, 0xf8, 0x27, 0x86, 0x90, 0xb0, 0x52, 0x62, 0x0, 0x21, 0x4a, 0x6d, 0x5d, 0x8e, 0xba, 0xa0, 0xc0, 0x79, 0xbc, 0x84, 0x47, 0xa0, 0xaa, 0x59, 0x61, 0xc5, 0x8c, 0xfa, 0x60, 0x8, 0x99, 0xa7, 0x67, 0x45, 0x51, 0x62, 0xf7, 0xbb, 0xe3, 0x4e, 0xcb, 0x42, 0x42, 0x98, 0x67, 0x2b, 0x3d, 0x1a, 0xbb, 0x65, 0xca, 0x4c, 0x17, 0xfb, 0xda, 0x8a, 0xce, 0x48, 0x62, 0x26, 0x1f, 0xf6, 0xa5, 0x23, 0x9d, 0x4e, 0xbd, 0x72, 0x1b, 0xa1, 0x0, 0x64, 0x91, 0x50, 0xbc, 0x6a, 0x65, 0x42, 0xd9, 0x1, 0xcb, 0xb9, 0xf4, 0xb6, 0xec, 0xc2, 0xb, 0x5e, 0x33, 0x1b, 0xf1, 0x2, 0x18, 0x3b, 0x61, 0xc9, 0xdd, 0xe8, 0x5, 0x6f, 0x1d, 0x48, 0xe0, 0xab, 0x48, 0x9e, 0x70, 0x9f, 0x91, 0x4a, 0x7e, 0x19, 0xbf, 0x17, 0x56, 0x9c, 0x23, 0xc1, 0x17, 0x0, 0x5f, 0x39, 0x88, 0x7a, 0x33, 0x44, 0x26, 0xfc, 0x1c, 0xe, 0x3f, 0x5, 0x9d, 0x30, 0xf0, 0x16, 0xfc, 0xa0, 0x70, 0xee, 0xf4, 0xee, 0x22, 0x94, 0x6a, 0xf, 0x7, 0x62, 0xf9, 0xc, 0x26, 0x31, 0x7a, 0xfb, 0x5c, 0xf7, 0x30, 0x37, 0x72, 0xfd, 0x94, 0x2b, 0x15, 0x13, 0xad, 0x4a, 0x18, 0xb1, 0x81, 0xee, 0xe4, 0xd8, 0x11, 0x28, 0x52, 0x24, 0x4f, 0x3f, 0x92, 0xc7, 0xb1, 0x18, 0xbf, 0xe7, 0x56, 0x7f, 0xb5, 0x4f, 0x3, 0x72, 0x5e, 0xb4, 0x68, 0x8d, 0xde, 0x9b, 0x55, 0xaa, 0xcb, 0xee, 0x2f, 0x36, 0x1e, 0xb0, 0xe1, 0x50, 0xa2, 0x56, 0x8b, 0x1c, 0x13, 0xcd, 0x52, 0x4a, 0x5, 0xb1, 0x8d, 0xb1, 0xd2, 0x95, 0xc4, 0x37, 0x5d, 0x10, 0xc8, 0xad, 0x70, 0xf4, 0x53, 0xca, 0x63, 0xfd, 0x74, 0x38, 0xf9, 0x10, 0xec, 0x7f, 0x3b, 0x6e, 0x1d, 0x53, 0xec, 0x74, 0x63, 0x1d, 0xbf, 0x3b, 0x12, 0xa2, 0x35, 0xda, 0xe1, 0xf, 0x36, 0x8b, 0x49, 0x96, 0x8, 0x4a, 0x40, 0xe0, 0x21, 0xc0, 0xae, 0x4b, 0xcb, 0x2, 0x14, 0x13, 0x5e, 0x7e, 0x8f, 0x12, 0xcf, 0xa8, 0x2c, 0x5, 0x4d, 0x98, 0x6a, 0x33, 0x49, 0xb2, 0x9d, 0x11, 0x28, 0xc3, 0x31, 0xd4, 0x60, 0x14, 0x59, 0x7c, 0xbe, 0x97, 0xc5, 0xa7, 0xe8};
+    uint8_t my_ciphertext[8];
+    
+    uint8_t result = Simon_Init(my_cipher, Simon_64_32, ECB, my_key, init_vector, counter);
+
+    printf("Key Size: %d\n", my_cipher.key_size);
+
+    printf("Result: %d\n",result);
+
+    printf("Plaintext:");
+    for(int i = 0; i < 8; i++){
+        printf("%x ", my_plaintext_64[i]);
+    }
+    printf("\n");
+
+    // Simon_Encrypt_64(rands, my_plaintext_64, my_ciphertext);
+
+    // printf("CipherText:");
+    // for(int i = 0; i < 8; i++){
+    //     printf("%x ",my_ciphertext[i]);
+    // }
+    // printf("\n");
+
+    return 0;
+
+
 }
