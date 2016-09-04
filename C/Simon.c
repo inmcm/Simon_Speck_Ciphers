@@ -2,15 +2,12 @@
 #include <stdint.h>
 #include "Simon.h"
 
-
-
 // Cipher Operation Macros
 #define shift_one ((x_word << 1) | (x_word >> (word_size - 1)))
 #define shift_eight ((x_word << 8) | (x_word >> (word_size - 8)))
 #define shift_two ((x_word << 2) | (x_word >> (word_size - 2)))
 
-
-
+// Valid Cipher Parameters
 const uint8_t simon_rounds[] = {32, 36, 36, 42, 44, 52, 54, 68, 69, 72};
 const uint8_t block_sizes[] = {32, 48, 48, 64, 64, 96, 96, 128, 128, 128};
 const uint16_t key_sizes[] = {64, 72, 96, 96, 128, 96, 144, 128, 192, 256};
@@ -19,7 +16,6 @@ uint8_t Simon_Init(Simon_Cipher cipher_object, enum cipher_config_t cipher_cfg, 
     printf("Key Size: %d\n", cipher_object.key_size);
     return 0;
 }
-
 
 uint8_t Simon_Encrypt(Simon_Cipher cipher_object, uint8_t *plaintext, uint8_t *ciphertext) {
  
