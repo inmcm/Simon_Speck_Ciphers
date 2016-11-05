@@ -176,15 +176,13 @@ class SimonCipher:
             raise
 
         if self.mode == 'ECB':
-            for x in self.key_schedule:
-                b, a = self.encrypt_round(b, a, x)
+            b, a = self.encrypt_function(b, a)
 
         elif self.mode == 'CTR':
             true_counter = self.iv + self.counter
             d = (true_counter >> self.word_size) & self.mod_mask
             c = true_counter & self.mod_mask
-            for x in self.key_schedule:
-                d, c = self.encrypt_round(d, c, x)
+            d, c = self.encrypt_function(d, c)
             b ^= d
             a ^= c
             self.counter += 1
@@ -192,8 +190,7 @@ class SimonCipher:
         elif self.mode == 'CBC':
             b ^= self.iv_upper
             a ^= self.iv_lower
-            for x in self.key_schedule:
-                b, a = self.encrypt_round(b, a, x)
+            b, a = self.encrypt_function(b, a)
 
             self.iv_upper = b
             self.iv_lower = a
@@ -203,9 +200,7 @@ class SimonCipher:
             f, e = b, a
             b ^= self.iv_upper
             a ^= self.iv_lower
-            for x in self.key_schedule:
-                b, a = self.encrypt_round(b, a, x)
-
+            b, a = self.encrypt_function(b, a)
             self.iv_upper = b ^ f
             self.iv_lower = a ^ e
             self.iv = (self.iv_upper << self.word_size) + self.iv_lower
@@ -213,8 +208,7 @@ class SimonCipher:
         elif self.mode == 'CFB':
             d = self.iv_upper
             c = self.iv_lower
-            for x in self.key_schedule:
-                d, c = self.encrypt_round(d, c, x)
+            d, c = self.encrypt_function(d, c)
             b ^= d
             a ^= c
 
@@ -225,9 +219,7 @@ class SimonCipher:
         elif self.mode == 'OFB':
             d = self.iv_upper
             c = self.iv_lower
-            for x in self.key_schedule:
-                d, c = self.encrypt_round(d, c, x)
-
+            d, c = self.encrypt_function(d, c)
             self.iv_upper = d
             self.iv_lower = c
             self.iv = (d << self.word_size) + c
@@ -254,22 +246,19 @@ class SimonCipher:
             raise
 
         if self.mode == 'ECB':
-            for x in reversed(self.key_schedule):
-                b, a = self.decrypt_round(b, a, x)
+            a, b = self.decrypt_function(a, b)
 
         elif self.mode == 'CTR':
             true_counter = self.iv + self.counter
             d = (true_counter >> self.word_size) & self.mod_mask
             c = true_counter & self.mod_mask
-            for x in self.key_schedule:
-                d, c = self.encrypt_round(d, c, x)
+            d, c = self.encrypt_function(d, c)
             b ^= d
             a ^= c
             self.counter += 1
 
         elif self.mode == 'CBC':
-            for x in reversed(self.key_schedule):
-                b, a = self.decrypt_round(b, a, x)
+            a, b = self.decrypt_function(a, b)
             b ^= self.iv_upper
             a ^= self.iv_lower
 
@@ -279,10 +268,7 @@ class SimonCipher:
 
         elif self.mode == 'PCBC':
             f, e = b, a
-
-            for x in reversed(self.key_schedule):
-                b, a = self.decrypt_round(b, a, x)
-
+            a, b = self.decrypt_function(a, b)
             b ^= self.iv_upper
             a ^= self.iv_lower
             self.iv_upper = (b ^ f)
@@ -295,20 +281,14 @@ class SimonCipher:
             self.iv_upper = b
             self.iv_lower = a
             self.iv = (b << self.word_size) + a
-
-            for x in self.key_schedule:
-                d, c = self.encrypt_round(d, c, x)
-
+            d, c = self.encrypt_function(d, c)
             b ^= d
             a ^= c
 
         elif self.mode == 'OFB':
             d = self.iv_upper
             c = self.iv_lower
-
-            for x in self.key_schedule:
-                d, c = self.encrypt_round(d, c, x)
-
+            d, c = self.encrypt_function(d, c)
             self.iv_upper = d
             self.iv_lower = c
             self.iv = (d << self.word_size) + c
@@ -319,6 +299,64 @@ class SimonCipher:
         plaintext = (b << self.word_size) + a
 
         return plaintext
+
+
+    def encrypt_function(self, upper_word, lower_word):
+        """
+        Completes appropriate number of Simon Fiestel function to encrypt provided words
+        Round number is based off of number of elements in key schedule
+        upper_word: int of upper bytes of plaintext input 
+                    limited by word size of currently configured cipher
+        lower_word: int of lower bytes of plaintext input 
+                    limited by word size of currently configured cipher
+        x,y:        int of Upper and Lower ciphertext words            
+        """    
+        x = upper_word
+        y = lower_word 
+
+        # Run Encryption Steps For Appropriate Number of Rounds
+        for k in self.key_schedule:
+             # Generate all circular shifts
+            ls_1_x = ((x >> (self.word_size - 1)) + (x << 1)) & self.mod_mask
+            ls_8_x = ((x >> (self.word_size - 8)) + (x << 8)) & self.mod_mask
+            ls_2_x = ((x >> (self.word_size - 2)) + (x << 2)) & self.mod_mask
+
+            # XOR Chain
+            xor_1 = (ls_1_x & ls_8_x) ^ y
+            xor_2 = xor_1 ^ ls_2_x
+            y = x
+            x = k ^ xor_2
+            
+        return x,y    
+
+    def decrypt_function(self, upper_word, lower_word):    
+        """
+        Completes appropriate number of Simon Fiestel function to decrypt provided words
+        Round number is based off of number of elements in key schedule
+        upper_word: int of upper bytes of ciphertext input 
+                    limited by word size of currently configured cipher
+        lower_word: int of lower bytes of ciphertext input 
+                    limited by word size of currently configured cipher
+        x,y:        int of Upper and Lower plaintext words            
+        """
+        x = upper_word
+        y = lower_word
+
+        # Run Encryption Steps For Appropriate Number of Rounds
+        for k in reversed(self.key_schedule): 
+             # Generate all circular shifts
+            ls_1_x = ((x >> (self.word_size - 1)) + (x << 1)) & self.mod_mask
+            ls_8_x = ((x >> (self.word_size - 8)) + (x << 8)) & self.mod_mask
+            ls_2_x = ((x >> (self.word_size - 2)) + (x << 2)) & self.mod_mask
+
+            # XOR Chain
+            xor_1 = (ls_1_x & ls_8_x) ^ y
+            xor_2 = xor_1 ^ ls_2_x
+            y = x
+            x = k ^ xor_2
+            
+        return x,y      
+
 
     def update_iv(self, new_iv):
         if new_iv:

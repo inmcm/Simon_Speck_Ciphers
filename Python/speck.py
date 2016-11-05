@@ -131,15 +131,17 @@ class SpeckCipher:
             raise
 
         if self.mode == 'ECB':
-            for x in self.key_schedule:
-                b, a = self.encrypt_round(b, a, x)
+            b, a = self.encrypt_function(b, a)
+            # for x in self.key_schedule:
+            #     b, a = self.encrypt_round(b, a, x)
 
         elif self.mode == 'CTR':
             true_counter = self.iv + self.counter
             d = (true_counter >> self.word_size) & self.mod_mask
             c = true_counter & self.mod_mask
-            for x in self.key_schedule:
-                d, c = self.encrypt_round(d, c, x)
+            d, c = self.encrypt_function(d, c)
+            # for x in self.key_schedule:
+            #     d, c = self.encrypt_round(d, c, x)
             b ^= d
             a ^= c
             self.counter += 1
@@ -147,8 +149,9 @@ class SpeckCipher:
         elif self.mode == 'CBC':
             b ^= self.iv_upper
             a ^= self.iv_lower
-            for x in self.key_schedule:
-                b, a = self.encrypt_round(b, a, x)
+            b, a = self.encrypt_function(b, a)
+            # for x in self.key_schedule:
+            #     b, a = self.encrypt_round(b, a, x)
 
             self.iv_upper = b
             self.iv_lower = a
@@ -158,8 +161,9 @@ class SpeckCipher:
             f, e = b, a
             b ^= self.iv_upper
             a ^= self.iv_lower
-            for x in self.key_schedule:
-                b, a = self.encrypt_round(b, a, x)
+            b, a = self.encrypt_function(b, a)
+            # for x in self.key_schedule:
+            #     b, a = self.encrypt_round(b, a, x)
             self.iv_upper = (b ^ f)
             self.iv_lower = (a ^ e)
             self.iv = (self.iv_upper << self.word_size) + self.iv_lower
@@ -167,8 +171,9 @@ class SpeckCipher:
         elif self.mode == 'CFB':
             d = self.iv_upper
             c = self.iv_lower
-            for x in self.key_schedule:
-                d, c = self.encrypt_round(d, c, x)
+            d, c = self.encrypt_function(d, c)
+            # for x in self.key_schedule:
+            #     d, c = self.encrypt_round(d, c, x)
             b ^= d
             a ^= c
             self.iv_upper = b
@@ -178,9 +183,9 @@ class SpeckCipher:
         elif self.mode == 'OFB':
             d = self.iv_upper
             c = self.iv_lower
-            for x in self.key_schedule:
-                d, c = self.encrypt_round(d, c, x)
-
+            d, c = self.encrypt_function(d, c)
+            # for x in self.key_schedule:
+            #     d, c = self.encrypt_round(d, c, x)
             self.iv_upper = d
             self.iv_lower = c
             self.iv = (d << self.word_size) + c
@@ -202,24 +207,26 @@ class SpeckCipher:
             raise
 
         if self.mode == 'ECB':
-            for x in reversed(self.key_schedule):
-                b, a = self.decrypt_round(b, a, x)
+            b, a = self.decrypt_function(b, a)
+            # for x in reversed(self.key_schedule):
+            #     b, a = self.decrypt_round(b, a, x)
 
         elif self.mode == 'CTR':
             true_counter = self.iv + self.counter
             d = (true_counter >> self.word_size) & self.mod_mask
             c = true_counter & self.mod_mask
-            for x in self.key_schedule:
-                d, c = self.encrypt_round(d, c, x)
+            d, c = self.encrypt_function(d, c)
+            # for x in self.key_schedule:
+            #     d, c = self.encrypt_round(d, c, x)
             b ^= d
             a ^= c
             self.counter += 1
 
         elif self.mode == 'CBC':
             f, e = b, a
-
-            for x in reversed(self.key_schedule):
-                b, a = self.decrypt_round(b, a, x)
+            b, a = self.decrypt_function(b, a)
+            # for x in reversed(self.key_schedule):
+            #     b, a = self.decrypt_round(b, a, x)
             b ^= self.iv_upper
             a ^= self.iv_lower
 
@@ -230,8 +237,9 @@ class SpeckCipher:
         elif self.mode == 'PCBC':
             f, e = b, a
 
-            for x in reversed(self.key_schedule):
-                b, a = self.decrypt_round(b, a, x)
+            b, a = self.decrypt_function(b, a)
+            # for x in reversed(self.key_schedule):
+            #     b, a = self.decrypt_round(b, a, x)
 
             b ^= self.iv_upper
             a ^= self.iv_lower
@@ -245,9 +253,9 @@ class SpeckCipher:
             self.iv_upper = b
             self.iv_lower = a
             self.iv = (b << self.word_size) + a
-
-            for x in self.key_schedule:
-                d, c = self.encrypt_round(d, c, x)
+            d, c = self.encrypt_function(d, c)
+            # for x in self.key_schedule:
+            #     d, c = self.encrypt_round(d, c, x)
 
             b ^= d
             a ^= c
@@ -255,9 +263,9 @@ class SpeckCipher:
         elif self.mode == 'OFB':
             d = self.iv_upper
             c = self.iv_lower
-
-            for x in self.key_schedule:
-                d, c = self.encrypt_round(d, c, x)
+            d, c = self.encrypt_function(d, c)
+            # for x in self.key_schedule:
+            #     d, c = self.encrypt_round(d, c, x)
 
             self.iv_upper = d
             self.iv_lower = c
@@ -269,6 +277,47 @@ class SpeckCipher:
         plaintext = (b << self.word_size) + a
 
         return plaintext
+
+    def encrypt_function(self, upper_word, lower_word):    
+        
+        x = upper_word
+        y = lower_word 
+
+        # Run Encryption Steps For Appropriate Number of Rounds
+        for k in self.key_schedule:
+            rs_x = ((x << (self.word_size - self.alpha_shift)) + (x >> self.alpha_shift)) & self.mod_mask
+
+            add_sxy = (rs_x + y) & self.mod_mask
+
+            x = k ^ add_sxy
+
+            ls_y = ((y >> (self.word_size - self.beta_shift)) + (y << self.beta_shift)) & self.mod_mask
+
+            y = x ^ ls_y
+            
+        return x,y    
+
+
+    def decrypt_function(self, upper_word, lower_word):    
+        
+        x = upper_word
+        y = lower_word
+
+        # Run Encryption Steps For Appropriate Number of Rounds
+        for k in reversed(self.key_schedule): 
+            xor_xy = x ^ y
+
+            y = ((xor_xy << (self.word_size - self.beta_shift)) + (xor_xy >> self.beta_shift)) & self.mod_mask
+
+            xor_xk = x ^ k
+
+            msub = ((xor_xk - y) + self.mod_mask_sub) % self.mod_mask_sub
+
+            x = ((msub >> (self.word_size - self.alpha_shift)) + (msub << self.alpha_shift)) & self.mod_mask
+
+            
+        return x,y
+        
 
     def update_iv(self, new_iv=None):
         if new_iv:
