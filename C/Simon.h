@@ -22,14 +22,23 @@ typedef struct {
   uint8_t round_limit;
   uint8_t init_vector[16];
   uint8_t counter[16];  
-  uint8_t key_schedule[272];
+  uint8_t key_schedule[576];
+  uint8_t z_seq;
 } Simon_Cipher;
 
-uint8_t Simon_Init(Simon_Cipher cipher_object, enum cipher_config_t cipher_cfg, enum mode_t c_mode, uint8_t *key, uint8_t *iv, uint8_t *counter);
+typedef struct _bword_24{
+  uint32_t data: 24;
+} bword_24;
+
+typedef struct _bword_48{
+  uint64_t data: 48;
+} bword_48;
+
+uint8_t Simon_Init(Simon_Cipher *cipher_object, enum cipher_config_t cipher_cfg, enum mode_t c_mode, uint8_t *key, uint8_t *iv, uint8_t *counter);
 
 uint8_t Simon_Encrypt(Simon_Cipher cipher_object, uint8_t *plaintext, uint8_t *ciphertext);
 
-void Simon_Encrypt_32(uint8_t round_limit, uint8_t *key_schedule, uint8_t *plaintext, uint8_t *ciphertext);
+void Simon_Encrypt_32(uint8_t *key_schedule, uint8_t *plaintext, uint8_t *ciphertext);
 void Simon_Encrypt_48(uint8_t round_limit, uint8_t *key_schedule, uint8_t *plaintext, uint8_t *ciphertext);
 void Simon_Encrypt_64(uint8_t round_limit, uint8_t *key_schedule, uint8_t *plaintext, uint8_t *ciphertext);
 void Simon_Encrypt_96(uint8_t round_limit, uint8_t *key_schedule, uint8_t *plaintext, uint8_t *ciphertext);
