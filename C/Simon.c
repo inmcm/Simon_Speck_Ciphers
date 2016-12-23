@@ -1,6 +1,7 @@
 #include <stdint.h>
 #include <limits.h>
 #include <stdlib.h>
+#include <string.h>
 #include "Simon.h"
 
 // Cipher Operation Macros
@@ -22,7 +23,7 @@ const uint8_t block_sizes[] = {32, 48, 48, 64, 64, 96, 96, 128, 128, 128};
 const uint16_t key_sizes[] = {64, 72, 96, 96, 128, 96, 144, 128, 192, 256};
 const uint8_t  z_assign[] = {0, 0, 1, 2, 3, 2, 3, 2, 3, 4};
 
-uint8_t Simon_Init(Simon_Cipher *cipher_object, enum cipher_config_t cipher_cfg, enum mode_t c_mode, uint8_t *key, uint8_t *iv, uint8_t *counter) {
+uint8_t Simon_Init(Simon_Cipher *cipher_object, enum cipher_config_t cipher_cfg, enum mode_t c_mode, void *key, uint8_t *iv, uint8_t *counter) {
 
     if (cipher_cfg > Simon_256_128 || cipher_cfg < Simon_64_32){
         return -1;
@@ -78,7 +79,7 @@ uint8_t Simon_Init(Simon_Cipher *cipher_object, enum cipher_config_t cipher_cfg,
     return 0;
 }
 
-uint8_t Simon_Encrypt(Simon_Cipher cipher_object, uint8_t *plaintext, uint8_t *ciphertext) {
+uint8_t Simon_Encrypt(Simon_Cipher cipher_object, void *plaintext, void *ciphertext) {
 
     if (cipher_object.cipher_cfg == Simon_64_32) {
         Simon_Encrypt_32(cipher_object.key_schedule, plaintext, ciphertext);

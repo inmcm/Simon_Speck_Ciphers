@@ -34,9 +34,9 @@ typedef struct _bword_48{
   uint64_t data: 48;
 } bword_48;
 
-uint8_t Simon_Init(Simon_Cipher *cipher_object, enum cipher_config_t cipher_cfg, enum mode_t c_mode, uint8_t *key, uint8_t *iv, uint8_t *counter);
+uint8_t Simon_Init(Simon_Cipher *cipher_object, enum cipher_config_t cipher_cfg, enum mode_t c_mode, void *key, uint8_t *iv, uint8_t *counter);
 
-uint8_t Simon_Encrypt(Simon_Cipher cipher_object, uint8_t *plaintext, uint8_t *ciphertext);
+uint8_t Simon_Encrypt(Simon_Cipher cipher_object, void *plaintext, void *ciphertext);
 
 void Simon_Encrypt_32(uint8_t *key_schedule, uint8_t *plaintext, uint8_t *ciphertext);
 void Simon_Encrypt_48(uint8_t round_limit, uint8_t *key_schedule, uint8_t *plaintext, uint8_t *ciphertext);
