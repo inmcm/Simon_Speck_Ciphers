@@ -9,11 +9,15 @@ Implementations of the [Speck & Simon] Block Ciphers
 #####VHDL
 - Speck Cipher Implemented
 - Simon Cipher Implemented
+- AXI Bus Peripheral available for Zynq/MicroBlaze Processors
+  - Internal Clocked Version
+  - Externally Clocked Version (includes clock boundary traversal module)
 - Need to add top layer that add cipher block mode options.
-- Need to create Zynq AXI peripheral interface and clock boundary translator
+
 
 #####C
-- In Progress - Basic Code Skeletons Complete
-
+- Speck Cipher Encryption Implemented
+- Simon Cipher Encryption Implemented
+- Need to Implement Decryption and Block Modes
 
 [Speck & Simon]: http://eprint.iacr.org/2013/404
