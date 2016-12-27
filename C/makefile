@@ -10,4 +10,4 @@ simon.o: Simon.c
 	gcc -c Simon.c
 
 clean:
-	rm -rf *o hello
+	rm -rf *o tests
