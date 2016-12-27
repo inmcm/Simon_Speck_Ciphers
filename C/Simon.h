@@ -44,6 +44,11 @@ void Simon_Encrypt_64(uint8_t round_limit, uint8_t *key_schedule, uint8_t *plain
 void Simon_Encrypt_96(uint8_t round_limit, uint8_t *key_schedule, uint8_t *plaintext, uint8_t *ciphertext);
 void Simon_Encrypt_128(uint8_t round_limit, uint8_t *key_schedule, uint8_t *plaintext, uint8_t *ciphertext);
 
-uint8_t Simon_Decrypt(Simon_Cipher cipher_object, uint8_t *ciphertext, uint8_t *plaintext);
+uint8_t Simon_Decrypt(Simon_Cipher cipher_object, void *ciphertext, void *plaintext);
+void Simon_Decrypt_32(uint8_t *key_schedule, uint8_t *ciphertext, uint8_t *plaintext);
+void Simon_Decrypt_48(uint8_t round_limit, uint8_t *key_schedule, uint8_t *ciphertext, uint8_t *plaintext);
+void Simon_Decrypt_64(uint8_t round_limit, uint8_t *key_schedule, uint8_t *ciphertext, uint8_t *plaintext);
+void Simon_Decrypt_96(uint8_t round_limit, uint8_t *key_schedule, uint8_t *ciphertext, uint8_t *plaintext);
+void Simon_Decrypt_128(uint8_t round_limit, uint8_t *key_schedule, uint8_t *ciphertext, uint8_t *plaintext);
 
 #endif
