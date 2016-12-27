@@ -127,8 +127,7 @@ void Simon_Encrypt_32(uint8_t *key_schedule, uint8_t *plaintext, uint8_t *cipher
     }
     // Assemble Ciphertext Output Array   
     *word_ptr = y_word;
-    word_ptr += 1;
-    *word_ptr = x_word;
+    *(word_ptr + 1) = x_word;
 }
 
 void Simon_Encrypt_48(uint8_t round_limit, uint8_t *key_schedule, uint8_t *plaintext, uint8_t *ciphertext) {
@@ -182,8 +181,7 @@ void Simon_Encrypt_64(uint8_t round_limit, uint8_t *key_schedule, uint8_t *plain
     }
     // Assemble Ciphertext Output Array   
     *word_ptr = y_word;
-    word_ptr += 1;
-    *word_ptr = x_word;
+    *(word_ptr + 1) = x_word;
 }
 
 void Simon_Encrypt_96(uint8_t round_limit, uint8_t *key_schedule, uint8_t *plaintext, uint8_t *ciphertext) {
@@ -238,8 +236,7 @@ void Simon_Encrypt_128(uint8_t round_limit, uint8_t *key_schedule, uint8_t *plai
     }
     // Assemble Ciphertext Output Array   
     *word_ptr = y_word;
-    word_ptr += 1;
-    *word_ptr = x_word;
+    *(word_ptr + 1) = x_word;
 }
 
 uint8_t Simon_Decrypt(Simon_Cipher cipher_object, void *ciphertext, void *plaintext) {
