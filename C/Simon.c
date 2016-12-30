@@ -19,24 +19,24 @@ uint64_t z_arrays[5] = {0b000110011100001101010010001011111011001110000110101001
 
 // Valid Cipher Parameters
 const uint8_t simon_rounds[] = {32, 36, 36, 42, 44, 52, 54, 68, 69, 72};
-const uint8_t block_sizes[] = {32, 48, 48, 64, 64, 96, 96, 128, 128, 128};
-const uint16_t key_sizes[] = {64, 72, 96, 96, 128, 96, 144, 128, 192, 256};
+const uint8_t simon_block_sizes[] = {32, 48, 48, 64, 64, 96, 96, 128, 128, 128};
+const uint16_t simon_key_sizes[] = {64, 72, 96, 96, 128, 96, 144, 128, 192, 256};
 const uint8_t  z_assign[] = {0, 0, 1, 2, 3, 2, 3, 2, 3, 4};
 
-uint8_t Simon_Init(Simon_Cipher *cipher_object, enum cipher_config_t cipher_cfg, enum mode_t c_mode, void *key, uint8_t *iv, uint8_t *counter) {
+uint8_t Simon_Init(Simon_Cipher *cipher_object, enum simon_cipher_config_t cipher_cfg, enum mode_t c_mode, void *key, uint8_t *iv, uint8_t *counter) {
 
     if (cipher_cfg > Simon_256_128 || cipher_cfg < Simon_64_32){
         return -1;
     }
     
-    cipher_object->block_size = block_sizes[cipher_cfg];
-    cipher_object->key_size = key_sizes[cipher_cfg];
+    cipher_object->block_size = simon_block_sizes[cipher_cfg];
+    cipher_object->key_size = simon_key_sizes[cipher_cfg];
     cipher_object->round_limit = simon_rounds[cipher_cfg];
     cipher_object->cipher_cfg = cipher_cfg;
     cipher_object->z_seq = z_assign[cipher_cfg];
-    uint8_t word_size = block_sizes[cipher_cfg] >> 1;
+    uint8_t word_size = simon_block_sizes[cipher_cfg] >> 1;
     uint8_t word_bytes = word_size >> 3;
-    uint8_t key_words =  key_sizes[cipher_cfg] / word_size;
+    uint8_t key_words =  simon_key_sizes[cipher_cfg] / word_size;
     uint64_t sub_keys[4] = {};
     uint64_t mod_mask = ULLONG_MAX >> (64 - word_size);
 

@@ -1,9 +1,12 @@
 #ifndef SIMON_H
 #define SIMON_H
 
+#ifndef CIPHER_CONSTANTS
+#define CIPHER_CONSTANTS
 enum mode_t { ECB, CTR, CBC, CFB, OFB };
+#endif
 
-enum cipher_config_t { Simon_64_32,
+enum simon_cipher_config_t { Simon_64_32,
                        Simon_72_48,
                        Simon_96_48,
                        Simon_96_64,
@@ -16,7 +19,7 @@ enum cipher_config_t { Simon_64_32,
 }; 
 
 typedef struct {
-  enum cipher_config_t cipher_cfg;
+  enum simon_cipher_config_t cipher_cfg;
   uint8_t key_size;
   uint8_t block_size;
   uint8_t round_limit;
@@ -34,7 +37,7 @@ typedef struct _bword_48{
   uint64_t data: 48;
 } bword_48;
 
-uint8_t Simon_Init(Simon_Cipher *cipher_object, enum cipher_config_t cipher_cfg, enum mode_t c_mode, void *key, uint8_t *iv, uint8_t *counter);
+uint8_t Simon_Init(Simon_Cipher *cipher_object, enum simon_cipher_config_t cipher_cfg, enum mode_t c_mode, void *key, uint8_t *iv, uint8_t *counter);
 
 uint8_t Simon_Encrypt(Simon_Cipher cipher_object, void *plaintext, void *ciphertext);
 

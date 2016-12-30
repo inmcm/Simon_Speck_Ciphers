@@ -1,9 +1,16 @@
 #ifndef SPECK_H
 #define SPECK_H
 
-enum mode_t { ECB, CTR, CBC, CFB, OFB };
+// enum speck_mode_t { ECB, CTR, CBC, CFB, OFB };
+// const uint8_t speck_block_sizes[] = {32, 48, 48, 64, 64, 96, 96, 128, 128, 128};
+// const uint16_t speck_key_sizes[] = {64, 72, 96, 96, 128, 96, 144, 128, 192, 256};
 
-enum cipher_config_t { Speck_64_32,
+#ifndef CIPHER_CONSTANTS
+#define CIPHER_CONSTANTS
+enum mode_t { ECB, CTR, CBC, CFB, OFB };
+#endif
+
+enum speck_cipher_config_t { Speck_64_32,
                Speck_72_48,
                Speck_96_48,
                Speck_96_64,
@@ -16,7 +23,7 @@ enum cipher_config_t { Speck_64_32,
 } ; 
 
 typedef struct {
-    enum cipher_config_t cipher_cfg;
+    enum speck_cipher_config_t cipher_cfg;
     uint8_t key_size;
     uint8_t block_size;
     uint8_t round_limit;
@@ -44,7 +51,7 @@ typedef struct _bytes6_t{
 } bytes6_t;
 
 
-uint8_t Speck_Init(Speck_Cipher *cipher_object, enum cipher_config_t cipher_cfg, enum mode_t c_mode, void *key, uint8_t *iv, uint8_t *counter);
+uint8_t Speck_Init(Speck_Cipher *cipher_object, enum speck_cipher_config_t cipher_cfg, enum mode_t c_mode, void *key, uint8_t *iv, uint8_t *counter);
 
 uint8_t Speck_Encrypt(Speck_Cipher cipher_object, void *plaintext, void *ciphertext);
 
