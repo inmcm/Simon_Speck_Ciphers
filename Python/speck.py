@@ -13,7 +13,7 @@ class SpeckCipher:
     __valid_modes = ['ECB', 'CTR', 'CBC', 'PCBC', 'CFB', 'OFB']
 
     def encrypt_round(self, x, y, k):
-        """Complete One Round of Fiestal Operation"""
+        """Complete One Round of Feistel Operation"""
         rs_x = ((x << (self.word_size - self.alpha_shift)) + (x >> self.alpha_shift)) & self.mod_mask
 
         add_sxy = (rs_x + y) & self.mod_mask
@@ -27,7 +27,7 @@ class SpeckCipher:
         return new_x, new_y
 
     def decrypt_round(self, x, y, k):
-        """Complete One Round of Inverse Fiestal Operation"""
+        """Complete One Round of Inverse Feistel Operation"""
 
         xor_xy = x ^ y
 
