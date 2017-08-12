@@ -67,8 +67,8 @@ uint8_t Simon_Init(Simon_Cipher *cipher_object, enum simon_cipher_config_t ciphe
         tmp1 ^= tmp2;
 
         // Shift Sub Words
-        for(int i = 0; i < (key_words - 1); i++){
-            sub_keys[i] = sub_keys[i+1];
+        for(int j = 0; j < (key_words - 1); j++){
+            sub_keys[j] = sub_keys[j+1];
         }
         sub_keys[key_words - 1] = tmp1 & mod_mask;
 
