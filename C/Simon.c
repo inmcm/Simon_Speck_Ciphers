@@ -36,7 +36,7 @@ uint8_t Simon_Init(Simon_Cipher *cipher_object, enum simon_cipher_config_t ciphe
     cipher_object->z_seq = z_assign[cipher_cfg];
     uint8_t word_size = simon_block_sizes[cipher_cfg] >> 1;
     uint8_t word_bytes = word_size >> 3;
-    uint8_t key_words =  simon_key_sizes[cipher_cfg] / word_size;
+    uint16_t key_words =  simon_key_sizes[cipher_cfg] / word_size;
     uint64_t sub_keys[4] = {};
     uint64_t mod_mask = ULLONG_MAX >> (64 - word_size);
 
