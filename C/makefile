@@ -1,6 +1,6 @@
 all: tests
 
-CFLAGS=-c -Wall -Wextra -Wshadow -Wconversion
+CFLAGS=-c -Wall -Wextra -Wshadow -Wconversion -std=c99 -O3
 
 tests: simon.o speck.o tests.o
 	gcc simon.o speck.o tests.o -o tests
