@@ -8,8 +8,8 @@
 #define shift_one ((x_word << 1) | (x_word >> (word_size - 1)))
 #define shift_eight ((x_word << 8) | (x_word >> (word_size - 8)))
 #define shift_two ((x_word << 2) | (x_word >> (word_size - 2)))
-#define rshift_three(x) (x >> 3) |((x & 0x7) << (word_size - 3))
-#define rshift_one(x)   (x >> 1) |((x & 0x1) << (word_size - 1))
+#define rshift_three(x) ((x) >> 3) | (((x) & 0x7) << (word_size - 3))
+#define rshift_one(x)   ((x) >> 1) | (((x) & 0x1) << (word_size - 1))
 
 uint64_t z_arrays[5] = {0b0001100111000011010100100010111110110011100001101010010001011111,
                         0b0001011010000110010011111011100010101101000011001001111101110001,
