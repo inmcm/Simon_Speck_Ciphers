@@ -288,7 +288,6 @@ void Simon_Decrypt_32(uint8_t *key_schedule, uint8_t *ciphertext, uint8_t *plain
     // Assemble Plaintext Output Array   
     *word_ptr = x_word;
     *(word_ptr + 1) = y_word;
-    return;
 }
 
 void Simon_Decrypt_48(uint8_t round_limit, uint8_t *key_schedule, uint8_t *ciphertext, uint8_t *plaintext){
@@ -318,7 +317,6 @@ void Simon_Decrypt_48(uint8_t round_limit, uint8_t *key_schedule, uint8_t *ciphe
     intrd.data = y_word;
     intrd_ptr = (bword_24 *)(plaintext + 3);
     *intrd_ptr = intrd;
-    return;
 }
 void Simon_Decrypt_64(uint8_t round_limit, uint8_t *key_schedule, uint8_t *ciphertext, uint8_t *plaintext){
     const uint8_t word_size = 32;
@@ -341,7 +339,6 @@ void Simon_Decrypt_64(uint8_t round_limit, uint8_t *key_schedule, uint8_t *ciphe
     // Assemble Plaintext Output Array   
     *word_ptr = x_word;
     *(word_ptr + 1) = y_word;
-    return;
 }
 void Simon_Decrypt_96(uint8_t round_limit, uint8_t *key_schedule, uint8_t *ciphertext, uint8_t *plaintext){
     const uint8_t word_size = 48;
@@ -369,7 +366,6 @@ void Simon_Decrypt_96(uint8_t round_limit, uint8_t *key_schedule, uint8_t *ciphe
     intrd.data = y_word;
     intrd_ptr = (bword_48 *)(plaintext + 6);
     *intrd_ptr = intrd;
-    return;
 }
 void Simon_Decrypt_128(uint8_t round_limit, uint8_t *key_schedule, uint8_t *ciphertext, uint8_t *plaintext){
     const uint8_t word_size = 64;
@@ -392,5 +388,4 @@ void Simon_Decrypt_128(uint8_t round_limit, uint8_t *key_schedule, uint8_t *ciph
     // Assemble Plaintext Output Array   
     *word_ptr = x_word;
     *(word_ptr + 1) = y_word;
-    return;
 }
