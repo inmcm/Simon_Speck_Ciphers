@@ -26,7 +26,7 @@ const uint8_t  z_assign[] = {0, 0, 1, 2, 3, 2, 3, 2, 3, 4};
 uint8_t Simon_Init(Simon_Cipher *cipher_object, enum simon_cipher_config_t cipher_cfg, enum mode_t c_mode, void *key, uint8_t *iv, uint8_t *counter) {
 
     if (cipher_cfg > Simon_256_128 || cipher_cfg < Simon_64_32){
-        return -1;
+        return 1;
     }
     
     cipher_object->block_size = simon_block_sizes[cipher_cfg];
@@ -101,7 +101,7 @@ uint8_t Simon_Encrypt(Simon_Cipher cipher_object, void *plaintext, void *ciphert
         Simon_Encrypt_128(cipher_object.round_limit, cipher_object.key_schedule, plaintext, ciphertext);
     }
     
-    else return -1;
+    else return 1;
 
     return 0;
 }
@@ -261,7 +261,7 @@ uint8_t Simon_Decrypt(Simon_Cipher cipher_object, void *ciphertext, void *plaint
         Simon_Decrypt_128(cipher_object.round_limit, cipher_object.key_schedule, ciphertext, plaintext);
     }
     
-    else return -1;
+    else return 1;
 
     return 0;
 }
