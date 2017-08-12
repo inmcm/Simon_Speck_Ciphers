@@ -79,7 +79,7 @@ uint8_t Simon_Init(Simon_Cipher *cipher_object, enum simon_cipher_config_t ciphe
     return 0;
 }
 
-uint8_t Simon_Encrypt(Simon_Cipher cipher_object, void *plaintext, void *ciphertext) {
+uint8_t Simon_Encrypt(Simon_Cipher cipher_object, const void *plaintext, void *ciphertext) {
 
     if (cipher_object.cipher_cfg == Simon_64_32) {
         Simon_Encrypt_32(cipher_object.key_schedule, plaintext, ciphertext);
@@ -106,7 +106,7 @@ uint8_t Simon_Encrypt(Simon_Cipher cipher_object, void *plaintext, void *ciphert
     return 0;
 }
 
-void Simon_Encrypt_32(uint8_t *key_schedule, uint8_t *plaintext, uint8_t *ciphertext) {
+void Simon_Encrypt_32(const uint8_t *key_schedule, const uint8_t *plaintext, uint8_t *ciphertext) {
     
     const uint8_t word_size = 16;
     uint16_t y_word = *(uint16_t *)plaintext;
@@ -130,7 +130,8 @@ void Simon_Encrypt_32(uint8_t *key_schedule, uint8_t *plaintext, uint8_t *cipher
     *(word_ptr + 1) = x_word;
 }
 
-void Simon_Encrypt_48(uint8_t round_limit, uint8_t *key_schedule, uint8_t *plaintext, uint8_t *ciphertext) {
+void Simon_Encrypt_48(const uint8_t round_limit, const uint8_t *key_schedule, const uint8_t *plaintext,
+                      uint8_t *ciphertext) {
     
     const uint8_t word_size = 24;
 
@@ -160,7 +161,8 @@ void Simon_Encrypt_48(uint8_t round_limit, uint8_t *key_schedule, uint8_t *plain
     *intrd_ptr = intrd;
 }
 
-void Simon_Encrypt_64(uint8_t round_limit, uint8_t *key_schedule, uint8_t *plaintext, uint8_t *ciphertext) {
+void Simon_Encrypt_64(const uint8_t round_limit, const uint8_t *key_schedule, const uint8_t *plaintext,
+                      uint8_t *ciphertext) {
     
     const uint8_t word_size = 32;
     uint32_t y_word = *(uint32_t *)plaintext;
@@ -184,7 +186,8 @@ void Simon_Encrypt_64(uint8_t round_limit, uint8_t *key_schedule, uint8_t *plain
     *(word_ptr + 1) = x_word;
 }
 
-void Simon_Encrypt_96(uint8_t round_limit, uint8_t *key_schedule, uint8_t *plaintext, uint8_t *ciphertext) {
+void Simon_Encrypt_96(const uint8_t round_limit, const uint8_t *key_schedule, const uint8_t *plaintext,
+                      uint8_t *ciphertext) {
     
     const uint8_t word_size = 48;
 
@@ -215,7 +218,8 @@ void Simon_Encrypt_96(uint8_t round_limit, uint8_t *key_schedule, uint8_t *plain
     
 }
 
-void Simon_Encrypt_128(uint8_t round_limit, uint8_t *key_schedule, uint8_t *plaintext, uint8_t *ciphertext) {
+void Simon_Encrypt_128(const uint8_t round_limit, const uint8_t *key_schedule, const uint8_t *plaintext,
+                       uint8_t *ciphertext) {
 
     const uint8_t word_size = 64;
     uint64_t y_word = *(uint64_t *)plaintext;
@@ -239,7 +243,7 @@ void Simon_Encrypt_128(uint8_t round_limit, uint8_t *key_schedule, uint8_t *plai
     *(word_ptr + 1) = x_word;
 }
 
-uint8_t Simon_Decrypt(Simon_Cipher cipher_object, void *ciphertext, void *plaintext) {
+uint8_t Simon_Decrypt(Simon_Cipher cipher_object, const void *ciphertext, void *plaintext) {
 
     if (cipher_object.cipher_cfg == Simon_64_32) {
         Simon_Decrypt_32(cipher_object.key_schedule, ciphertext, plaintext);
@@ -266,7 +270,7 @@ uint8_t Simon_Decrypt(Simon_Cipher cipher_object, void *ciphertext, void *plaint
     return 0;
 }
 
-void Simon_Decrypt_32(uint8_t *key_schedule, uint8_t *ciphertext, uint8_t *plaintext) {
+void Simon_Decrypt_32(const uint8_t *key_schedule, const uint8_t *ciphertext, uint8_t *plaintext) {
     
     const uint8_t word_size = 16;
     uint16_t x_word = *(uint16_t *)ciphertext;
@@ -290,7 +294,8 @@ void Simon_Decrypt_32(uint8_t *key_schedule, uint8_t *ciphertext, uint8_t *plain
     *(word_ptr + 1) = y_word;
 }
 
-void Simon_Decrypt_48(uint8_t round_limit, uint8_t *key_schedule, uint8_t *ciphertext, uint8_t *plaintext){
+void Simon_Decrypt_48(const uint8_t round_limit, const uint8_t *key_schedule, const uint8_t *ciphertext,
+                      uint8_t *plaintext){
     const uint8_t word_size = 24;
 
     bword_24 intrd = *(bword_24 *)ciphertext;
@@ -318,7 +323,8 @@ void Simon_Decrypt_48(uint8_t round_limit, uint8_t *key_schedule, uint8_t *ciphe
     intrd_ptr = (bword_24 *)(plaintext + 3);
     *intrd_ptr = intrd;
 }
-void Simon_Decrypt_64(uint8_t round_limit, uint8_t *key_schedule, uint8_t *ciphertext, uint8_t *plaintext){
+void Simon_Decrypt_64(const uint8_t round_limit, const uint8_t *key_schedule, const uint8_t *ciphertext,
+                      uint8_t *plaintext){
     const uint8_t word_size = 32;
     uint32_t x_word = *(uint32_t *)ciphertext;
     uint32_t y_word = *(((uint32_t *)ciphertext) + 1);
@@ -340,7 +346,8 @@ void Simon_Decrypt_64(uint8_t round_limit, uint8_t *key_schedule, uint8_t *ciphe
     *word_ptr = x_word;
     *(word_ptr + 1) = y_word;
 }
-void Simon_Decrypt_96(uint8_t round_limit, uint8_t *key_schedule, uint8_t *ciphertext, uint8_t *plaintext){
+void Simon_Decrypt_96(const uint8_t round_limit, const uint8_t *key_schedule, const uint8_t *ciphertext,
+                      uint8_t *plaintext){
     const uint8_t word_size = 48;
     bword_48 intrd = *(bword_48 *)ciphertext;
     uint64_t x_word = intrd.data;
@@ -367,7 +374,8 @@ void Simon_Decrypt_96(uint8_t round_limit, uint8_t *key_schedule, uint8_t *ciphe
     intrd_ptr = (bword_48 *)(plaintext + 6);
     *intrd_ptr = intrd;
 }
-void Simon_Decrypt_128(uint8_t round_limit, uint8_t *key_schedule, uint8_t *ciphertext, uint8_t *plaintext){
+void Simon_Decrypt_128(const uint8_t round_limit, const uint8_t *key_schedule, const uint8_t *ciphertext,
+                       uint8_t *plaintext){
     const uint8_t word_size = 64;
     uint64_t x_word = *(uint64_t *)ciphertext;
     uint64_t y_word = *(((uint64_t *)ciphertext) + 1);
