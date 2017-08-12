@@ -140,7 +140,7 @@ void Simon_Encrypt_48(const uint8_t round_limit, const uint8_t *key_schedule, co
     intrd = *((bword_24 *)(plaintext+3));
     uint32_t x_word = intrd.data;
 
-    for(uint8_t i = 0; i < round_limit; i++) {  // Block size 32 has only one round number option
+    for(uint8_t i = 0; i < round_limit; i++) {
 
         // Shift, AND , XOR ops
         uint32_t temp = (shift_one & shift_eight) ^ y_word ^ shift_two;
@@ -170,7 +170,7 @@ void Simon_Encrypt_64(const uint8_t round_limit, const uint8_t *key_schedule, co
     uint32_t *round_key_ptr = (uint32_t *)key_schedule;
     uint32_t *word_ptr = (uint32_t *)ciphertext;
 
-    for(uint8_t i = 0; i < round_limit; i++) {  // Block size 32 has only one round number option
+    for(uint8_t i = 0; i < round_limit; i++) {
 
         // Shift, AND , XOR ops
         uint32_t temp = (shift_one & shift_eight) ^ y_word ^ shift_two;
@@ -227,7 +227,7 @@ void Simon_Encrypt_128(const uint8_t round_limit, const uint8_t *key_schedule, c
     uint64_t *round_key_ptr = (uint64_t *)key_schedule;
     uint64_t *word_ptr = (uint64_t *)ciphertext;
 
-    for(uint8_t i = 0; i < round_limit; i++) {  // Block size 32 has only one round number option
+    for(uint8_t i = 0; i < round_limit; i++) {
 
         // Shift, AND , XOR ops
         uint64_t temp = (shift_one & shift_eight) ^ y_word ^ shift_two;
@@ -303,7 +303,7 @@ void Simon_Decrypt_48(const uint8_t round_limit, const uint8_t *key_schedule, co
     intrd = *((bword_24 *)(ciphertext+3));
     uint32_t y_word = intrd.data;
 
-    for(int8_t i = round_limit -1 ; i >= 0; i--) { 
+    for(int8_t i = round_limit - 1 ; i >= 0; i--) {
 
         // Shift, AND , XOR ops
         uint32_t temp = (shift_one & shift_eight) ^ y_word ^ shift_two;
@@ -331,7 +331,7 @@ void Simon_Decrypt_64(const uint8_t round_limit, const uint8_t *key_schedule, co
     uint32_t *round_key_ptr = (uint32_t *)key_schedule;
     uint32_t *word_ptr = (uint32_t *)plaintext;
 
-    for(int8_t i = round_limit -1 ; i >= 0; i--) { 
+    for(int8_t i = round_limit -1 ; i >= 0; i--) {
 
         // Shift, AND , XOR ops
         uint32_t temp = (shift_one & shift_eight) ^ y_word ^ shift_two;
@@ -354,7 +354,7 @@ void Simon_Decrypt_96(const uint8_t round_limit, const uint8_t *key_schedule, co
     intrd = *((bword_48 *)(ciphertext+6));
     uint64_t y_word = intrd.data;
 
-    for(int8_t i = round_limit - 1; i >= 0; i--) {  
+    for(int8_t i = round_limit - 1; i >= 0; i--) {
 
         // Shift, AND , XOR ops
         uint64_t temp = (shift_one & shift_eight) ^ y_word ^ shift_two;
