@@ -1,16 +1,18 @@
 all: tests
 
+CFLAGS=-c -Wall -Wextra -Wshadow -Wconversion
+
 tests: simon.o speck.o tests.o
 	gcc simon.o speck.o tests.o -o tests
 
 tests.o: tests.c
-	gcc -c tests.c
+	gcc $(CFLAGS) tests.c
 
 simon.o: Simon.c
-	gcc -c Simon.c
+	gcc $(CFLAGS) Simon.c
 
 speck.o: Speck.c
-	gcc -c Speck.c
+	gcc $(CFLAGS) Speck.c
 
 clean:
 	rm -rf *o tests
