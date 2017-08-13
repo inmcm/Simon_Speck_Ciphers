@@ -16,8 +16,9 @@ Implementations of the [Speck & Simon] Block Ciphers
 
 
 ### C
-- Speck Cipher Encryption Implemented
-- Simon Cipher Encryption Implemented
-- Need to Implement Decryption and Block Modes
+- Speck Cipher Encryption/Decryption Implemented
+- Simon Cipher Encryption/Decryption Implemented
+- Tests Available
+- Need to Implement Block Modes
 
 [Speck & Simon]: http://eprint.iacr.org/2013/404
