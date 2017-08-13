@@ -5,12 +5,9 @@
 #include <string.h>
 #include "Speck.h"
 
-// #define shift_alpha(x,a) ((x << a) | (x >> (word_size - a)))
-// #define shift_beta(x)
-#define rotate_left(x,n) (x >> (word_size - n)) | (x << n)
-#define rotate_right(x,n) (x << (word_size - n)) | (x >> n)
-// #define encrypt_round(x,y,k) rotate_right(x,alpha) + y 
-// #define decrypt_round(x,y,k) 
+
+#define rotate_left(x,n) (((x) >> (word_size - (n))) | ((x) << (n)))
+#define rotate_right(x,n) (((x) << (word_size - (n))) | ((x) >> (n)))
 
 const uint8_t speck_rounds[] = {22, 22, 23, 26, 27, 28, 29, 32, 33, 34};
 const uint8_t speck_block_sizes[] = {32, 48, 48, 64, 64, 96, 96, 128, 128, 128};
