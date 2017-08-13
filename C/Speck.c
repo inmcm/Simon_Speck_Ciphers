@@ -16,7 +16,7 @@ const uint16_t speck_key_sizes[] = {64, 72, 96, 96, 128, 96, 144, 128, 192, 256}
 uint8_t Speck_Init(Speck_Cipher *cipher_object, enum speck_cipher_config_t cipher_cfg, enum mode_t c_mode, void *key, uint8_t *iv, uint8_t *counter) {
 
     if (cipher_cfg > Speck_256_128 || cipher_cfg < Speck_64_32) {
-        return -1;
+        return 1;
     }
     
     cipher_object->block_size = speck_block_sizes[cipher_cfg];
@@ -26,7 +26,7 @@ uint8_t Speck_Init(Speck_Cipher *cipher_object, enum speck_cipher_config_t ciphe
     
     uint8_t word_size = speck_block_sizes[cipher_cfg] >> 1;
     uint8_t word_bytes = word_size >> 3;
-    uint8_t key_words =  speck_key_sizes[cipher_cfg] / word_size;
+    uint16_t key_words =  speck_key_sizes[cipher_cfg] / word_size;
     uint64_t sub_keys[4] = {};
     uint64_t mod_mask = ULLONG_MAX >> (64 - word_size);
     
@@ -48,8 +48,7 @@ uint8_t Speck_Init(Speck_Cipher *cipher_object, enum speck_cipher_config_t ciphe
     memcpy(cipher_object->key_schedule, &sub_keys[0], word_bytes);
 
     uint64_t tmp,tmp2;
-    // printf("Subkeys 3:%04x  2:%04x  1:%04x  0:%04x  \n",sub_keys[3],sub_keys[2],sub_keys[1],sub_keys[0]);
-    for(uint64_t i = 0; i < speck_rounds[cipher_cfg] - 1; i++){
+    for (uint64_t i = 0; i < speck_rounds[cipher_cfg] - 1; i++) {
 
         // Run Speck Cipher Round Function
         // tmp = ((rotate_right(sub_keys[1],cipher_object->alpha) + sub_keys[0]) ^ i) & mod_mask;
@@ -70,8 +69,8 @@ uint8_t Speck_Init(Speck_Cipher *cipher_object, enum speck_cipher_config_t ciphe
         // Shift Key Schedule Subword
         if (key_words != 2) {
             // Shift Sub Words
-            for(int i = 1; i < (key_words - 1); i++){
-                sub_keys[i] = sub_keys[i+1];
+            for(int j = 1; j < (key_words - 1); j++){
+                sub_keys[j] = sub_keys[j+1];
             }
         }
         sub_keys[key_words - 1] = tmp;
@@ -106,7 +105,7 @@ uint8_t Speck_Encrypt(Speck_Cipher cipher_object, void *plaintext, void *ciphert
         Speck_Encrypt_128(cipher_object.round_limit, cipher_object.key_schedule, plaintext, ciphertext);
     }
     
-    else return -1;
+    else return 1;
 
     return 0;;
 }
@@ -190,7 +189,6 @@ void Speck_Encrypt_96(uint8_t round_limit, uint8_t *key_schedule, uint8_t *plain
     *threeBytePtr = *(bytes6_t *)&y_word;
     threeBytePtr += 1;
     *threeBytePtr = *(bytes6_t *)&x_word;
-    return;
 }
 void Speck_Encrypt_128(uint8_t round_limit, uint8_t *key_schedule, uint8_t *plaintext, uint8_t *ciphertext){
     const uint8_t word_size = 64;
@@ -208,7 +206,6 @@ void Speck_Encrypt_128(uint8_t round_limit, uint8_t *key_schedule, uint8_t *plai
     // word_ptr += 1;
     // *word_ptr = x_word;
     *(word_ptr + 1) = x_word;
-    return;
 }
 
 uint8_t Speck_Decrypt(Speck_Cipher cipher_object, uint8_t *ciphertext, uint8_t *plaintext) {
