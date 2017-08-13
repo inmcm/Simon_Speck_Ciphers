@@ -15,7 +15,7 @@ void cipher_compare(const void *source, void *target, size_t n) {
     for(size_t i=0; i < n; i++) {
         uint8_t * src_bytes = (uint8_t *)source;
         uint8_t * trg_bytes = (uint8_t *)target;
-        printf("Byte %02d: %02x - %02x",i, src_bytes[i], trg_bytes[i]);
+        printf("Byte %02zu: %02x - %02x",i, src_bytes[i], trg_bytes[i]);
         if (src_bytes[i] != trg_bytes[i]) {
             printf("  FAIL\n");
             fail_count++;
@@ -233,8 +233,14 @@ int main(void){
     uint8_t speck64_32_plain[] = {0x4c, 0x69, 0x74, 0x65};
     uint8_t speck64_32_cipher[] = {0xf2, 0x42, 0x68, 0xa8};
     result = Speck_Init(&my_speck_cipher, Speck_64_32, ECB, speck64_32_key, my_IV, my_counter);
+
+    printf("Encryption Test:\n");
     Speck_Encrypt(my_speck_cipher, &speck64_32_plain, &ciphertext_buffer);
     cipher_compare(&ciphertext_buffer, &speck64_32_cipher, sizeof(speck64_32_cipher));
+
+    printf("Decryption Test:\n");
+    Speck_Decrypt(my_speck_cipher, &speck64_32_cipher, &ciphertext_buffer);
+    cipher_compare(&ciphertext_buffer, &speck64_32_plain, sizeof(speck64_32_plain));
 
     printf("\n");
 
@@ -243,8 +249,14 @@ int main(void){
     uint8_t speck72_48_plain[] = {0x72, 0x61, 0x6c, 0x6c, 0x79, 0x20};
     uint8_t speck72_48_cipher[] = {0xdc, 0x5a, 0x38, 0xa5, 0x49, 0xc0};
     result = Speck_Init(&my_speck_cipher, Speck_72_48, ECB, speck72_48_key, my_IV, my_counter);
+
+    printf("Encryption Test:\n");
     Speck_Encrypt(my_speck_cipher, &speck72_48_plain, &ciphertext_buffer);
     cipher_compare(&ciphertext_buffer, &speck72_48_cipher, sizeof(speck72_48_cipher));
+
+    printf("Decryption Test:\n");
+    Speck_Decrypt(my_speck_cipher, &speck72_48_cipher, &ciphertext_buffer);
+    cipher_compare(&ciphertext_buffer, &speck72_48_plain, sizeof(speck72_48_plain));
 
     printf("\n");
 
@@ -253,8 +265,14 @@ int main(void){
     uint8_t speck96_48_plain[] = {0X74, 0X68, 0X69, 0X73, 0X20, 0X6D};
     uint8_t speck96_48_cipher[] = {0X5D, 0X44, 0XB6, 0X10, 0X5E, 0X73};
     result = Speck_Init(&my_speck_cipher, Speck_96_48, ECB, speck96_48_key, my_IV, my_counter);
+
+    printf("Encryption Test:\n");
     Speck_Encrypt(my_speck_cipher, &speck96_48_plain, &ciphertext_buffer);
     cipher_compare(&ciphertext_buffer, &speck96_48_cipher, sizeof(speck96_48_cipher));
+
+    printf("Encryption Test:\n");
+    Speck_Decrypt(my_speck_cipher, &speck96_48_cipher, &ciphertext_buffer);
+    cipher_compare(&ciphertext_buffer, &speck96_48_plain, sizeof(speck96_48_plain));
 
     printf("\n");
 
@@ -263,8 +281,14 @@ int main(void){
     uint8_t speck96_64_plain[] = {0X65, 0X61, 0X6E, 0X73, 0X20, 0X46, 0X61, 0X74};
     uint8_t speck96_64_cipher[] = {0X6c, 0X94, 0X75, 0X41, 0XEC, 0X52, 0X79, 0X9F};
     result = Speck_Init(&my_speck_cipher, Speck_96_64, ECB, speck96_64_key, my_IV, my_counter);
+
+    printf("Encryption Test:\n");
     Speck_Encrypt(my_speck_cipher, &speck96_64_plain, &ciphertext_buffer);
     cipher_compare(&ciphertext_buffer, &speck96_64_cipher, sizeof(speck96_64_cipher));
+
+    printf("Decryption Test:\n");
+    Speck_Decrypt(my_speck_cipher, &speck96_64_cipher, &ciphertext_buffer);
+    cipher_compare(&ciphertext_buffer, &speck96_64_plain, sizeof(speck96_64_plain));
 
     printf("\n");
 
@@ -273,8 +297,13 @@ int main(void){
     uint8_t speck128_64_plain[] = {0X2D,0X43,0X75,0X74,0X74,0X65,0X72,0X3B};
     uint8_t speck128_64_cipher[] = {0X8B,0X02,0X4E,0X45,0X48,0XA5,0X6F,0X8C};
     result = Speck_Init(&my_speck_cipher, Speck_128_64, ECB, speck128_64_key, my_IV, my_counter);
+
+    printf("Encryption Test:\n");
     Speck_Encrypt(my_speck_cipher, &speck128_64_plain, &ciphertext_buffer);
     cipher_compare(&ciphertext_buffer, &speck128_64_cipher, sizeof(speck128_64_cipher));
+    printf("Decryption Test:\n");
+    Speck_Decrypt(my_speck_cipher, &speck128_64_cipher, &ciphertext_buffer);
+    cipher_compare(&ciphertext_buffer, &speck128_64_plain, sizeof(speck128_64_plain));
 
     printf("\n");
 
@@ -283,8 +312,13 @@ int main(void){
     uint8_t speck96_96_plain[] = {0X20, 0X75, 0X73, 0X61, 0X67, 0X65, 0X2C, 0X20, 0X68, 0X6F, 0X77, 0X65};
     uint8_t speck96_96_cipher[] = {0XAA, 0X79, 0X8F, 0XDE, 0XBD, 0X62, 0X78, 0X71, 0XAB, 0X09, 0X4D, 0X9E};
     result = Speck_Init(&my_speck_cipher, Speck_96_96, ECB, speck96_96_key, my_IV, my_counter);
+
+    printf("Encryption Test:\n");
     Speck_Encrypt(my_speck_cipher, &speck96_96_plain, &ciphertext_buffer);
     cipher_compare(&ciphertext_buffer, &speck96_96_cipher, sizeof(speck96_96_cipher));
+    printf("Decryption Test:\n");
+    Speck_Decrypt(my_speck_cipher, &speck96_96_cipher, &ciphertext_buffer);
+    cipher_compare(&ciphertext_buffer, &speck96_96_plain, sizeof(speck96_96_plain));
 
     printf("\n");
 
@@ -293,8 +327,14 @@ int main(void){
     uint8_t speck144_96_plain[] = {0X76, 0X65, 0X72, 0X2C, 0X20, 0X69, 0X6E, 0X20, 0X74, 0X69, 0X6D, 0X65};
     uint8_t speck144_96_cipher[] = {0XE6, 0X2E, 0X25, 0X40, 0XE4, 0X7A, 0X8A, 0X22, 0X72, 0X10, 0XF3, 0X2B};
     result = Speck_Init(&my_speck_cipher, Speck_144_96, ECB, speck144_96_key, my_IV, my_counter);
+
+    printf("Encryption Test:\n");
     Speck_Encrypt(my_speck_cipher, &speck144_96_plain, &ciphertext_buffer);
     cipher_compare(&ciphertext_buffer, &speck144_96_cipher, sizeof(speck144_96_cipher));
+
+    printf("Decryption Test:\n");
+    Speck_Decrypt(my_speck_cipher, &speck144_96_cipher, &ciphertext_buffer);
+    cipher_compare(&ciphertext_buffer, &speck144_96_plain, sizeof(speck144_96_plain));
 
     printf("\n");
 
@@ -303,8 +343,13 @@ int main(void){
     uint8_t speck128_128_plain[] = {0X20, 0X6D, 0X61, 0X64, 0X65, 0X20, 0X69, 0X74, 0X20, 0X65, 0X71, 0X75, 0X69, 0X76, 0X61, 0X6C};
     uint8_t speck128_128_cipher[] = {0X18, 0X0D, 0X57, 0X5C, 0XDF, 0XFE, 0X60, 0X78, 0X65, 0X32, 0X78, 0X79, 0X51, 0X98, 0X5D, 0XA6};
     result = Speck_Init(&my_speck_cipher, Speck_128_128, ECB, speck128_128_key, my_IV, my_counter);
+
+    printf("Encryption Test:\n");
     Speck_Encrypt(my_speck_cipher, &speck128_128_plain, &ciphertext_buffer);
     cipher_compare(&ciphertext_buffer, &speck128_128_cipher, sizeof(speck128_128_cipher));
+    printf("Decryption Test:\n");
+    Speck_Decrypt(my_speck_cipher, &speck128_128_cipher, &ciphertext_buffer);
+    cipher_compare(&ciphertext_buffer, &speck128_128_plain, sizeof(speck128_128_plain));
 
     printf("\n");
 
@@ -313,8 +358,13 @@ int main(void){
     uint8_t speck192_128_plain[] = {0X65, 0X6E, 0X74, 0X20, 0X74, 0X6F, 0X20, 0X43, 0X68, 0X69, 0X65, 0X66, 0X20, 0X48, 0X61, 0X72};
     uint8_t speck192_128_cipher[] = {0X86, 0X18, 0X3C, 0XE0, 0X5D, 0X18, 0XBC, 0XF9, 0X66, 0X55, 0X13, 0X13, 0X3A, 0XCF, 0XE4, 0X1B};
     result = Speck_Init(&my_speck_cipher, Speck_192_128, ECB, speck192_128_key, my_IV, my_counter);
+
+    printf("Encryption Test:\n");
     Speck_Encrypt(my_speck_cipher, &speck192_128_plain, &ciphertext_buffer);
     cipher_compare(&ciphertext_buffer, &speck192_128_cipher, sizeof(speck192_128_cipher));
+    printf("Decryption Test:\n");
+    Speck_Decrypt(my_speck_cipher, &speck192_128_cipher, &ciphertext_buffer);
+    cipher_compare(&ciphertext_buffer, &speck192_128_plain, sizeof(speck192_128_plain));
 
     printf("\n");
 
@@ -323,8 +373,13 @@ int main(void){
     uint8_t speck256_128_plain[] = {0X70, 0X6F, 0X6F, 0X6E, 0X65, 0X72, 0X2E, 0X20, 0X49, 0X6E, 0X20, 0X74, 0X68, 0X6F, 0X73, 0X65};
     uint8_t speck256_128_cipher[] = {0X43, 0X8F, 0X18, 0X9C, 0X8D, 0XB4, 0XEE, 0X4E, 0X3E, 0XF5, 0XC0, 0X05, 0X04, 0X01, 0X09, 0X41};
     result = Speck_Init(&my_speck_cipher, Speck_256_128, ECB, speck256_128_key, my_IV, my_counter);
+
+    printf("Encryption Test:\n");
     Speck_Encrypt(my_speck_cipher, &speck256_128_plain, &ciphertext_buffer);
     cipher_compare(&ciphertext_buffer, &speck256_128_cipher, sizeof(speck256_128_cipher));
+    printf("Decryption Test:\n");
+    Speck_Decrypt(my_speck_cipher, &speck256_128_cipher, &ciphertext_buffer);
+    cipher_compare(&ciphertext_buffer, &speck256_128_plain, sizeof(speck256_128_plain));
 
     printf("\n");
 
