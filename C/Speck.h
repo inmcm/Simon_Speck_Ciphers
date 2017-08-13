@@ -24,7 +24,7 @@ enum speck_cipher_config_t { Speck_64_32,
 
 typedef struct {
     enum speck_cipher_config_t cipher_cfg;
-    uint8_t key_size;
+    uint16_t key_size;
     uint8_t block_size;
     uint8_t round_limit;
     uint8_t init_vector[16];
