@@ -51,21 +51,13 @@ uint8_t Speck_Init(Speck_Cipher *cipher_object, enum speck_cipher_config_t ciphe
     for (uint64_t i = 0; i < speck_rounds[cipher_cfg] - 1; i++) {
 
         // Run Speck Cipher Round Function
-        // tmp = ((rotate_right(sub_keys[1],cipher_object->alpha) + sub_keys[0]) ^ i) & mod_mask;
         tmp = (rotate_right(sub_keys[1],cipher_object->alpha)) & mod_mask;
-        // printf("Check rotate: %04x %04x\n",sub_keys[1], tmp);
         tmp = (tmp + sub_keys[0]) & mod_mask;
-        // printf("Check Add: %04x\n",tmp);
         tmp= tmp ^ i;
-        // printf("New X: %x\n",tmp);
-        // sub_keys[0] = ((rotate_left(sub_keys[0],cipher_object->beta)) ^ tmp) & mod_mask;
         tmp2 = (rotate_left(sub_keys[0],cipher_object->beta)) & mod_mask;
-        // printf("Check rotate: %04x %04x\n",sub_keys[0], tmp2);
         tmp2 = tmp2 ^ tmp;
-        // printf("New Y: %04x\n",tmp2);
         sub_keys[0] = tmp2;
-        // printf("\n");
-        
+
         // Shift Key Schedule Subword
         if (key_words != 2) {
             // Shift Sub Words
@@ -74,8 +66,6 @@ uint8_t Speck_Init(Speck_Cipher *cipher_object, enum speck_cipher_config_t ciphe
             }
         }
         sub_keys[key_words - 1] = tmp;
-
-        // printf("Subkeys 3:%04x  2:%04x  1:%04x  0:%04x  \n",sub_keys[3],sub_keys[2],sub_keys[1],sub_keys[0]);
 
         // Append sub key to key schedule
         memcpy(cipher_object->key_schedule + (word_bytes * (i+1)), &sub_keys[0], word_bytes);   
@@ -203,8 +193,6 @@ void Speck_Encrypt_128(uint8_t round_limit, uint8_t *key_schedule, uint8_t *plai
     }
     // Assemble Ciphertext Output Array   
     *word_ptr = y_word;
-    // word_ptr += 1;
-    // *word_ptr = x_word;
     *(word_ptr + 1) = x_word;
 }
 
