@@ -1,3 +1,11 @@
+/*
+ * Simon.c
+ * Implementation of NSA Simon Block Cipher
+ * Copyright 2017 Michael Calvin McCoy
+ * calvin.mccoy@gmail.com
+ *  # The MIT License (MIT) - see LICENSE.md
+*/
+
 #include <stdint.h>
 #include <limits.h>
 #include <stdlib.h>

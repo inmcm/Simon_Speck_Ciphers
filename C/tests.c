@@ -1,4 +1,11 @@
-// Simon Tests 
+/*
+ * tests.c
+ * Tests For Simon and Speck Block Ciphers
+ * Copyright 2017 Michael Calvin McCoy
+ * calvin.mccoy@gmail.com
+ * # The MIT License (MIT) - see LICENSE.md
+*/
+
 #include <stdio.h>
 #include <stdint.h>
 #include "Simon.h"
