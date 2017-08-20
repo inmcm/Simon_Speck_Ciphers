@@ -108,21 +108,19 @@ uint8_t Speck_Encrypt(Speck_Cipher cipher_object, const void *plaintext, void *c
 }
 
 void Speck_Encrypt_32(const uint8_t *key_schedule, const uint8_t *plaintext, uint8_t *ciphertext) {
-    
+
     const uint8_t word_size = 16;
-    uint16_t y_word = *(uint16_t *)plaintext;
-    uint16_t x_word = *(((uint16_t *)plaintext) + 1);
+    uint16_t *y_word = (uint16_t *)ciphertext;
+    uint16_t *x_word = ((uint16_t *)ciphertext) + 1;
     uint16_t *round_key_ptr = (uint16_t *)key_schedule;
-    uint16_t * word_ptr = (uint16_t *)ciphertext;
+
+    *y_word = *(uint16_t *)plaintext;
+    *x_word = *(((uint16_t *)plaintext) + 1);
 
     for(uint8_t i = 0; i < 22; i++) {  // Block size 32 has only one round number option
-        x_word = ((rotate_right(x_word, 7)) + y_word) ^ *(round_key_ptr + i);
-        y_word = (rotate_left(y_word, 2)) ^ x_word;
+        *x_word = ((rotate_right(*x_word, 7)) + *y_word) ^ *(round_key_ptr + i);
+        *y_word = (rotate_left(*y_word, 2)) ^ *x_word;
     }
-    // Assemble Ciphertext Output Array   
-    *word_ptr = y_word;
-    word_ptr += 1;
-    *word_ptr = x_word;
 }
 
 
@@ -150,22 +148,20 @@ void Speck_Encrypt_48(const uint8_t round_limit, const uint8_t *key_schedule, co
 }
 
 void Speck_Encrypt_64(const uint8_t round_limit, const uint8_t *key_schedule, const uint8_t *plaintext,
-                      uint8_t *ciphertext){
-    
+                      uint8_t *ciphertext) {
+
     const uint8_t word_size = 32;
-    uint32_t y_word = *(uint32_t *)plaintext;
-    uint32_t x_word = *(((uint32_t *)plaintext) + 1);
+    uint32_t *y_word = (uint32_t *)ciphertext;
+    uint32_t *x_word = ((uint32_t *)ciphertext) + 1;
     uint32_t *round_key_ptr = (uint32_t *)key_schedule;
-    uint32_t * word_ptr = (uint32_t *)ciphertext;
+
+    *y_word = *(uint32_t *)plaintext;
+    *x_word = *(((uint32_t *)plaintext) + 1);
 
     for(uint8_t i = 0; i < round_limit; i++) { 
-        x_word = ((rotate_right(x_word, 8)) + y_word) ^ *(round_key_ptr + i);
-        y_word = (rotate_left(y_word, 3)) ^ x_word;
+        *x_word = ((rotate_right(*x_word, 8)) + *y_word) ^ *(round_key_ptr + i);
+        *y_word = (rotate_left(*y_word, 3)) ^ *x_word;
     }
-    // Assemble Ciphertext Output Array   
-    *word_ptr = y_word;
-    word_ptr += 1;
-    *word_ptr = x_word;
 }
 
 void Speck_Encrypt_96(const uint8_t round_limit, const uint8_t *key_schedule, const uint8_t *plaintext,
@@ -192,19 +188,19 @@ void Speck_Encrypt_96(const uint8_t round_limit, const uint8_t *key_schedule, co
 
 void Speck_Encrypt_128(const uint8_t round_limit, const uint8_t *key_schedule, const uint8_t *plaintext,
                        uint8_t *ciphertext){
+
     const uint8_t word_size = 64;
-    uint64_t y_word = *(uint64_t *)plaintext;
-    uint64_t x_word = *(((uint64_t *)plaintext) + 1);
+    uint64_t *y_word = (uint64_t *)ciphertext;
+    uint64_t *x_word = ((uint64_t *)ciphertext) + 1;
     uint64_t *round_key_ptr = (uint64_t *)key_schedule;
-    uint64_t * word_ptr = (uint64_t *)ciphertext;
+
+    *y_word = *(uint64_t *)plaintext;
+    *x_word = *(((uint64_t *)plaintext) + 1);
 
     for(uint8_t i = 0; i < round_limit; i++) { 
-        x_word = ((rotate_right(x_word, 8)) + y_word) ^ *(round_key_ptr + i);
-        y_word = (rotate_left(y_word, 3)) ^ x_word;
+        *x_word = ((rotate_right(*x_word, 8)) + *y_word) ^ *(round_key_ptr + i);
+        *y_word = (rotate_left(*y_word, 3)) ^ *x_word;
     }
-    // Assemble Ciphertext Output Array   
-    *word_ptr = y_word;
-    *(word_ptr + 1) = x_word;
 }
 
 uint8_t Speck_Decrypt(Speck_Cipher cipher_object, void *ciphertext, void *plaintext) {
@@ -236,20 +232,19 @@ uint8_t Speck_Decrypt(Speck_Cipher cipher_object, void *ciphertext, void *plaint
 void Speck_Decrypt_32(const uint8_t *key_schedule, const uint8_t *ciphertext, uint8_t *plaintext) {
 
     const uint8_t word_size = 16;
-    uint16_t y_word = *(uint16_t *)ciphertext;
-    uint16_t x_word = *(((uint16_t *)ciphertext) + 1);
+    uint16_t *y_word = (uint16_t *)plaintext;
+    uint16_t *x_word = ((uint16_t *)plaintext) + 1;
     uint16_t *round_key_ptr = (uint16_t *)key_schedule;
-    uint16_t * word_ptr = (uint16_t *)plaintext;
+
+    *y_word = *(uint16_t *)ciphertext;
+    *x_word = *(((uint16_t *)ciphertext) + 1);
 
     for(int8_t i = 21; i >=0; i--) {  // Block size 32 has only one round number option
-        y_word = rotate_right((y_word ^ x_word), 2);
-        x_word = rotate_left((uint16_t)((x_word ^ *(round_key_ptr + i)) - y_word), 7);
+        *y_word = rotate_right((*y_word ^ *x_word), 2);
+        *x_word = rotate_left((uint16_t)((*x_word ^ *(round_key_ptr + i)) - *y_word), 7);
     }
-    // Assemble Plaintext Output Array
-    *word_ptr = y_word;
-    word_ptr += 1;
-    *word_ptr = x_word;
 }
+
 void Speck_Decrypt_48(const uint8_t round_limit, const uint8_t *key_schedule, const uint8_t *ciphertext,
                       uint8_t *plaintext) {
 
@@ -276,22 +271,21 @@ void Speck_Decrypt_48(const uint8_t round_limit, const uint8_t *key_schedule, co
 
 void Speck_Decrypt_64(const uint8_t round_limit, const uint8_t *key_schedule, const uint8_t *ciphertext,
                       uint8_t *plaintext) {
+
     const uint8_t word_size = 32;
-    uint32_t y_word = *(uint32_t *)ciphertext;
-    uint32_t x_word = *(((uint32_t *)ciphertext) + 1);
+    uint32_t *y_word = (uint32_t *)plaintext;
+    uint32_t *x_word = ((uint32_t *)plaintext) + 1;
     uint32_t *round_key_ptr = (uint32_t *)key_schedule;
-    uint32_t * word_ptr = (uint32_t *)plaintext;
+
+    *y_word = *(uint32_t *)ciphertext;
+    *x_word = *(((uint32_t *)ciphertext) + 1);
 
     for(int8_t i = round_limit - 1; i >=0; i--) {
-        y_word = rotate_right((y_word ^ x_word), 3);
-        x_word = rotate_left((uint32_t)((x_word ^ *(round_key_ptr + i)) - y_word), 8);
+        *y_word = rotate_right((*y_word ^ *x_word), 3);
+        *x_word = rotate_left((uint32_t)((*x_word ^ *(round_key_ptr + i)) - *y_word), 8);
     }
-    // Assemble Plaintext Output Array
-    *word_ptr = y_word;
-    word_ptr += 1;
-    *word_ptr = x_word;
-
 }
+
 void Speck_Decrypt_96(const uint8_t round_limit, const uint8_t *key_schedule, const uint8_t *ciphertext,
                       uint8_t *plaintext) {
     const uint8_t word_size = 48;
@@ -317,18 +311,17 @@ void Speck_Decrypt_96(const uint8_t round_limit, const uint8_t *key_schedule, co
 
 void Speck_Decrypt_128(const uint8_t round_limit, const uint8_t *key_schedule, const uint8_t *ciphertext,
                        uint8_t *plaintext) {
+
     const uint8_t word_size = 64;
-    uint64_t y_word = *(uint64_t *)ciphertext;
-    uint64_t x_word = *(((uint64_t *)ciphertext) + 1);
+    uint64_t *y_word = (uint64_t *)plaintext;
+    uint64_t *x_word = ((uint64_t *)plaintext) + 1;
     uint64_t *round_key_ptr = (uint64_t *)key_schedule;
-    uint64_t * word_ptr = (uint64_t *)plaintext;
+
+    *y_word = *(uint64_t *)ciphertext;
+    *x_word = *(((uint64_t *)ciphertext) + 1);
 
     for(int8_t i = round_limit - 1; i >=0; i--) {
-        y_word = rotate_right((y_word ^ x_word), 3);
-        x_word = rotate_left((uint64_t)((x_word ^ *(round_key_ptr + i)) - y_word), 8);
+        *y_word = rotate_right((*y_word ^ *x_word), 3);
+        *x_word = rotate_left((uint64_t)((*x_word ^ *(round_key_ptr + i)) - *y_word), 8);
     }
-    // Assemble Plaintext Output Array
-    *word_ptr = y_word;
-    word_ptr += 1;
-    *word_ptr = x_word;
 }

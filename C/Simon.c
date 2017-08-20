@@ -13,9 +13,10 @@
 #include "Simon.h"
 
 // Cipher Operation Macros
-#define shift_one ((x_word << 1) | (x_word >> (word_size - 1)))
-#define shift_eight ((x_word << 8) | (x_word >> (word_size - 8)))
-#define shift_two ((x_word << 2) | (x_word >> (word_size - 2)))
+#define shift_one(x_word) (((x_word) << 1) | ((x_word) >> (word_size - 1)))
+#define shift_eight(x_word) (((x_word) << 8) | ((x_word) >> (word_size - 8)))
+#define shift_two(x_word) (((x_word) << 2) | ((x_word) >> (word_size - 2)))
+
 #define rshift_three(x) (((x) >> 3) | (((x) & 0x7) << (word_size - 3)))
 #define rshift_one(x)   (((x) >> 1) | (((x) & 0x1) << (word_size - 1)))
 
@@ -117,25 +118,25 @@ uint8_t Simon_Encrypt(Simon_Cipher cipher_object, const void *plaintext, void *c
 void Simon_Encrypt_32(const uint8_t *key_schedule, const uint8_t *plaintext, uint8_t *ciphertext) {
     
     const uint8_t word_size = 16;
-    uint16_t y_word = *(uint16_t *)plaintext;
-    uint16_t x_word = *(((uint16_t *)plaintext) + 1);
+    uint16_t *y_word = (uint16_t *)ciphertext;
+    uint16_t *x_word = (((uint16_t *)ciphertext) + 1);
+
+    *y_word = *(uint16_t *)plaintext;
+    *x_word = *(((uint16_t *)plaintext) + 1);
+
     uint16_t *round_key_ptr = (uint16_t *)key_schedule;
-    uint16_t * word_ptr = (uint16_t *)ciphertext;
 
     for(uint8_t i = 0; i < 32; i++) {  // Block size 32 has only one round number option
 
         // Shift, AND , XOR ops
-        uint16_t temp = (shift_one & shift_eight) ^ y_word ^ shift_two;
+        uint16_t temp = (shift_one(*x_word) & shift_eight(*x_word)) ^ *y_word ^ shift_two(*x_word);
         
         // Feistel Cross
-        y_word = x_word;
+        *y_word = *x_word;
         
         // XOR with Round Key
-        x_word = temp ^ *(round_key_ptr + i);
+        *x_word = temp ^ *(round_key_ptr + i);
     }
-    // Assemble Ciphertext Output Array   
-    *word_ptr = y_word;
-    *(word_ptr + 1) = x_word;
 }
 
 void Simon_Encrypt_48(const uint8_t round_limit, const uint8_t *key_schedule, const uint8_t *plaintext,
@@ -151,7 +152,7 @@ void Simon_Encrypt_48(const uint8_t round_limit, const uint8_t *key_schedule, co
     for(uint8_t i = 0; i < round_limit; i++) {
 
         // Shift, AND , XOR ops
-        uint32_t temp = (shift_one & shift_eight) ^ y_word ^ shift_two;
+        uint32_t temp = (shift_one(x_word) & shift_eight(x_word)) ^ y_word ^ shift_two(x_word);
 
         // Feistel Cross
         y_word = x_word;
@@ -173,25 +174,23 @@ void Simon_Encrypt_64(const uint8_t round_limit, const uint8_t *key_schedule, co
                       uint8_t *ciphertext) {
     
     const uint8_t word_size = 32;
-    uint32_t y_word = *(uint32_t *)plaintext;
-    uint32_t x_word = *(((uint32_t *)plaintext) + 1);
+    uint32_t *y_word = (uint32_t *)ciphertext;
+    uint32_t *x_word = (((uint32_t *)ciphertext) + 1);
+    *y_word = *(uint32_t *)plaintext;
+    *x_word = *(((uint32_t *)plaintext) + 1);
     uint32_t *round_key_ptr = (uint32_t *)key_schedule;
-    uint32_t *word_ptr = (uint32_t *)ciphertext;
 
     for(uint8_t i = 0; i < round_limit; i++) {
 
         // Shift, AND , XOR ops
-        uint32_t temp = (shift_one & shift_eight) ^ y_word ^ shift_two;
+        uint32_t temp = (shift_one(*x_word) & shift_eight(*x_word)) ^ *y_word ^ shift_two(*x_word);
         
         // Feistel Cross
-        y_word = x_word;
+        *y_word = *x_word;
         
         // XOR with Round Key
-        x_word = temp ^ *(round_key_ptr + i);
+        *x_word = temp ^ *(round_key_ptr + i);
     }
-    // Assemble Ciphertext Output Array   
-    *word_ptr = y_word;
-    *(word_ptr + 1) = x_word;
 }
 
 void Simon_Encrypt_96(const uint8_t round_limit, const uint8_t *key_schedule, const uint8_t *plaintext,
@@ -207,7 +206,7 @@ void Simon_Encrypt_96(const uint8_t round_limit, const uint8_t *key_schedule, co
     for(uint8_t i = 0; i < round_limit; i++) {  
 
         // Shift, AND , XOR ops
-        uint64_t temp = (shift_one & shift_eight) ^ y_word ^ shift_two;
+        uint64_t temp = (shift_one(x_word) & shift_eight(x_word)) ^ y_word ^ shift_two(x_word);
 
         // Feistel Cross
         y_word = x_word;
@@ -230,25 +229,24 @@ void Simon_Encrypt_128(const uint8_t round_limit, const uint8_t *key_schedule, c
                        uint8_t *ciphertext) {
 
     const uint8_t word_size = 64;
-    uint64_t y_word = *(uint64_t *)plaintext;
-    uint64_t x_word = *(((uint64_t *)plaintext) + 1);
+    uint64_t *y_word = (uint64_t *)ciphertext;
+    uint64_t *x_word = (((uint64_t *)ciphertext) + 1);
+    *y_word = *(uint64_t *)plaintext;
+    *x_word = *(((uint64_t *)plaintext) + 1);
     uint64_t *round_key_ptr = (uint64_t *)key_schedule;
-    uint64_t *word_ptr = (uint64_t *)ciphertext;
+
 
     for(uint8_t i = 0; i < round_limit; i++) {
 
         // Shift, AND , XOR ops
-        uint64_t temp = (shift_one & shift_eight) ^ y_word ^ shift_two;
+        uint64_t temp = (shift_one(*x_word) & shift_eight(*x_word)) ^ *y_word ^ shift_two(*x_word);
         
         // Feistel Cross
-        y_word = x_word;
+        *y_word = *x_word;
         
         // XOR with Round Key
-        x_word = temp ^ *(round_key_ptr + i);
+        *x_word = temp ^ *(round_key_ptr + i);
     }
-    // Assemble Ciphertext Output Array   
-    *word_ptr = y_word;
-    *(word_ptr + 1) = x_word;
 }
 
 uint8_t Simon_Decrypt(Simon_Cipher cipher_object, const void *ciphertext, void *plaintext) {
@@ -279,27 +277,26 @@ uint8_t Simon_Decrypt(Simon_Cipher cipher_object, const void *ciphertext, void *
 }
 
 void Simon_Decrypt_32(const uint8_t *key_schedule, const uint8_t *ciphertext, uint8_t *plaintext) {
-    
+
     const uint8_t word_size = 16;
-    uint16_t x_word = *(uint16_t *)ciphertext;
-    uint16_t y_word = *(((uint16_t *)ciphertext) + 1);
+    uint16_t *x_word = (uint16_t *)plaintext;
+    uint16_t *y_word = ((uint16_t *)plaintext) + 1;
     uint16_t *round_key_ptr = (uint16_t *)key_schedule;
-    uint16_t * word_ptr = (uint16_t *)plaintext;
+
+    *x_word = *(uint16_t *)ciphertext;
+    *y_word = *(((uint16_t *)ciphertext) + 1);
 
     for(int8_t i = 31; i >= 0; i--) {  // Block size 32 has only one round number option
 
         // Shift, AND , XOR ops
-        uint16_t temp = (shift_one & shift_eight) ^ y_word ^ shift_two;
+        uint16_t temp = (shift_one(*x_word) & shift_eight(*x_word)) ^ *y_word ^ shift_two(*x_word);
         
         // Feistel Cross
-        y_word = x_word;
+        *y_word = *x_word;
         
         // XOR with Round Key
-        x_word = temp ^ *(round_key_ptr + i);
+        *x_word = temp ^ *(round_key_ptr + i);
     }
-    // Assemble Plaintext Output Array   
-    *word_ptr = x_word;
-    *(word_ptr + 1) = y_word;
 }
 
 void Simon_Decrypt_48(const uint8_t round_limit, const uint8_t *key_schedule, const uint8_t *ciphertext,
@@ -314,7 +311,7 @@ void Simon_Decrypt_48(const uint8_t round_limit, const uint8_t *key_schedule, co
     for(int8_t i = round_limit - 1 ; i >= 0; i--) {
 
         // Shift, AND , XOR ops
-        uint32_t temp = (shift_one & shift_eight) ^ y_word ^ shift_two;
+        uint32_t temp = (shift_one(x_word) & shift_eight(x_word)) ^ y_word ^ shift_two(x_word);
 
         // Feistel Cross
         y_word = x_word;
@@ -331,29 +328,31 @@ void Simon_Decrypt_48(const uint8_t round_limit, const uint8_t *key_schedule, co
     intrd_ptr = (bword_24 *)(plaintext + 3);
     *intrd_ptr = intrd;
 }
+
 void Simon_Decrypt_64(const uint8_t round_limit, const uint8_t *key_schedule, const uint8_t *ciphertext,
                       uint8_t *plaintext){
+
     const uint8_t word_size = 32;
-    uint32_t x_word = *(uint32_t *)ciphertext;
-    uint32_t y_word = *(((uint32_t *)ciphertext) + 1);
+    uint32_t *x_word = (uint32_t *)plaintext;
+    uint32_t *y_word = ((uint32_t *)plaintext) + 1;
     uint32_t *round_key_ptr = (uint32_t *)key_schedule;
-    uint32_t *word_ptr = (uint32_t *)plaintext;
+
+    *x_word = *(uint32_t *)ciphertext;
+    *y_word = *(((uint32_t *)ciphertext) + 1);
 
     for(int8_t i = round_limit -1 ; i >= 0; i--) {
 
         // Shift, AND , XOR ops
-        uint32_t temp = (shift_one & shift_eight) ^ y_word ^ shift_two;
+        uint32_t temp = (shift_one(*x_word) & shift_eight(*x_word)) ^ *y_word ^ shift_two(*x_word);
         
         // Feistel Cross
-        y_word = x_word;
+        *y_word = *x_word;
         
         // XOR with Round Key
-        x_word = temp ^ *(round_key_ptr + i);
+        *x_word = temp ^ *(round_key_ptr + i);
     }
-    // Assemble Plaintext Output Array   
-    *word_ptr = x_word;
-    *(word_ptr + 1) = y_word;
 }
+
 void Simon_Decrypt_96(const uint8_t round_limit, const uint8_t *key_schedule, const uint8_t *ciphertext,
                       uint8_t *plaintext){
     const uint8_t word_size = 48;
@@ -365,7 +364,7 @@ void Simon_Decrypt_96(const uint8_t round_limit, const uint8_t *key_schedule, co
     for(int8_t i = round_limit - 1; i >= 0; i--) {
 
         // Shift, AND , XOR ops
-        uint64_t temp = (shift_one & shift_eight) ^ y_word ^ shift_two;
+        uint64_t temp = (shift_one(x_word) & shift_eight(x_word)) ^ y_word ^ shift_two(x_word);
 
         // Feistel Cross
         y_word = x_word;
@@ -382,26 +381,27 @@ void Simon_Decrypt_96(const uint8_t round_limit, const uint8_t *key_schedule, co
     intrd_ptr = (bword_48 *)(plaintext + 6);
     *intrd_ptr = intrd;
 }
+
 void Simon_Decrypt_128(const uint8_t round_limit, const uint8_t *key_schedule, const uint8_t *ciphertext,
                        uint8_t *plaintext){
+
     const uint8_t word_size = 64;
-    uint64_t x_word = *(uint64_t *)ciphertext;
-    uint64_t y_word = *(((uint64_t *)ciphertext) + 1);
+    uint64_t *x_word = (uint64_t *)plaintext;
+    uint64_t *y_word = ((uint64_t *)plaintext) + 1;
     uint64_t *round_key_ptr = (uint64_t *)key_schedule;
-    uint64_t *word_ptr = (uint64_t *)plaintext;
+
+    *x_word = *(uint64_t *)ciphertext;
+    *y_word = *(((uint64_t *)ciphertext) + 1);
 
     for(int8_t i = round_limit - 1; i >=0; i--) {
 
         // Shift, AND , XOR ops
-        uint64_t temp = (shift_one & shift_eight) ^ y_word ^ shift_two;
+        uint64_t temp = (shift_one(*x_word) & shift_eight(*x_word)) ^ *y_word ^ shift_two(*x_word);
         
         // Feistel Cross
-        y_word = x_word;
+        *y_word = *x_word;
         
         // XOR with Round Key
-        x_word = temp ^ *(round_key_ptr + i);
+        *x_word = temp ^ *(round_key_ptr + i);
     }
-    // Assemble Plaintext Output Array   
-    *word_ptr = x_word;
-    *(word_ptr + 1) = y_word;
 }
