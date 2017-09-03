@@ -10,7 +10,7 @@
 #include <limits.h>
 #include <stdlib.h>
 #include <string.h>
-#include "Simon.h"
+#include "simon.h"
 
 // Cipher Operation Macros
 #define shift_one(x_word) (((x_word) << 1) | ((x_word) >> (word_size - 1)))

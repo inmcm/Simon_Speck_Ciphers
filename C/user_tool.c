@@ -9,8 +9,8 @@
 #include <fcntl.h>
 #endif
 
-#include "Simon.h"
-#include "Speck.h"
+#include "simon.h"
+#include "speck.h"
 
 /* Usage
  $ ./user encrypt/decrypt cipher mode keyfile file
@@ -28,7 +28,7 @@ int main(int argc, char *argv[]) {
 
     static const uint16_t key_size_bits = 64;
     static const uint16_t block_size_bits = 32;
-    static const uint8_t  block_size = block_size_bits >> 3;
+    const uint8_t  block_size = block_size_bits >> 3;
 
     FILE *key_fd;
     key_fd = fopen(argv[4],"rb");

@@ -8,8 +8,8 @@
 
 #include <stdio.h>
 #include <stdint.h>
-#include "Simon.h"
-#include "Speck.h"
+#include "simon.h"
+#include "speck.h"
 
 // Function Prototypes
 void cipher_compare(const void *source, void *target, size_t n);

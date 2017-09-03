@@ -10,7 +10,7 @@
 #include <limits.h>
 #include <stdlib.h>
 #include <string.h>
-#include "Speck.h"
+#include "speck.h"
 
 
 #define rotate_left(x,n) (((x) >> (word_size - (n))) | ((x) << (n)))
