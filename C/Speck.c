@@ -77,37 +77,43 @@ uint8_t Speck_Init(Speck_Cipher *cipher_object, enum speck_cipher_config_t ciphe
         // Append sub key to key schedule
         memcpy(cipher_object->key_schedule + (word_bytes * (i+1)), &sub_keys[0], word_bytes);   
     }
+
+    if (cipher_cfg == Speck_64_32){
+        cipher_object->encryptPtr = &Speck_Encrypt_32;
+        cipher_object->decryptPtr = &Speck_Decrypt_32;
+    }
+    else if(cipher_cfg <= Speck_96_48){
+        cipher_object->encryptPtr = Speck_Encrypt_48;
+        cipher_object->decryptPtr = Speck_Decrypt_48;
+    }
+    else if(cipher_cfg <= Speck_128_64) {
+        cipher_object->encryptPtr = Speck_Encrypt_64;
+        cipher_object->decryptPtr = Speck_Decrypt_64;
+
+    }
+
+    else if(cipher_cfg <= Speck_144_96) {
+        cipher_object->encryptPtr = Speck_Encrypt_96;
+        cipher_object->decryptPtr = Speck_Decrypt_96;
+    }
+
+    else if(cipher_cfg <= Speck_256_128) {
+        cipher_object->encryptPtr = Speck_Encrypt_128;
+        cipher_object->decryptPtr = Speck_Decrypt_128;
+    }
+
+    else return 1;
+
     return 0;
 }
 
 
 uint8_t Speck_Encrypt(Speck_Cipher cipher_object, const void *plaintext, void *ciphertext) {
-    if (cipher_object.cipher_cfg == Speck_64_32) {
-        Speck_Encrypt_32(cipher_object.key_schedule, plaintext, ciphertext);
-    }
-    
-    else if(cipher_object.cipher_cfg <= Speck_96_48) {
-        Speck_Encrypt_48(cipher_object.round_limit, cipher_object.key_schedule, plaintext, ciphertext);
-    }
-    
-    else if(cipher_object.cipher_cfg <= Speck_128_64) {
-        Speck_Encrypt_64(cipher_object.round_limit, cipher_object.key_schedule, plaintext, ciphertext);
-    }
-    
-    else if(cipher_object.cipher_cfg <= Speck_144_96) {
-        Speck_Encrypt_96(cipher_object.round_limit, cipher_object.key_schedule, plaintext, ciphertext);
-    }
-
-    else if(cipher_object.cipher_cfg <= Speck_256_128) {
-        Speck_Encrypt_128(cipher_object.round_limit, cipher_object.key_schedule, plaintext, ciphertext);
-    }
-    
-    else return 1;
-
-    return 0;;
+    (*cipher_object.encryptPtr)(cipher_object.round_limit, cipher_object.key_schedule, plaintext, ciphertext);
+    return 0;
 }
 
-void Speck_Encrypt_32(const uint8_t *key_schedule, const uint8_t *plaintext, uint8_t *ciphertext) {
+void Speck_Encrypt_32(const uint8_t round_limit, const uint8_t *key_schedule, const uint8_t *plaintext, uint8_t *ciphertext) {
 
     const uint8_t word_size = 16;
     uint16_t *y_word = (uint16_t *)ciphertext;
@@ -117,7 +123,7 @@ void Speck_Encrypt_32(const uint8_t *key_schedule, const uint8_t *plaintext, uin
     *y_word = *(uint16_t *)plaintext;
     *x_word = *(((uint16_t *)plaintext) + 1);
 
-    for(uint8_t i = 0; i < 22; i++) {  // Block size 32 has only one round number option
+    for(uint8_t i = 0; i < round_limit; i++) {
         *x_word = ((rotate_right(*x_word, 7)) + *y_word) ^ *(round_key_ptr + i);
         *y_word = (rotate_left(*y_word, 2)) ^ *x_word;
     }
@@ -204,32 +210,11 @@ void Speck_Encrypt_128(const uint8_t round_limit, const uint8_t *key_schedule, c
 }
 
 uint8_t Speck_Decrypt(Speck_Cipher cipher_object, void *ciphertext, void *plaintext) {
-    if (cipher_object.cipher_cfg == Speck_64_32) {
-        Speck_Decrypt_32(cipher_object.key_schedule, ciphertext, plaintext);
-    }
-
-    else if(cipher_object.cipher_cfg <= Speck_96_48) {
-        Speck_Decrypt_48(cipher_object.round_limit, cipher_object.key_schedule, ciphertext, plaintext);
-    }
-
-    else if(cipher_object.cipher_cfg <= Speck_128_64) {
-        Speck_Decrypt_64(cipher_object.round_limit, cipher_object.key_schedule, ciphertext, plaintext);
-    }
-
-    else if(cipher_object.cipher_cfg <= Speck_144_96) {
-        Speck_Decrypt_96(cipher_object.round_limit, cipher_object.key_schedule, ciphertext, plaintext);
-    }
-
-    else if(cipher_object.cipher_cfg <= Speck_256_128) {
-        Speck_Decrypt_128(cipher_object.round_limit, cipher_object.key_schedule, ciphertext, plaintext);
-    }
-
-    else return 1;
-
+    (*cipher_object.decryptPtr)(cipher_object.round_limit, cipher_object.key_schedule, ciphertext, plaintext);
     return 0;
 }
 
-void Speck_Decrypt_32(const uint8_t *key_schedule, const uint8_t *ciphertext, uint8_t *plaintext) {
+void Speck_Decrypt_32(const uint8_t round_limit, const uint8_t *key_schedule, const uint8_t *ciphertext, uint8_t *plaintext) {
 
     const uint8_t word_size = 16;
     uint16_t *y_word = (uint16_t *)plaintext;
@@ -239,7 +224,7 @@ void Speck_Decrypt_32(const uint8_t *key_schedule, const uint8_t *ciphertext, ui
     *y_word = *(uint16_t *)ciphertext;
     *x_word = *(((uint16_t *)ciphertext) + 1);
 
-    for(int8_t i = 21; i >=0; i--) {  // Block size 32 has only one round number option
+    for(int8_t i = round_limit - 1; i >=0; i--) {
         *y_word = rotate_right((*y_word ^ *x_word), 2);
         *x_word = rotate_left((uint16_t)((*x_word ^ *(round_key_ptr + i)) - *y_word), 7);
     }

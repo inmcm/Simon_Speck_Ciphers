@@ -60,14 +60,14 @@ uint8_t Simon_Init(Simon_Cipher *cipher_object, enum simon_cipher_config_t ciphe
     // Store First Key Schedule Entry
     memcpy(cipher_object->key_schedule, &sub_keys[0], word_bytes);
 
-    for(int i = 0; i < simon_rounds[cipher_cfg] - 1; i++){
+    for (int i = 0; i < simon_rounds[cipher_cfg] - 1; i++) {
         tmp1 = rshift_three(sub_keys[key_words - 1]);
-        
-        if(key_words == 4) {
+
+        if (key_words == 4) {
             tmp1 ^= sub_keys[1];
         }
 
-        tmp2  = rshift_one(tmp1);
+        tmp2 = rshift_one(tmp1);
         tmp1 ^= sub_keys[0];
         tmp1 ^= tmp2;
 
@@ -76,46 +76,52 @@ uint8_t Simon_Init(Simon_Cipher *cipher_object, enum simon_cipher_config_t ciphe
         tmp1 ^= tmp2;
 
         // Shift Sub Words
-        for(int j = 0; j < (key_words - 1); j++){
-            sub_keys[j] = sub_keys[j+1];
+        for (int j = 0; j < (key_words - 1); j++) {
+            sub_keys[j] = sub_keys[j + 1];
         }
         sub_keys[key_words - 1] = tmp1 & mod_mask;
 
         // Append sub key to key schedule
-        memcpy(cipher_object->key_schedule + (word_bytes * (i+1)), &sub_keys[0], word_bytes);   
+        memcpy(cipher_object->key_schedule + (word_bytes * (i + 1)), &sub_keys[0], word_bytes);
+
     }
 
-    return 0;
-}
+    if (cipher_cfg == Simon_64_32){
+        cipher_object->encryptPtr = &Simon_Encrypt_32;
+        cipher_object->decryptPtr = &Simon_Decrypt_32;
+    }
+    else if(cipher_cfg <= Simon_96_48){
+        cipher_object->encryptPtr = Simon_Encrypt_48;
+        cipher_object->decryptPtr = Simon_Decrypt_48;
+    }
+    else if(cipher_cfg <= Simon_128_64) {
+        cipher_object->encryptPtr = Simon_Encrypt_64;
+        cipher_object->decryptPtr = Simon_Decrypt_64;
 
-uint8_t Simon_Encrypt(Simon_Cipher cipher_object, const void *plaintext, void *ciphertext) {
-
-    if (cipher_object.cipher_cfg == Simon_64_32) {
-        Simon_Encrypt_32(cipher_object.key_schedule, plaintext, ciphertext);
-    }
-    
-    else if(cipher_object.cipher_cfg <= Simon_96_48) {
-        Simon_Encrypt_48(cipher_object.round_limit, cipher_object.key_schedule, plaintext, ciphertext);
-    }
-    
-    else if(cipher_object.cipher_cfg <= Simon_128_64) {
-        Simon_Encrypt_64(cipher_object.round_limit, cipher_object.key_schedule, plaintext, ciphertext);
-    }
-    
-    else if(cipher_object.cipher_cfg <= Simon_144_96) {
-        Simon_Encrypt_96(cipher_object.round_limit, cipher_object.key_schedule, plaintext, ciphertext);
     }
 
-    else if(cipher_object.cipher_cfg <= Simon_256_128) {
-        Simon_Encrypt_128(cipher_object.round_limit, cipher_object.key_schedule, plaintext, ciphertext);
+    else if(cipher_cfg <= Simon_144_96) {
+        cipher_object->encryptPtr = Simon_Encrypt_96;
+        cipher_object->decryptPtr = Simon_Decrypt_96;
     }
-    
+
+    else if(cipher_cfg <= Simon_256_128) {
+        cipher_object->encryptPtr = Simon_Encrypt_128;
+        cipher_object->decryptPtr = Simon_Decrypt_128;
+    }
+
     else return 1;
 
     return 0;
 }
 
-void Simon_Encrypt_32(const uint8_t *key_schedule, const uint8_t *plaintext, uint8_t *ciphertext) {
+
+uint8_t Simon_Encrypt(Simon_Cipher cipher_object, const void *plaintext, void *ciphertext) {
+    (*cipher_object.encryptPtr)(cipher_object.round_limit, cipher_object.key_schedule, plaintext, ciphertext);
+    return 0;
+}
+
+void Simon_Encrypt_32(const uint8_t round_limit, const uint8_t *key_schedule, const uint8_t *plaintext, uint8_t *ciphertext) {
     
     const uint8_t word_size = 16;
     uint16_t *y_word = (uint16_t *)ciphertext;
@@ -126,7 +132,7 @@ void Simon_Encrypt_32(const uint8_t *key_schedule, const uint8_t *plaintext, uin
 
     uint16_t *round_key_ptr = (uint16_t *)key_schedule;
 
-    for(uint8_t i = 0; i < 32; i++) {  // Block size 32 has only one round number option
+    for(uint8_t i = 0; i < round_limit; i++) {
 
         // Shift, AND , XOR ops
         uint16_t temp = (shift_one(*x_word) & shift_eight(*x_word)) ^ *y_word ^ shift_two(*x_word);
@@ -250,33 +256,12 @@ void Simon_Encrypt_128(const uint8_t round_limit, const uint8_t *key_schedule, c
 }
 
 uint8_t Simon_Decrypt(Simon_Cipher cipher_object, const void *ciphertext, void *plaintext) {
-
-    if (cipher_object.cipher_cfg == Simon_64_32) {
-        Simon_Decrypt_32(cipher_object.key_schedule, ciphertext, plaintext);
-    }
-    
-    else if(cipher_object.cipher_cfg <= Simon_96_48) {
-        Simon_Decrypt_48(cipher_object.round_limit, cipher_object.key_schedule, ciphertext, plaintext);
-    }
-    
-    else if(cipher_object.cipher_cfg <= Simon_128_64) {
-        Simon_Decrypt_64(cipher_object.round_limit, cipher_object.key_schedule, ciphertext, plaintext);
-    }
-    
-    else if(cipher_object.cipher_cfg <= Simon_144_96) {
-        Simon_Decrypt_96(cipher_object.round_limit, cipher_object.key_schedule, ciphertext, plaintext);
-    }
-
-    else if(cipher_object.cipher_cfg <= Simon_256_128) {
-        Simon_Decrypt_128(cipher_object.round_limit, cipher_object.key_schedule, ciphertext, plaintext);
-    }
-    
-    else return 1;
-
+    (*cipher_object.decryptPtr)(cipher_object.round_limit, cipher_object.key_schedule, ciphertext, plaintext);
     return 0;
 }
 
-void Simon_Decrypt_32(const uint8_t *key_schedule, const uint8_t *ciphertext, uint8_t *plaintext) {
+void Simon_Decrypt_32(const uint8_t round_limit, const uint8_t *key_schedule, const uint8_t *ciphertext,
+                      uint8_t *plaintext) {
 
     const uint8_t word_size = 16;
     uint16_t *x_word = (uint16_t *)plaintext;
@@ -286,7 +271,7 @@ void Simon_Decrypt_32(const uint8_t *key_schedule, const uint8_t *ciphertext, ui
     *x_word = *(uint16_t *)ciphertext;
     *y_word = *(((uint16_t *)ciphertext) + 1);
 
-    for(int8_t i = 31; i >= 0; i--) {  // Block size 32 has only one round number option
+    for(int8_t i = round_limit - 1; i >= 0; i--) {
 
         // Shift, AND , XOR ops
         uint16_t temp = (shift_one(*x_word) & shift_eight(*x_word)) ^ *y_word ^ shift_two(*x_word);

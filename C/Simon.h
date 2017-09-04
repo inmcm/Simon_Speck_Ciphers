@@ -20,6 +20,8 @@ enum simon_cipher_config_t { Simon_64_32,
 
 typedef struct {
   enum simon_cipher_config_t cipher_cfg;
+  void (*encryptPtr)(const uint8_t, const uint8_t *, const uint8_t *, uint8_t *);
+  void (*decryptPtr)(const uint8_t, const uint8_t *, const uint8_t *, uint8_t *);
   uint16_t key_size;
   uint8_t block_size;
   uint8_t round_limit;
@@ -41,7 +43,8 @@ uint8_t Simon_Init(Simon_Cipher *cipher_object, enum simon_cipher_config_t ciphe
 
 uint8_t Simon_Encrypt(Simon_Cipher cipher_object, const void *plaintext, void *ciphertext);
 
-void Simon_Encrypt_32(const uint8_t *key_schedule, const uint8_t *plaintext, uint8_t *ciphertext);
+void Simon_Encrypt_32(uint8_t round_limit, const uint8_t *key_schedule, const uint8_t *plaintext,
+                      uint8_t *ciphertext);
 void Simon_Encrypt_48(const uint8_t round_limit, const uint8_t *key_schedule, const uint8_t *plaintext,
                       uint8_t *ciphertext);
 void Simon_Encrypt_64(const uint8_t round_limit, const uint8_t *key_schedule, const uint8_t *plaintext,
@@ -52,7 +55,8 @@ void Simon_Encrypt_128(const uint8_t round_limit, const uint8_t *key_schedule, c
                        uint8_t *ciphertext);
 
 uint8_t Simon_Decrypt(Simon_Cipher cipher_object, const void *ciphertext, void *plaintext);
-void Simon_Decrypt_32(const uint8_t *key_schedule, const uint8_t *ciphertext, uint8_t *plaintext);
+void Simon_Decrypt_32(const uint8_t round_limit, const uint8_t *key_schedule, const uint8_t *ciphertext,
+                      uint8_t *plaintext);
 void Simon_Decrypt_48(const uint8_t round_limit, const uint8_t *key_schedule, const uint8_t *ciphertext,
                       uint8_t *plaintext);
 void Simon_Decrypt_64(const uint8_t round_limit, const uint8_t *key_schedule, const uint8_t *ciphertext,

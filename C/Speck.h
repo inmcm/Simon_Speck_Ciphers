@@ -24,6 +24,8 @@ enum speck_cipher_config_t { Speck_64_32,
 
 typedef struct {
     enum speck_cipher_config_t cipher_cfg;
+    void (*encryptPtr)(const uint8_t, const uint8_t *, const uint8_t *, uint8_t *);
+    void (*decryptPtr)(const uint8_t, const uint8_t *, const uint8_t *, uint8_t *);
     uint16_t key_size;
     uint8_t block_size;
     uint8_t round_limit;
@@ -57,7 +59,8 @@ uint8_t Speck_Encrypt(Speck_Cipher cipher_object, const void *plaintext, void *c
 
 uint8_t Speck_Decrypt(Speck_Cipher cipher_object, void *ciphertext, void *plaintext);
 
-void Speck_Encrypt_32(const uint8_t *key_schedule, const uint8_t *plaintext, uint8_t *ciphertext);
+void Speck_Encrypt_32(const uint8_t round_limit, const uint8_t *key_schedule, const uint8_t *plaintext,
+                      uint8_t *ciphertext);
 void Speck_Encrypt_48(const uint8_t round_limit, const uint8_t *key_schedule, const uint8_t *plaintext,
                       uint8_t *ciphertext);
 void Speck_Encrypt_64(const uint8_t round_limit, const uint8_t *key_schedule, const uint8_t *plaintext,
@@ -67,7 +70,8 @@ void Speck_Encrypt_96(const uint8_t round_limit, const uint8_t *key_schedule, co
 void Speck_Encrypt_128(const uint8_t round_limit, const uint8_t *key_schedule, const uint8_t *plaintext,
                        uint8_t *ciphertext);
 
-void Speck_Decrypt_32(const uint8_t *key_schedule, const uint8_t *ciphertext, uint8_t *plaintext);
+void Speck_Decrypt_32(const uint8_t round_limit, const uint8_t *key_schedule, const uint8_t *ciphertext,
+                      uint8_t *plaintext);
 void Speck_Decrypt_48(const uint8_t round_limit, const uint8_t *key_schedule, const uint8_t *ciphertext,
                       uint8_t *plaintext);
 void Speck_Decrypt_64(const uint8_t round_limit, const uint8_t *key_schedule, const uint8_t *ciphertext,
