@@ -56,15 +56,15 @@ int main(int argc, char *argv[]) {
     }
 
     uint8_t cfg_index = 255;
-    uint8_t cfg_cipher;
+    uint8_t cfg_cipher = SIMON;
     uint8_t cfg_dir;
 
-
-
     for (int j = 0;  j < sizeof (valid_cfgs) / sizeof (valid_cfgs[0]);  ++j) {
-        if (!strcmp(argv[1], valid_cfgs[j].str))
+        if (!strcmp(argv[1], valid_cfgs[j].str)) {
             cfg_index = valid_cfgs[j].index;
             cfg_cipher = valid_cfgs[j].cipher;
+            break;
+        }
     }
     if (255 == cfg_index) {
         fprintf(stderr, "Not a Valid Simon/Speck Cipher Configuration");
