@@ -1,6 +1,8 @@
 all: tests user
 
-CFLAGS=-c -Wall -Wextra -Wshadow -Wconversion -std=c99 -O3
+GIT_VERSION := $(shell git describe --abbrev=0 --always)
+
+CFLAGS=-c -Wall -Wextra -Wshadow -Wconversion -std=c99 -O3 -DVERSION=\"$(GIT_VERSION)\"
 
 user: simon.o speck.o user_tool.o
 	gcc simon.o speck.o user_tool.o -o user

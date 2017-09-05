@@ -48,11 +48,16 @@ const static struct {
         {"speck_256_128", 9, SPECK}
 };
 
+void print_usage(void);
+
+
 int main(int argc, char *argv[]) {
-    int i;
-    printf("Hello!\n");
-    for (i=0; i < argc; i++) {
-        printf("arg%d: %s\n", i, argv[i]);
+
+    /* Test That The Minumum Number of Arguments are Provided */
+    if (argc < 6) {
+        fprintf(stderr, "Missing All Required Inputs!!");
+        print_usage();
+        return -1;
     }
 
     uint8_t cfg_index = 255;
@@ -143,7 +148,7 @@ int main(int argc, char *argv[]) {
     }
 
     FILE *out_fd;
-    out_fd = fopen("outputext.txt","wb");
+    out_fd = fopen(argv[6],"wb");
     fwrite(backup_buffer, 1, input_size, out_fd);
     fclose(out_fd);
 
@@ -152,4 +157,11 @@ int main(int argc, char *argv[]) {
     free(backup_buffer);
     printf("All done!\n");
     return  0;
+}
+
+
+void print_usage(void){
+    printf("Simon/Speck User Tool\n");
+    printf("Version: %s\n", VERSION);
+    printf("usage: user <CIPHER_CONFIGURATION> <BLOCK_MODE> <CIPHER_DIRECTION> <KEYFILE> <INPUT_FILE> <OUTPUT>\n");
 }
