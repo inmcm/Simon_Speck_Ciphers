@@ -1,40 +1,7 @@
 #ifndef SPECK_H
 #define SPECK_H
 
-// enum speck_mode_t { ECB, CTR, CBC, CFB, OFB };
-// const uint8_t speck_block_sizes[] = {32, 48, 48, 64, 64, 96, 96, 128, 128, 128};
-// const uint16_t speck_key_sizes[] = {64, 72, 96, 96, 128, 96, 144, 128, 192, 256};
-
-#ifndef CIPHER_CONSTANTS
-#define CIPHER_CONSTANTS
-enum mode_t { ECB, CTR, CBC, CFB, OFB };
-#endif
-
-enum speck_cipher_config_t { Speck_64_32,
-               Speck_72_48,
-               Speck_96_48,
-               Speck_96_64,
-               Speck_128_64,
-               Speck_96_96,
-               Speck_144_96,
-               Speck_128_128,
-               Speck_192_128,
-               Speck_256_128
-} ; 
-
-typedef struct {
-    enum speck_cipher_config_t cipher_cfg;
-    void (*encryptPtr)(const uint8_t, const uint8_t *, const uint8_t *, uint8_t *);
-    void (*decryptPtr)(const uint8_t, const uint8_t *, const uint8_t *, uint8_t *);
-    uint16_t key_size;
-    uint8_t block_size;
-    uint8_t round_limit;
-    uint8_t init_vector[16];
-    uint8_t counter[16];  
-    uint8_t key_schedule[576];
-    uint8_t alpha;
-    uint8_t beta;
-} Speck_Cipher;
+#include "cipher_constants.h"
 
 typedef struct _bitword24_t{
   uint32_t data: 24;
@@ -53,11 +20,11 @@ typedef struct _bytes6_t{
 } bytes6_t;
 
 
-uint8_t Speck_Init(Speck_Cipher *cipher_object, enum speck_cipher_config_t cipher_cfg, enum mode_t c_mode, void *key, uint8_t *iv, uint8_t *counter);
+uint8_t Speck_Init(SimSpk_Cipher *cipher_object, enum cipher_config_t cipher_cfg, enum mode_t c_mode, void *key, uint8_t *iv, uint8_t *counter);
 
-uint8_t Speck_Encrypt(Speck_Cipher cipher_object, const void *plaintext, void *ciphertext);
+uint8_t Speck_Encrypt(SimSpk_Cipher cipher_object, const void *plaintext, void *ciphertext);
 
-uint8_t Speck_Decrypt(Speck_Cipher cipher_object, void *ciphertext, void *plaintext);
+uint8_t Speck_Decrypt(SimSpk_Cipher cipher_object, const void *ciphertext, void *plaintext);
 
 void Speck_Encrypt_32(const uint8_t round_limit, const uint8_t *key_schedule, const uint8_t *plaintext,
                       uint8_t *ciphertext);

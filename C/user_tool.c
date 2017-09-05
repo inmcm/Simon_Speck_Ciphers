@@ -54,7 +54,6 @@ const static struct {
         {"speck_256_128", 9, SPECK}
 };
 
-
 int main(int argc, char *argv[]) {
     int i;
     printf("Hello!\n");

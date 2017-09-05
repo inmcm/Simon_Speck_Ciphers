@@ -17,27 +17,25 @@
 #define rotate_right(x,n) (((x) << (word_size - (n))) | ((x) >> (n)))
 
 const uint8_t speck_rounds[] = {22, 22, 23, 26, 27, 28, 29, 32, 33, 34};
-const uint8_t speck_block_sizes[] = {32, 48, 48, 64, 64, 96, 96, 128, 128, 128};
-const uint16_t speck_key_sizes[] = {64, 72, 96, 96, 128, 96, 144, 128, 192, 256};
 
-uint8_t Speck_Init(Speck_Cipher *cipher_object, enum speck_cipher_config_t cipher_cfg, enum mode_t c_mode, void *key, uint8_t *iv, uint8_t *counter) {
+uint8_t Speck_Init(SimSpk_Cipher *cipher_object, enum cipher_config_t cipher_cfg, enum mode_t c_mode, void *key, uint8_t *iv, uint8_t *counter) {
 
-    if (cipher_cfg > Speck_256_128 || cipher_cfg < Speck_64_32) {
+    if (cipher_cfg > cfg_256_128 || cipher_cfg < cfg_64_32) {
         return 1;
     }
     
-    cipher_object->block_size = speck_block_sizes[cipher_cfg];
-    cipher_object->key_size = speck_key_sizes[cipher_cfg];
+    cipher_object->block_size = block_sizes[cipher_cfg];
+    cipher_object->key_size = key_sizes[cipher_cfg];
     cipher_object->round_limit = speck_rounds[cipher_cfg];
     cipher_object->cipher_cfg = cipher_cfg;
     
-    uint8_t word_size = speck_block_sizes[cipher_cfg] >> 1;
+    uint8_t word_size = block_sizes[cipher_cfg] >> 1;
     uint8_t word_bytes = word_size >> 3;
-    uint16_t key_words =  speck_key_sizes[cipher_cfg] / word_size;
+    uint16_t key_words =  key_sizes[cipher_cfg] / word_size;
     uint64_t sub_keys[4] = {};
     uint64_t mod_mask = ULLONG_MAX >> (64 - word_size);
     
-    if (cipher_cfg == Speck_64_32) {
+    if (cipher_cfg == cfg_64_32) {
         cipher_object->alpha = 7;
         cipher_object->beta = 2;
     }
@@ -78,26 +76,26 @@ uint8_t Speck_Init(Speck_Cipher *cipher_object, enum speck_cipher_config_t ciphe
         memcpy(cipher_object->key_schedule + (word_bytes * (i+1)), &sub_keys[0], word_bytes);   
     }
 
-    if (cipher_cfg == Speck_64_32){
+    if (cipher_cfg == cfg_64_32){
         cipher_object->encryptPtr = &Speck_Encrypt_32;
         cipher_object->decryptPtr = &Speck_Decrypt_32;
     }
-    else if(cipher_cfg <= Speck_96_48){
+    else if(cipher_cfg <= cfg_96_48){
         cipher_object->encryptPtr = Speck_Encrypt_48;
         cipher_object->decryptPtr = Speck_Decrypt_48;
     }
-    else if(cipher_cfg <= Speck_128_64) {
+    else if(cipher_cfg <= cfg_128_64) {
         cipher_object->encryptPtr = Speck_Encrypt_64;
         cipher_object->decryptPtr = Speck_Decrypt_64;
 
     }
 
-    else if(cipher_cfg <= Speck_144_96) {
+    else if(cipher_cfg <= cfg_144_96) {
         cipher_object->encryptPtr = Speck_Encrypt_96;
         cipher_object->decryptPtr = Speck_Decrypt_96;
     }
 
-    else if(cipher_cfg <= Speck_256_128) {
+    else if(cipher_cfg <= cfg_256_128) {
         cipher_object->encryptPtr = Speck_Encrypt_128;
         cipher_object->decryptPtr = Speck_Decrypt_128;
     }
@@ -108,7 +106,7 @@ uint8_t Speck_Init(Speck_Cipher *cipher_object, enum speck_cipher_config_t ciphe
 }
 
 
-uint8_t Speck_Encrypt(Speck_Cipher cipher_object, const void *plaintext, void *ciphertext) {
+uint8_t Speck_Encrypt(SimSpk_Cipher cipher_object, const void *plaintext, void *ciphertext) {
     (*cipher_object.encryptPtr)(cipher_object.round_limit, cipher_object.key_schedule, plaintext, ciphertext);
     return 0;
 }
@@ -209,7 +207,7 @@ void Speck_Encrypt_128(const uint8_t round_limit, const uint8_t *key_schedule, c
     }
 }
 
-uint8_t Speck_Decrypt(Speck_Cipher cipher_object, void *ciphertext, void *plaintext) {
+uint8_t Speck_Decrypt(SimSpk_Cipher cipher_object, const void *ciphertext, void *plaintext) {
     (*cipher_object.decryptPtr)(cipher_object.round_limit, cipher_object.key_schedule, ciphertext, plaintext);
     return 0;
 }

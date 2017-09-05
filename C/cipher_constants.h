@@ -1,13 +1,12 @@
 // cipher_constants.h
-#ifndef CIPHER_CONSTANTS
-#define CIPHER_CONSTANTS
+#ifndef CIPHER_CONSTANTS_H
+#define CIPHER_CONSTANTS_H
 
 enum mode_t { ECB, CTR, CBC, CFB, OFB };
 
-const uint8_t block_sizes[] = {32, 48, 48, 64, 64, 96, 96, 128, 128, 128};
+static const uint8_t block_sizes[] = {32, 48, 48, 64, 64, 96, 96, 128, 128, 128};
 
-const uint16_t key_sizes[] = {64, 72, 96, 96, 128, 96, 144, 128, 192, 256};
-
+static const uint16_t key_sizes[] = {64, 72, 96, 96, 128, 96, 144, 128, 192, 256};
 
 enum cipher_config_t {
     cfg_64_32,
@@ -24,6 +23,8 @@ enum cipher_config_t {
 
 typedef struct {
     enum cipher_config_t cipher_cfg;
+    void (*encryptPtr)(const uint8_t, const uint8_t *, const uint8_t *, uint8_t *);
+    void (*decryptPtr)(const uint8_t, const uint8_t *, const uint8_t *, uint8_t *);
     uint16_t key_size;
     uint8_t block_size;
     uint8_t round_limit;
@@ -32,6 +33,7 @@ typedef struct {
     uint8_t key_schedule[576];
     uint8_t alpha;
     uint8_t beta;
+    uint8_t z_seq;
 } SimSpk_Cipher;
 
 #endif
