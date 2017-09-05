@@ -14,10 +14,7 @@
 
 /* Usage
  $ ./user simon_256_128 ECB -e keyfile input output
-
 */
-void print_hex(uint8_t *data, uint64_t data_len);
-
 
 #define SIMON 0
 #define SPECK 1
@@ -153,20 +150,4 @@ int main(int argc, char *argv[]) {
     free(backup_buffer);
     printf("All done!\n");
     return  0;
-}
-
-
-void print_hex(uint8_t *data, uint64_t data_len) {
-    uint64_t line_limit = (data_len % 16) > 0 ? 1 : 0;
-    line_limit += data_len >> 4;
-    uint64_t element = 0;
-    for (uint64_t line=0; line<line_limit; line++) {
-        printf("%04X   ", line);
-        uint8_t element_limit = data_len-element >= 16 ? 16 : data_len-element;
-        for (uint8_t element_cnt=0; element_cnt < element_limit; element_cnt++) {
-            printf("%02X ", data[element++]);
-        }
-        printf("\n");
-    }
-    printf("\n");
 }
