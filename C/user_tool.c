@@ -6,9 +6,6 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include "string.h"
-#ifdef __APPLE__
-#include <fcntl.h>
-#endif
 
 #include "cipher_constants.h"
 #include "simon.h"
