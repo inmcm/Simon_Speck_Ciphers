@@ -84,7 +84,22 @@ int main(int argc, char *argv[]) {
         return -1;
     }
 
-   // Read In Key Bytes
+    uint8_t (*initPtr)(SimSpk_Cipher *, enum cipher_config_t, enum mode_t, void *, uint8_t *, uint8_t *);
+    uint8_t (*operationPtr)(SimSpk_Cipher, const void *, void *);
+
+    if (SIMON == cfg_cipher) {
+        initPtr = &Simon_Init;
+        if (ENCRYPT == cfg_dir) operationPtr = &Simon_Encrypt;
+        else operationPtr = &Simon_Decrypt;
+    }
+    else {
+        initPtr = &Speck_Init;
+        if (ENCRYPT == cfg_dir) operationPtr = &Speck_Encrypt;
+        else operationPtr = &Speck_Decrypt;
+    }
+
+
+    // Read In Key Bytes
     FILE *key_fd;
     key_fd = fopen(argv[4],"rb");
     fseek(key_fd, 0L, SEEK_END);
@@ -112,33 +127,20 @@ int main(int argc, char *argv[]) {
     fread(working_buffer, 1, input_size, in_fd);
     fclose(in_fd);
 
-
-
-    Simon_Cipher my_simon_cipher;
-    int result = Simon_Init(&my_simon_cipher, Simon_256_128, ECB, key_buffer, NULL, NULL);
+    SimSpk_Cipher my_cipher;
+    int result = (*initPtr)(&my_cipher, (enum cipher_config_t)cfg_index, ECB, key_buffer, NULL, NULL);
     if (result) {
         fprintf(stderr, "Failed to Init Cipher\n");
         return result;
     }
+    printf("Key Size: %d\n", my_cipher.key_size);
+    printf("Block Size: %d\n", my_cipher.block_size);
 
     uint8_t *backup_buffer = working_buffer;
     for(int block=0; block < input_size / block_size; block++){
-//        printf("Encrypting Block %d\n", block);
-        Simon_Encrypt(my_simon_cipher, working_buffer, working_buffer);
+        (*operationPtr)(my_cipher, working_buffer, working_buffer);
         working_buffer += block_size;
     }
-
-//    print_hex(backup_buffer, input_size);
-
-
-    working_buffer = backup_buffer;
-    for(int block=0; block < input_size / block_size; block++){
-//        printf("Decrypting Block %d\n", block);
-        Simon_Decrypt(my_simon_cipher, working_buffer, working_buffer);
-        working_buffer += block_size;
-    }
-
-//    print_hex(backup_buffer, input_size);
 
     FILE *out_fd;
     out_fd = fopen("outputext.txt","wb");
