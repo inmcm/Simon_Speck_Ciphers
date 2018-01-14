@@ -4,6 +4,20 @@ Pure python implementations of the [Simon and Speck] block ciphers. These are sm
 
 **WARNING** The following implementations are for reference/research/entertainment only and should not be considered 100% free of bugs or side channel attacks. Use in a production environment is discouraged.
 
+## Installation ##
+
+Download or clone this project and run from this directory:
+
+```sh
+python setup.py install
+```
+where `python` is favorite python interperator
+
+You can verify the included pytest test suite with:
+```sh
+python setup.py test
+```
+
 ##  Basic Usage ##
 Simon and Speck work identically. Once the code has been copied into your project, the ciphers can be imported:
 ```sh
