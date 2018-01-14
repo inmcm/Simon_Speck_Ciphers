@@ -21,6 +21,10 @@
 #define ENCRYPT 0
 #define DECRYPT 1
 
+#ifndef VERSION
+#define VERSION "custom_build"
+#endif
+
 const static struct {
     const char *str;
     uint8_t     index;
@@ -55,7 +59,7 @@ int main(int argc, char *argv[]) {
 
     /* Test That The Minumum Number of Arguments are Provided */
     if (argc < 6) {
-        fprintf(stderr, "Missing All Required Inputs!!");
+        fprintf(stderr, "Missing All Required Inputs!!\n");
         print_usage();
         return -1;
     }
