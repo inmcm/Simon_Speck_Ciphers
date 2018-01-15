@@ -258,13 +258,14 @@ class SimonCipher:
             self.counter += 1
 
         elif self.mode == 'CBC':
-            a, b = self.decrypt_function(a, b)
+            f, e = b, a
+            b, a = self.decrypt_function(b, a)
             b ^= self.iv_upper
             a ^= self.iv_lower
 
-            self.iv_upper = b
-            self.iv_lower = a
-            self.iv = (b << self.word_size) + a
+            self.iv_upper = f
+            self.iv_lower = e
+            self.iv = (f << self.word_size) + e
 
         elif self.mode == 'PCBC':
             f, e = b, a
