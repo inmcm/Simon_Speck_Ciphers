@@ -482,13 +482,21 @@ class TestCipherModesSpeck:
 
     def test_ctr_mode_equivalent(self):
 
-        c = SpeckCipher(self.key, self.key_size, self.block_size, 'CTR', init=self.iv, counter=self.counter)
-        ctr_out = c.encrypt(self.plaintxt)
+        c1 = SpeckCipher(self.key, self.key_size, self.block_size, 'CTR', init=self.iv, counter=self.counter)
+        ctr_out = c1.encrypt(self.plaintxt)
 
-        c = SpeckCipher(self.key, self.key_size, self.block_size, 'ECB')
-        ecb_out = c.encrypt(self.iv + self.counter)
+        c2 = SpeckCipher(self.key, self.key_size, self.block_size, 'ECB')
+        ecb_out = c2.encrypt(self.iv + self.counter)
         ctr_equivalent = ecb_out ^ self.plaintxt
         assert ctr_out == ctr_equivalent
+
+        c1 = SpeckCipher(self.key, self.key_size, self.block_size, 'CTR', init=self.iv, counter=self.counter)
+        c2 = SpeckCipher(self.key, self.key_size, self.block_size, 'ECB')
+        ecb_out = c2.encrypt(self.iv + self.counter)
+        ctr_equivalent ^= ecb_out
+        ctr_out = c1.decrypt(ctr_out)
+
+        assert self.plaintxt == ctr_equivalent == ctr_out
 
     def test_ctr_mode_single_cycle(self):
 
@@ -530,22 +538,25 @@ class TestCipherModesSpeck:
         cbc_equivalent = c.encrypt(self.iv ^ self.plaintxt)
         assert cbc_out == cbc_equivalent
 
-    def test_cbc_mode_chain(self):
-
         c = SpeckCipher(self.key, self.key_size, self.block_size, 'CBC', init=self.iv)
-
-        cbc_out = 0
-        for x in range(1000):
-            cbc_out = c.encrypt(self.plaintxt)
+        cbc_out = c.decrypt(cbc_out)
 
         c = SpeckCipher(self.key, self.key_size, self.block_size, 'ECB')
+        cbc_equivalent = c.decrypt(cbc_equivalent) ^ self.iv
 
-        cbc_equivalent = self.iv
+        assert hex(cbc_out) == hex(cbc_equivalent) == hex(self.plaintxt)
+
+    def test_cbc_mode_chain(self):
+
+        c1 = SpeckCipher(self.key, self.key_size, self.block_size, 'CBC', init=self.iv)
+        c2 = SpeckCipher(self.key, self.key_size, self.block_size, 'ECB')
+
+        cbc_iv_equivalent = self.iv
         for x in range(1000):
-            cbc_input = self.plaintxt ^ cbc_equivalent
-            cbc_equivalent = c.encrypt(cbc_input)
-
-        assert cbc_out == cbc_equivalent
+            cbc_input = self.plaintxt ^ cbc_iv_equivalent
+            cbc_iv_equivalent = c2.encrypt(cbc_input)
+            cbc_out = c1.encrypt(self.plaintxt)
+            assert cbc_out == cbc_iv_equivalent
 
     def test_pcbc_mode_single(self):
 
@@ -686,22 +697,25 @@ class TestCipherModesSimon:
         cbc_equivalent = c.encrypt(self.iv ^ self.plaintxt)
         assert cbc_out == cbc_equivalent
 
-    def test_cbc_mode_chain(self):
-
         c = SimonCipher(self.key, self.key_size, self.block_size, 'CBC', init=self.iv)
-
-        cbc_out = 0
-        for x in range(1000):
-            cbc_out = c.encrypt(self.plaintxt)
+        cbc_out = c.decrypt(cbc_out)
 
         c = SimonCipher(self.key, self.key_size, self.block_size, 'ECB')
+        cbc_equivalent = c.decrypt(cbc_equivalent) ^ self.iv
 
-        cbc_equivalent = self.iv
+        assert hex(cbc_out) == hex(cbc_equivalent) == hex(self.plaintxt)
+
+    def test_cbc_mode_chain(self):
+
+        c1 = SimonCipher(self.key, self.key_size, self.block_size, 'CBC', init=self.iv)
+        c2 = SimonCipher(self.key, self.key_size, self.block_size, 'ECB')
+
+        cbc_iv_equivalent = self.iv
         for x in range(1000):
-            cbc_input = self.plaintxt ^ cbc_equivalent
-            cbc_equivalent = c.encrypt(cbc_input)
-
-        assert cbc_out == cbc_equivalent
+            cbc_input = self.plaintxt ^ cbc_iv_equivalent
+            cbc_iv_equivalent = c2.encrypt(cbc_input)
+            cbc_out = c1.encrypt(self.plaintxt)
+            assert cbc_out == cbc_iv_equivalent
 
     def test_pcbc_mode_single(self):
 

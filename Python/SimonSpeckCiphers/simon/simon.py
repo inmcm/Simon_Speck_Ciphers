@@ -4,7 +4,8 @@ from collections import deque
 __author__ = 'inmcm'
 
 
-class SimonCipher:
+class SimonCipher(object):
+    """Simon Block Cipher Object"""
 
     # Z Arrays (stored bit reversed for easier usage)
     z0 = 0b01100111000011010100100010111110110011100001101010010001011111
@@ -259,7 +260,7 @@ class SimonCipher:
 
         elif self.mode == 'CBC':
             f, e = b, a
-            b, a = self.decrypt_function(b, a)
+            a, b = self.decrypt_function(a, b)
             b ^= self.iv_upper
             a ^= self.iv_lower
 

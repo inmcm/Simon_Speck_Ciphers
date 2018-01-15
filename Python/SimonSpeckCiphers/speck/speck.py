@@ -1,7 +1,8 @@
 from __future__ import print_function
 
 
-class SpeckCipher:
+class SpeckCipher(object):
+    """Speck Block Cipher Object"""
     # valid cipher configurations stored:
     # block_size:{key_size:number_rounds}
     __valid_setups = {32: {64: 22},
@@ -132,16 +133,12 @@ class SpeckCipher:
 
         if self.mode == 'ECB':
             b, a = self.encrypt_function(b, a)
-            # for x in self.key_schedule:
-            #     b, a = self.encrypt_round(b, a, x)
 
         elif self.mode == 'CTR':
             true_counter = self.iv + self.counter
             d = (true_counter >> self.word_size) & self.mod_mask
             c = true_counter & self.mod_mask
             d, c = self.encrypt_function(d, c)
-            # for x in self.key_schedule:
-            #     d, c = self.encrypt_round(d, c, x)
             b ^= d
             a ^= c
             self.counter += 1
@@ -150,8 +147,6 @@ class SpeckCipher:
             b ^= self.iv_upper
             a ^= self.iv_lower
             b, a = self.encrypt_function(b, a)
-            # for x in self.key_schedule:
-            #     b, a = self.encrypt_round(b, a, x)
 
             self.iv_upper = b
             self.iv_lower = a
@@ -162,8 +157,6 @@ class SpeckCipher:
             b ^= self.iv_upper
             a ^= self.iv_lower
             b, a = self.encrypt_function(b, a)
-            # for x in self.key_schedule:
-            #     b, a = self.encrypt_round(b, a, x)
             self.iv_upper = (b ^ f)
             self.iv_lower = (a ^ e)
             self.iv = (self.iv_upper << self.word_size) + self.iv_lower
@@ -172,8 +165,6 @@ class SpeckCipher:
             d = self.iv_upper
             c = self.iv_lower
             d, c = self.encrypt_function(d, c)
-            # for x in self.key_schedule:
-            #     d, c = self.encrypt_round(d, c, x)
             b ^= d
             a ^= c
             self.iv_upper = b
@@ -184,8 +175,6 @@ class SpeckCipher:
             d = self.iv_upper
             c = self.iv_lower
             d, c = self.encrypt_function(d, c)
-            # for x in self.key_schedule:
-            #     d, c = self.encrypt_round(d, c, x)
             self.iv_upper = d
             self.iv_lower = c
             self.iv = (d << self.word_size) + c
@@ -208,16 +197,12 @@ class SpeckCipher:
 
         if self.mode == 'ECB':
             b, a = self.decrypt_function(b, a)
-            # for x in reversed(self.key_schedule):
-            #     b, a = self.decrypt_round(b, a, x)
 
         elif self.mode == 'CTR':
             true_counter = self.iv + self.counter
             d = (true_counter >> self.word_size) & self.mod_mask
             c = true_counter & self.mod_mask
             d, c = self.encrypt_function(d, c)
-            # for x in self.key_schedule:
-            #     d, c = self.encrypt_round(d, c, x)
             b ^= d
             a ^= c
             self.counter += 1
@@ -225,8 +210,6 @@ class SpeckCipher:
         elif self.mode == 'CBC':
             f, e = b, a
             b, a = self.decrypt_function(b, a)
-            # for x in reversed(self.key_schedule):
-            #     b, a = self.decrypt_round(b, a, x)
             b ^= self.iv_upper
             a ^= self.iv_lower
 
@@ -238,8 +221,6 @@ class SpeckCipher:
             f, e = b, a
 
             b, a = self.decrypt_function(b, a)
-            # for x in reversed(self.key_schedule):
-            #     b, a = self.decrypt_round(b, a, x)
 
             b ^= self.iv_upper
             a ^= self.iv_lower
@@ -254,8 +235,6 @@ class SpeckCipher:
             self.iv_lower = a
             self.iv = (b << self.word_size) + a
             d, c = self.encrypt_function(d, c)
-            # for x in self.key_schedule:
-            #     d, c = self.encrypt_round(d, c, x)
 
             b ^= d
             a ^= c
@@ -264,8 +243,6 @@ class SpeckCipher:
             d = self.iv_upper
             c = self.iv_lower
             d, c = self.encrypt_function(d, c)
-            # for x in self.key_schedule:
-            #     d, c = self.encrypt_round(d, c, x)
 
             self.iv_upper = d
             self.iv_lower = c
