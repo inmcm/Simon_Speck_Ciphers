@@ -14,11 +14,15 @@
 // Function Prototypes
 void cipher_compare(const void *source, void *target, size_t n);
 
+// Global Test count
+int test_count = 0;
+
 // Global Fail count
 int fail_count = 0;
 
 
 void cipher_compare(const void *source, void *target, size_t n) {
+    test_count++;
     for(size_t i=0; i < n; i++) {
         uint8_t * src_bytes = (uint8_t *)source;
         uint8_t * trg_bytes = (uint8_t *)target;
@@ -390,6 +394,8 @@ int main(void){
 
     printf("\n");
 
+
+    printf("Total Test Count: %d\n", test_count);
     printf("Total Fail Count: %d\n", fail_count);
 
     return fail_count;

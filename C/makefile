@@ -1,4 +1,4 @@
-all: tests user
+all: test user 
 
 GIT_VERSION := $(shell git describe --abbrev=0 --always)
 
@@ -21,6 +21,9 @@ simon.o: simon.c
 
 speck.o: speck.c
 	gcc $(CFLAGS) speck.c
+
+test: tests
+	./tests
 
 clean:
 	rm -rf *o tests user
