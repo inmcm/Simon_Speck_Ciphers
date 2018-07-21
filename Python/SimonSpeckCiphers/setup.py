@@ -16,7 +16,7 @@ setup(
     description="Implementations of the NSA's Simon and Speck Block Ciphers",
     install_requires=[],
     license='MIT',
-    long_description=open('README.md').read(),
+    long_description=open('Readme.md').read(),
     include_package_data=True,
     keywords='cryptography cipher encryption decryption crypto',
     name='SimonSpeckCiphers',
