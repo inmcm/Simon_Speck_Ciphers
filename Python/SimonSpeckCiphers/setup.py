@@ -4,7 +4,7 @@ setup(
     name='SimonSpeckCiphers',
     version='0.9.9',
     description="Implementations of the NSA's Simon and Speck Block Ciphers",
-    long_description=open('README.md').read(),
+    long_description=open('Readme.md').read(),
     url='https://github.com/inmcm/Simon_Speck_Ciphers',
     #scripts=['bin/benchmark_simonspeck.py'],
     license='MIT',
