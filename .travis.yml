@@ -1,0 +1,17 @@
+language: python
+python:
+  - "3.5"
+  - "3.5-dev"  # 3.5 development branch
+  - "3.6"
+  - "3.6-dev"  # 3.6 development branch
+  - "3.7-dev"  # 3.7 development branch
+branches:
+  only:
+  - master
+  - inmcm/python_packaging
+before_install:
+    - cd Python/SimonSpeckCiphers/
+install:
+    - python setup.py install
+script:
+    - pytest -vvv
