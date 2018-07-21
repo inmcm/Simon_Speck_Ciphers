@@ -10,7 +10,7 @@ branches:
   - master
   - inmcm/python_packaging
 before_install:
-    - cd Python/SimonSpeckCiphers/
+    - cd Python/simonspeckciphers/
     - pip install setuptools_scm  # required for py2.6
 install:
     - python setup.py install

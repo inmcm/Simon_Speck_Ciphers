@@ -6,16 +6,25 @@ Pure python implementations of the [Simon and Speck] block ciphers. These are sm
 
 ## Installation ##
 
-Download or clone this project and run from this directory:
+The Simon/Speck suite can be installed from [PyPi] via `pip`:
+
+```sh
+pip install simonspeckciphers
+```
+
+If `pip` is unavailable, you download or clone this project and run from this directory:
 
 ```sh
 python setup.py install
 ```
+
 where `python` is favorite python interperator
 
 You can verify the included pytest test suite with:
 ```sh
 python setup.py test
+# or
+py.test -xvvv
 ```
 
 ##  Basic Usage ##
@@ -121,4 +130,5 @@ A robust pytest suite is provided in ```tests.py```. Here all the official test 
 
 [National Security Agency]:https://www.nsa.gov/
 [Simon and Speck]:http://eprint.iacr.org/2013/404.pdf
+[PyPi]:https://pypi.org/project/simonspeckciphers/
 [most common modes]:https://en.wikipedia.org/wiki/Block_cipher_mode_of_operation
