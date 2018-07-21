@@ -1,0 +1,12 @@
+# Compiled objects
+*.o
+*.so
+*.out
+*.plist
+
+# Build Info
+cmake-build-debug/
+
+# Data Files
+*.bin
+*.dump

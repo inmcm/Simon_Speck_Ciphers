@@ -1,0 +1,9 @@
+# Compiled objects
+*.o
+*.so
+*.out
+cmake-build-debug/
+
+# Simulation Files
+*.vcd
+*.cf
